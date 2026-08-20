@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="Description" content="A legacy version of Sand Game JS - falling sand game.">
+  <title>Sand Game JS / 23w33a</title>
+
+  <!-- Versions before 23w44a use Bootstrap 4.5 and externally provided jQuery -->
+  <script src="https://code.jquery.com/jquery-2.2.4.min.js"
+          integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"
+        integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-HLHEV50NKX"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'G-HLHEV50NKX');
+    </script>
+  <link rel="stylesheet" type="text/css" href="https://files.harag.cz/www/app/sand-game-js/prod/23w33a/style.css">
+  <script defer src="https://files.harag.cz/www/app/sand-game-js/prod/23w33a/sand-game-js.umd.js"></script>
+  <script>
+      // global variables, accessible from browser console
+      var sandGame = null;
+      var brushes = null;
+
+      $(() => {
+          if (window.SandGameJS !== undefined) {
+              const root = $('#sand-game-root');
+              root.empty();
+              const assetsContextPath = 'https://files.harag.cz/www/app/sand-game-js/prod/23w33a/assets';  // needed before 23m02
+              const productionVersion = true;
+              const component = (productionVersion)
+                    ? SandGameJS.initStandard(root, assetsContextPath)
+                    : SandGameJS.initTest(root, assetsContextPath);
+              if (component !== undefined) {
+                  // since 23m02
+                  sandGame = component.getSandGame();
+                  component.addOnInitialized(s => {
+                      sandGame = s;
+                  });
+                  if (SandGameJS.Brushes !== undefined) {
+                      // since 23m02 to 23w29a
+                      brushes = SandGameJS.Brushes;
+                      console.log('Globals: sandGame, brushes');
+                      console.log('Example: sandGame.graphics().drawLine(10, 10, 300, 150, 2, brushes.SAND);');
+                  }
+                  if (SandGameJS.brushes !== undefined) {
+                      // since 23w32a
+                      brushes = SandGameJS.brushes;
+                      console.log('Globals:');
+                      console.log('  sandGame, brushes');
+                      console.log('Examples:');
+                      console.log('  sandGame.graphics().drawLine(10, 10, 300, 150, 2, brushes.sand);');
+                      console.log('  sandGame.graphics().draw(100, 20, brushes.meteor);');
+                  }
+              } else {
+                  // before 23m02
+                  console.log('Scripting is not available in this version.');
+              }
+          } else {
+              const placeholder = document.getElementById('sand-game-placeholder-content');
+              placeholder.innerHTML = '<span style="color: red; font-weight: bold;">' +
+                  'Failed to load the game. Possible reasons:<br>' +
+                  '&bull; Your browser may not support modern JavaScript<br>' +
+                  '&bull; Internet connection<br>' +
+                  '&bull; A server side problem' +
+                  '</span>';
+          }
+      });
+  </script>
+</head>
+<body>
+<main role="main" class="container"><div class="row"><div class="col-12">
+  <a href="/app/sand-game-js/history" class="d-none d-md-block" style="float: right; margin-top: 0.5rem;">Back to version history</a>
+  <h1 style="font-size: 2rem; margin-top: 0.5rem;">Sand Game JS / 23w33a</h1>
+
+  <div class="alert alert-warning alert-dismissible fade show" role="alert">
+    You are playing an older version. Some features may not be available / work differently etc. <br>
+    Click <a href="/app/sand-game-js">here</a> to play the latest version (game state will be lost).
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+
+
+  <div id="sand-game-root">
+    <!-- Sand Game JS placeholder -->
+    <div style="user-select: none;">
+      <div>
+        <button disabled class="badge badge-secondary" type="button" style="min-width: 4em; padding: 0.4em 0.4em; border: none; background-color: rgb(230, 230, 230); color: black;">&nbsp;</button>
+      </div>
+      <div style="height: 70vh; display: flex; align-items: center; justify-content: center; margin-top: 4pt; padding: 2em; outline: 1px solid #b7b7b7;">
+        <div id="sand-game-placeholder-content">
+          Loading...
+        </div>
+      </div>
+      <div style="height: 20vh"></div>
+    </div>
+  </div>
+</div></div></main>
+</body>
+</html>

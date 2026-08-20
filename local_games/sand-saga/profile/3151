@@ -1,0 +1,182 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <meta name="author" content="Patrik Harag">
+    <meta property="og:site_name" content="SandSaga.com">
+    
+    
+    <meta property="og:title" content="User Profile">
+    <meta property="og:image" content="/social-preview.png">
+
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=1">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png?v=1">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png?v=1">
+    <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png?v=1">
+    <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png?v=1">
+    <link rel="icon" type="image/png" sizes="512x512" href="/favicon-512x512.png?v=1">
+    <link rel="manifest" href="/site.webmanifest?v=3">
+    <link rel="mask-icon" href="/safari-pinned-tab.svg?v=1" color="#ffc40d">
+    <link rel="shortcut icon" href="/favicon.ico?v=1">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="theme-color" content="#24272b">
+
+    <link rel="alternate" type="application/rss+xml" title="News Feed" href="https://sandsaga.com/news/rss">
+    <link rel="alternate" type="application/rss+xml" title="Workshop Feed" href="https://sandsaga.com/workshop/rss">
+
+    <title>Sand Saga - User Profile</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" type="text/css" href="https://files.harag.cz/www/app/sand-saga/prod/26w29a/sand-saga_fe.min.css">
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-V8NDXLE87V"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'G-V8NDXLE87V');
+    </script>
+  <script>
+    var SGA_PAGE = ['p', 'sgjs-profile-root'];
+    var SGA_USER_ID = undefined;
+    var SGA_PROFILE_ID = '3151';
+    var SGA_PROFILE_ROLE = 'user';
+    var SGA_PROFILE_REGISTERED = 1738098007515;
+    var SGA_PROFILE_SCENARIOS = ['tutorial-basics','tutorial-fallthrough','tutorial-move','tutorial-humans','mission-deforestation','mission-demolition','mission-recultivation','mission-robots','mission-birds','puzzle-sep-w','puzzle-sep-ws','puzzle-sep-s','puzzle-transfer-w-1','puzzle-transfer-w-2','puzzle-transfer-a','puzzle-transfer-s','sandbox','sandbox-rain','sandbox-meteors','sandbox-empty','sandbox-snapshot','sandbox-mod','m-sandbox-sandscape','m-sandbox-sand-painting','x-sandbox-cheese-game',];
+    var SGA_PROFILE_SCENARIOS_TITLE = ['Tutorial: Basics','Tutorial: Fall-through Mode','Tutorial: Move Tool','Tutorial: Humans','Mission: Deforestation','Mission: Demolition','Mission: Recultivation','Mission: Robots','Mission: Birds!','Challenge: Separation 1','Challenge: Separation 2','Challenge: Separation 3','Challenge: Water Transfer 1','Challenge: Water Transfer 2','Challenge: Acid Transfer','Challenge: Sand Transfer','Sandbox','Sandbox: Rain','Sandbox: Meteors','Sandbox: Empty','Sandbox [workshop snapshot]','Sandbox [workshop mod]','Sandscape','Sand Painting','Cheese Game by Mecanix',];
+    var SGA_PROFILE_SCENARIOS_COMPLETED = ['tutorial-basics','tutorial-fallthrough','tutorial-move','mission-deforestation','mission-recultivation','puzzle-sep-w','puzzle-sep-ws','puzzle-transfer-s','sandbox-rain','sandbox-meteors','sandbox-empty','puzzle-sep-s','puzzle-transfer-w-1','puzzle-transfer-w-2','sandbox','m-sandbox-sandscape','x-sandbox-cheese-game','m-sandbox-sand-painting','mission-demolition','sandbox-snapshot','puzzle-transfer-a',];
+  </script>
+  <style>
+    .container {
+      max-width: 1000px;
+    }
+  </style>
+
+    <script src="https://files.harag.cz/www/app/sand-saga/prod/26w29a/sand-saga_fe.umd.min.js"></script>
+    <script>
+      var SGA_ANNOUNCEMENTS = '[{\"id\":412,\"title\":\"Update 26w29a\",\"description\":\"Added sound effects for the launcher, burner, and grinder\",\"url\":\"/about#26w29a\",\"type\":\"update\",\"time\":1784573781093,\"data\":\"26w29a\"},{\"id\":411,\"title\":\"Sand Saga Insider: Spring 2026\",\"description\":\"Quarterly information about the Sand Saga project\",\"url\":\"https://harag.cz/blog/sand-saga-insider-2026-q2\",\"type\":\"blog\",\"time\":1782937730040,\"data\":\"sand-saga-insider-2026-q2\"}]';
+    </script>
+  </head>
+
+  <body>
+    <div id="sga-dialog-anchor"></div>
+    <div id="sga-page-content-wrapper" class="d-flex flex-column">
+      <nav class="navbar navbar-expand-md navbar-dark">
+        <div class="container">
+          <a class="navbar-brand" href="/"><img src="/favicon-32x32.png" width="32" height="32" alt="Logo"><h1 style="display: inline;">Sand Saga</h1></a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#sga-navbar-collapse" aria-controls="sga-navbar-collapse" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="sga-navbar-collapse">
+            <div id="sga-navbar-part-1">
+<ul class="navbar-nav">
+  <li class="nav-item">
+    <a class="nav-link" href="/about">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info-circle" viewBox="0 0 16 16">
+        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+        <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0"/>
+      </svg>
+      <span class="nav-item-text">About</span>
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/manual">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-book" viewBox="0 0 16 16">
+        <path d="M1 2.828c.885-.37 2.154-.769 3.388-.893 1.33-.134 2.458.063 3.112.752v9.746c-.935-.53-2.12-.603-3.213-.493-1.18.12-2.37.461-3.287.811zm7.5-.141c.654-.689 1.782-.886 3.112-.752 1.234.124 2.503.523 3.388.893v9.923c-.918-.35-2.107-.692-3.287-.81-1.094-.111-2.278-.039-3.213.492zM8 1.783C7.015.936 5.587.81 4.287.94c-1.514.153-3.042.672-3.994 1.105A.5.5 0 0 0 0 2.5v11a.5.5 0 0 0 .707.455c.882-.4 2.303-.881 3.68-1.02 1.409-.142 2.59.087 3.223.877a.5.5 0 0 0 .78 0c.633-.79 1.814-1.019 3.222-.877 1.378.139 2.8.62 3.681 1.02A.5.5 0 0 0 16 13.5v-11a.5.5 0 0 0-.293-.455c-.952-.433-2.48-.952-3.994-1.105C10.413.809 8.985.936 8 1.783"/>
+      </svg>
+      <span class="nav-item-text">Manual</span>
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/premium">
+      <svg xmlns="http://www.w3.org/2000/svg" height="16" fill="currentColor" class="bi bi-supporters-badge" viewBox="0 0 80 100">
+        <title>Supporter's badge</title>
+        <path d="M39.8 0 0 10.3v27.2C0 74 26.5 96.8 39.8 100c13.3-3.1 39.8-26 39.8-62.4V10.3zm12 48.5L57.6 68l-1.4 1-16.7-11.6-16.9 11.8-1.3-.9 6-19.8L10.6 36l.2-1.3 21.2-.2 6.7-19.1h1.7L47 34.4l21 .3.5 1.1z"></path>
+      </svg>
+      <span class="nav-item-text">Premium</span>
+    </a>
+  </li>
+</ul>
+            </div>
+            <div id="sga-navbar-part-2">
+              <ul class="navbar-nav">
+                <li class="nav-item dropdown">
+                  <a class="btn btn-dark dropdown-toggle" href="#" id="sga-dropdown-account" role="button" data-bs-toggle="dropdown" aria-expanded="false" >
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-fill" viewBox="0 0 16 16">
+                      <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6"/>
+                    </svg>
+                    <span class="nav-item-text">Login</span>
+                  </a>
+                  <div id="sga-login-content" class="dropdown-menu dropdown-menu-dark" aria-labelledby="sga-dropdown-account">
+                    <a href="/login/discord" class="btn btn-light mb-1">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-discord" viewBox="0 0 16 16">
+                        <path d="M13.545 2.907a13.2 13.2 0 0 0-3.257-1.011.05.05 0 0 0-.052.025c-.141.25-.297.577-.406.833a12.2 12.2 0 0 0-3.658 0 8 8 0 0 0-.412-.833.05.05 0 0 0-.052-.025c-1.125.194-2.22.534-3.257 1.011a.04.04 0 0 0-.021.018C.356 6.024-.213 9.047.066 12.032q.003.022.021.037a13.3 13.3 0 0 0 3.995 2.02.05.05 0 0 0 .056-.019q.463-.63.818-1.329a.05.05 0 0 0-.01-.059l-.018-.011a9 9 0 0 1-1.248-.595.05.05 0 0 1-.02-.066l.015-.019q.127-.095.248-.195a.05.05 0 0 1 .051-.007c2.619 1.196 5.454 1.196 8.041 0a.05.05 0 0 1 .053.007q.121.1.248.195a.05.05 0 0 1-.004.085 8 8 0 0 1-1.249.594.05.05 0 0 0-.03.03.05.05 0 0 0 .003.041c.24.465.515.909.817 1.329a.05.05 0 0 0 .056.019 13.2 13.2 0 0 0 4.001-2.02.05.05 0 0 0 .021-.037c.334-3.451-.559-6.449-2.366-9.106a.03.03 0 0 0-.02-.019m-8.198 7.307c-.789 0-1.438-.724-1.438-1.612s.637-1.613 1.438-1.613c.807 0 1.45.73 1.438 1.613 0 .888-.637 1.612-1.438 1.612m5.316 0c-.788 0-1.438-.724-1.438-1.612s.637-1.613 1.438-1.613c.807 0 1.451.73 1.438 1.613 0 .888-.631 1.612-1.438 1.612"/>
+                      </svg>
+                      Continue with Discord
+                    </a><br>
+                    <a href="/login/google" class="btn btn-light mb-1">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-google" viewBox="0 0 16 16">
+                        <path d="M15.545 6.558a9.4 9.4 0 0 1 .139 1.626c0 2.434-.87 4.492-2.384 5.885h.002C11.978 15.292 10.158 16 8 16A8 8 0 1 1 8 0a7.7 7.7 0 0 1 5.352 2.082l-2.284 2.284A4.35 4.35 0 0 0 8 3.166c-2.087 0-3.86 1.408-4.492 3.304a4.8 4.8 0 0 0 0 3.063h.003c.635 1.893 2.405 3.301 4.492 3.301 1.078 0 2.004-.276 2.722-.764h-.003a3.7 3.7 0 0 0 1.599-2.431H8v-3.08z"/>
+                      </svg>
+                      Continue with Google
+                    </a><br>
+                    <a href="#" onclick="SandSagaBase.showLoginForm(); return false;" class="btn btn-light mb-1">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-at" viewBox="0 0 16 16">
+                        <path d="M13.106 7.222c0-2.967-2.249-5.032-5.482-5.032-3.35 0-5.646 2.318-5.646 5.702 0 3.493 2.235 5.708 5.762 5.708.862 0 1.689-.123 2.304-.335v-.862c-.43.199-1.354.328-2.29.328-2.926 0-4.813-1.88-4.813-4.798 0-2.844 1.921-4.881 4.594-4.881 2.735 0 4.608 1.688 4.608 4.156 0 1.682-.554 2.769-1.416 2.769-.492 0-.772-.28-.772-.76V5.206H8.923v.834h-.11c-.266-.595-.881-.964-1.6-.964-1.4 0-2.378 1.162-2.378 2.823 0 1.737.957 2.906 2.379 2.906.8 0 1.415-.39 1.709-1.087h.11c.081.67.703 1.148 1.503 1.148 1.572 0 2.57-1.415 2.57-3.643zm-7.177.704c0-1.197.54-1.907 1.456-1.907.93 0 1.524.738 1.524 1.907S8.308 9.84 7.371 9.84c-.895 0-1.442-.725-1.442-1.914"/>
+                      </svg>
+                      Email &amp; Password
+                    </a><br>
+                    <a href="/login" class="btn btn-secondary">Register</a>
+                  </div>
+                </li>
+                <li class="nav-item dropdown">
+                  <a class="btn btn-dark dropdown-toggle" href="#" id="sga-dropdown-news" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-megaphone" viewBox="0 0 16 16">
+                      <path d="M13 2.5a1.5 1.5 0 0 1 3 0v11a1.5 1.5 0 0 1-3 0v-.214c-2.162-1.241-4.49-1.843-6.912-2.083l.405 2.712A1 1 0 0 1 5.51 15.1h-.548a1 1 0 0 1-.916-.599l-1.85-3.49-.202-.003A2.014 2.014 0 0 1 0 9V7a2.02 2.02 0 0 1 1.992-2.013 75 75 0 0 0 2.483-.075c3.043-.154 6.148-.849 8.525-2.199zm1 0v11a.5.5 0 0 0 1 0v-11a.5.5 0 0 0-1 0m-1 1.35c-2.344 1.205-5.209 1.842-8 2.033v4.233q.27.015.537.036c2.568.189 5.093.744 7.463 1.993zm-9 6.215v-4.13a95 95 0 0 1-1.992.052A1.02 1.02 0 0 0 1 7v2c0 .55.448 1.002 1.006 1.009A61 61 0 0 1 4 10.065m-.657.975 1.609 3.037.01.024h.548l-.002-.014-.443-2.966a68 68 0 0 0-1.722-.082z"></path>
+                    </svg>
+                    <span id="sga-news-label" class="nav-item-text">News</span>
+                  </a>
+                  <div id="sga-news-content" class="dropdown-menu dropdown-menu-dark" aria-labelledby="sga-dropdown-news"></div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </nav>
+
+      <main class="container">
+        <div class="row"><div class="col-12">
+          <div id="sga-alerts">
+            <noscript>
+              <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                For full functionality of this site it is necessary to enable JavaScript.
+                Here are the <a href="https://www.enablejavascript.io/">instructions how to enable JavaScript in your web browser</a>.
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+              </div>
+            </noscript>
+          </div>
+  <h2>Gandalf the cat wizard</h2>
+  <div id="sgjs-profile-root" class="profile" style="margin-top: 1em;"></div>
+        </div></div>
+      </main>
+
+      <div class="spacer"></div>
+      <div class="sand-saga-sand-footer"></div>
+      <div class="sand-saga-footer">
+        <div class="container"><div class="row"><div class="col-12">
+          Sand Game JS & Sand Saga; &copy; Patrik Harag, <a href="https://harag.cz">harag.cz</a>; all rights reserved
+          &bull; <a href="/terms">Terms</a>
+          &bull; <a href="/privacy">Privacy</a>
+          &bull; <a href="/news/rss">RSS</a>
+        </div></div></div>
+      </div>
+    </div>
+  </body>
+</html>

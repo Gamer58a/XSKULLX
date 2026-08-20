@@ -1,0 +1,42 @@
+<svg width="1200" height="720" viewBox="0 0 1200 720" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="720" rx="36" fill="#FBF6EE"/>
+  <rect x="40" y="40" width="1120" height="640" rx="32" fill="#FFFAF1" stroke="#CFC1AE"/>
+  <text x="86" y="118" fill="#2B2118" font-family="Avenir Next, Segoe UI, sans-serif" font-size="44" font-weight="700">DialedGG listening practice loop</text>
+  <text x="86" y="160" fill="#7A6D60" font-family="Avenir Next, Segoe UI, sans-serif" font-size="24">A short ear-training session works best when each step stays concrete and repeatable.</text>
+  <defs>
+    <linearGradient id="warm" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#F8E3C8"/>
+      <stop offset="1" stop-color="#F1D0B2"/>
+    </linearGradient>
+    <linearGradient id="cool" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#D9EEF0"/>
+      <stop offset="1" stop-color="#C7E2E6"/>
+    </linearGradient>
+  </defs>
+  <rect x="86" y="230" width="224" height="174" rx="24" fill="url(#warm)" stroke="#CFC1AE"/>
+  <text x="114" y="286" fill="#2B2118" font-family="Avenir Next, Segoe UI, sans-serif" font-size="19" font-weight="700">1. Hear the target</text>
+  <text x="114" y="322" fill="#5B4A3A" font-family="Avenir Next, Segoe UI, sans-serif" font-size="18">Listen once without</text>
+  <text x="114" y="348" fill="#5B4A3A" font-family="Avenir Next, Segoe UI, sans-serif" font-size="18">guessing yet. Save</text>
+  <text x="114" y="374" fill="#5B4A3A" font-family="Avenir Next, Segoe UI, sans-serif" font-size="18">your first impression.</text>
+  <rect x="346" y="230" width="224" height="174" rx="24" fill="url(#cool)" stroke="#CFC1AE"/>
+  <text x="374" y="286" fill="#2B2118" font-family="Avenir Next, Segoe UI, sans-serif" font-size="19" font-weight="700">2. Make one guess</text>
+  <text x="374" y="322" fill="#5B4A3A" font-family="Avenir Next, Segoe UI, sans-serif" font-size="18">Decide only whether</text>
+  <text x="374" y="348" fill="#5B4A3A" font-family="Avenir Next, Segoe UI, sans-serif" font-size="18">you are high, low,</text>
+  <text x="374" y="374" fill="#5B4A3A" font-family="Avenir Next, Segoe UI, sans-serif" font-size="18">or close enough.</text>
+  <rect x="606" y="230" width="224" height="174" rx="24" fill="url(#warm)" stroke="#CFC1AE"/>
+  <text x="634" y="286" fill="#2B2118" font-family="Avenir Next, Segoe UI, sans-serif" font-size="19" font-weight="700">3. Check the result</text>
+  <text x="634" y="322" fill="#5B4A3A" font-family="Avenir Next, Segoe UI, sans-serif" font-size="18">Use the revealed</text>
+  <text x="634" y="348" fill="#5B4A3A" font-family="Avenir Next, Segoe UI, sans-serif" font-size="18">answer to learn what</text>
+  <text x="634" y="374" fill="#5B4A3A" font-family="Avenir Next, Segoe UI, sans-serif" font-size="18">your ear missed.</text>
+  <rect x="866" y="230" width="224" height="174" rx="24" fill="url(#cool)" stroke="#CFC1AE"/>
+  <text x="894" y="286" fill="#2B2118" font-family="Avenir Next, Segoe UI, sans-serif" font-size="19" font-weight="700">4. Write one note</text>
+  <text x="894" y="322" fill="#5B4A3A" font-family="Avenir Next, Segoe UI, sans-serif" font-size="18">Keep one useful</text>
+  <text x="894" y="348" fill="#5B4A3A" font-family="Avenir Next, Segoe UI, sans-serif" font-size="18">observation for your</text>
+  <text x="894" y="374" fill="#5B4A3A" font-family="Avenir Next, Segoe UI, sans-serif" font-size="18">next short session.</text>
+  <path d="M310 318H346" stroke="#C76631" stroke-width="8" stroke-linecap="round"/>
+  <path d="M570 318H606" stroke="#C76631" stroke-width="8" stroke-linecap="round"/>
+  <path d="M830 318H866" stroke="#C76631" stroke-width="8" stroke-linecap="round"/>
+  <path d="M978 470C978 570 836 622 602 622C364 622 226 570 226 470" stroke="#1D7D8C" stroke-width="10" stroke-linecap="round"/>
+  <path d="M228 470L248 486L226 504" stroke="#1D7D8C" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="432" y="592" fill="#1D7D8C" font-family="Avenir Next, Segoe UI, sans-serif" font-size="22" font-weight="700">Repeat tomorrow with a sharper question</text>
+</svg>

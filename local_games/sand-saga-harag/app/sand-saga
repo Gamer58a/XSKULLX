@@ -1,0 +1,2131 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <meta name="author" content="Patrik Harag">
+    <meta property="og:site_name" content="Harag.cz">
+    <meta name="Description" content="The Sand Saga is a unique falling-sand game, built on the Sand Game JS engine.">
+    <meta property="og:description" content="The Sand Saga is a unique falling-sand game, built on the Sand Game JS engine.">
+    <meta property="og:title" content="SandSaga.com">
+    <meta property="og:image" content="https://files.harag.cz/www/app/sand-saga/preview.png">
+
+    <!-- icons -->
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#e6c700">
+    <meta name="msapplication-TileColor" content="#ffc40d">
+    <meta name="theme-color" content="#000000">
+
+    <title>Harag.cz - SandSaga.com</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+          rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" type="text/css" href="/resources/main.css">
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-HLHEV50NKX"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'G-HLHEV50NKX');
+    </script>
+    <script>
+        function harag_cz_showLoginForm() {
+            var dialogNode = document.getElementById('dialog-login');
+            var modal = new window.bootstrap.Modal(dialogNode);
+            modal.show();
+        }
+        if (window.location.hash === '#login' || window.location.hash === '#login-failed') {
+            document.addEventListener('DOMContentLoaded', function () {
+                harag_cz_showLoginForm();
+            });
+        }
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var sidebarToggle = document.body.querySelector('#sidebarToggle');
+            if (sidebarToggle) {
+                sidebarToggle.addEventListener('click', function (event) {
+                    event.preventDefault();
+                    document.body.classList.toggle('sb-sidenav-toggled');
+                });
+            }
+        });
+    </script>
+
+<script>
+    function harag_cz_comment(replyTo) {
+        document.getElementById('dialog-comment_title').textContent = replyTo ? 'Reply' : 'Post Comment';
+        document.getElementById('dialog-comment_reply').value = replyTo;
+        document.getElementById('dialog-comment_error-message-wrapper').innerHTML = '';
+
+        const dialogNode = document.getElementById('dialog-comment');
+        const modal = new window.bootstrap.Modal(dialogNode);
+        modal.show();
+    }
+
+    function harag_cz_sendComment() {
+        document.getElementById('dialog-comment_error-message-wrapper').innerHTML = '';
+
+        let formComment = document.getElementById('form-comment');
+        let serialized = new FormData(formComment);
+        let dataToSend = {};
+
+        for (let [key, value] of serialized.entries()) {
+            dataToSend[key] = key.startsWith('test') ? value === 'on' : value;
+        }
+
+        fetch(`/discussion/app-sand-saga`, {
+                method: 'POST',
+                body: JSON.stringify(dataToSend),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => {
+                if (response.ok) {
+                    document.getElementById('dialog-comment_content').value = '';
+                    alert('Submitted successfully. Your comment will be visible after page reload.');
+                } else if (response.status === 400) {
+                    harag_cz_sendCommentHandleError('check the form again');
+                } else {
+                    harag_cz_sendCommentHandleError(response.statusText);
+                }
+            })
+            .catch(error => {
+                harag_cz_sendCommentHandleError(error);
+            });
+    }
+
+    function harag_cz_sendCommentHandleError(error) {
+        setTimeout(() => {
+            const alert = document.createElement('div');
+            alert.setAttribute('role', 'alert');
+            alert.setAttribute('class', 'alert alert-danger');
+            alert.append('Submit failed: ' + error);
+
+            const messageWrapper = document.getElementById('dialog-comment_error-message-wrapper');
+            messageWrapper.append(alert);
+
+            const dialogNode = document.getElementById('dialog-comment');
+            const modal = new window.bootstrap.Modal(dialogNode);
+            modal.show();
+        }, 0);
+    }
+
+</script>
+
+  </head>
+
+  <body class="d-flex">
+    <div class="modal fade" id="dialog-login" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <strong>Login</strong>
+          </div>
+          <div class="modal-body">
+            <form class="" action="/login" method="POST">
+              <input type="hidden" name="csrf-token" value="56da8624-799b-4b24-a8db-2ef70921406c">
+              <div class="mb-3">
+                <label class="form-label" for="username">Name</label>
+                <input type="text" id="username" name="username" class="form-control" placeholder="Enter login" maxlength="30" required>
+              </div>
+              <div class="mb-3">
+                <label class="form-label" for="password">Pass</label>
+                <input type="password" id="password" name="password" class="form-control" placeholder="Enter password" maxlength="30" required>
+              </div>
+              <div class="mb-3">
+                <button type="submit" class="btn btn-primary">Send</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sidebar-->
+    <nav id="sidebar" class="bg-dark">
+      <div id="sidebar-fixed" class="position-fixed bg-dark">
+        <div class="sidebar-heading">
+          <a class="navbar-brand" href="/">
+            <img src="/favicon-32x32.png" width="32" height="32" alt="Logo">
+            <span>Harag.cz</span>
+          </a>
+          <a class="hidden-link" href="#" onclick="harag_cz_showLoginForm(); return false;">_</a>
+        </div>
+        <ul class="nav flex-column">  <!-- active -->
+          <li class="nav-item">
+            <a href="/about/" class="nav-link">About</a>
+          </li>
+          <li class="nav-item">
+            <a href="/blog" class="nav-link">Blog</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/app">Apps</a>
+            <ul class="nav flex-column">
+              <li class="nav-item"><a class="nav-link" href="/app/sand-saga">SandSaga.com <span class="badge badge-light">New</span></a></li>
+              <li class="nav-item"><a class="nav-link" href="/app/sand-game-js">Sand Game JS</a></li>
+              <li class="nav-item"><a class="nav-link" href="/app/sand-game-2">Sand Game 2</a></li>
+              <li class="nav-item"><a class="nav-link" href="/app/turtle">Turtle Graphics</a></li>
+              <li class="nav-item"><a class="nav-link" href="/app/finance">Finance</a></li>
+              <li class="nav-item"> <a href="/app" class="nav-link">...</a></li>
+            </ul>
+          </li>
+        </ul>
+
+      </div>
+    </nav>
+
+    <!-- Page content wrapper-->
+    <div id="page-content-wrapper" class="d-flex flex-column">
+
+      <!-- Navigation -->
+      <nav id="navbar" class="navbar navbar-dark bg-dark">
+        <button id="sidebarToggle" class="navbar-toggler" type="button" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+      </nav>
+
+
+      <noscript>
+        <div class="container"><div class="row"><div class="col-12">
+          <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            For full functionality of this site it is necessary to enable JavaScript.
+            Here are the <a href="https://www.enablejavascript.io/">instructions how to enable JavaScript in your web browser</a>.
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+        </div></div></div>
+      </noscript>
+
+      <main class="container"><div class="row"><div class="col-12">
+  <h1>SandSaga.com</h1>
+  
+<div style="text-align: center;">
+    <p><a href="https://sandsaga.com" target="_blank"><img src="https://sandsaga.com/android-chrome-192x192.png" alt="Sand Saga preview" width="150" height="150" class="img-fluid"></a></p>
+    <p>Sand Saga = Sand Game JS (engine) <span style="color: green; white-space: nowrap;">+ scenarios and the workshop</span></p>
+    <p><a href="https://sandsaga.com" target="_blank" class="btn btn-primary">Open SandSaga.com</a></p>
+    <p>If you're having trouble with access, see <a href="https://harag.cz/blog/sand-saga-unblocked">this article</a>.</p>
+</div>
+
+      </div></div></main>
+
+<div class="container comments"><div class="row"><div class="col-12">
+  <h2>Discussion</h2>
+  <p>
+    There are 129 comments.
+    <button type="button" class="btn btn-outline-secondary button-show-comment-dialog" onclick="harag_cz_comment('')">
+      Leave a comment
+    </button>
+  </p>
+
+    <div id="comment_bc9c4539-d582-41ea-8c03-0474b40b9cee" class="card comment">
+      <div class="card-body">
+        <blockquote class="mb-0">
+          
+          <p class="comment-content">alr y&#39;all here are some game things. (don&#39;t get mad at me if they don&#39;t work say thank you)
+1-photopea
+2-tubzi 
+3-codepen
+4-codebeauitfy
+5-bored 
+6-poki
+well have fun hope this works</p>
+          <div class="comment-footer">
+            <span class="user ">Westley Dixon</span><span>, 2026-05-05 21:33 (UTC)</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary button-show-comment-dialog" onclick="harag_cz_comment('bc9c4539-d582-41ea-8c03-0474b40b9cee')">
+              Reply
+            </button>
+          </div>
+        </blockquote>
+      </div>
+    </div>
+    <div id="comment_86070085-4ede-4919-a2ee-96ace8976a2a" class="card comment">
+      <div class="card-body">
+        <blockquote class="mb-0">
+          <p>Replying to <a href="#comment_7a51b037-846b-4bbe-b02e-b57d53535da2">7a51b037-846b-4bbe-b02e-b57d53535da2</a>:</p>
+          <p class="comment-content">Neal.fun
+Hammyhome.com
+Hoodamath.com
+Rocket.new(if you want to make your own)
+Sorry if these are blocked but they are not for me</p>
+          <div class="comment-footer">
+            <span class="user ">Liana gulamhussein</span><span>, 2026-03-17 01:01 (UTC)</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary button-show-comment-dialog" onclick="harag_cz_comment('86070085-4ede-4919-a2ee-96ace8976a2a')">
+              Reply
+            </button>
+          </div>
+        </blockquote>
+      </div>
+    </div>
+    <div id="comment_015dd038-ec9e-40c3-8629-89e17e208541" class="card comment">
+      <div class="card-body">
+        <blockquote class="mb-0">
+          
+          <p class="comment-content">At my school we use a program called ixl but sometimes that&#39;s blocked even though we need to use it for school work! 
+So glad this is unblocked though</p>
+          <div class="comment-footer">
+            <span class="user ">Liana gulamhussein</span><span>, 2026-03-16 23:14 (UTC)</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary button-show-comment-dialog" onclick="harag_cz_comment('015dd038-ec9e-40c3-8629-89e17e208541')">
+              Reply
+            </button>
+          </div>
+        </blockquote>
+      </div>
+    </div>
+    <div id="comment_b92586f9-57d8-4e98-bd9b-ec51153365b0" class="card comment">
+      <div class="card-body">
+        <blockquote class="mb-0">
+          
+          <p class="comment-content">I&#39;m lucky my school doesn&#39;t block it</p>
+          <div class="comment-footer">
+            <span class="user ">Lyra Mccolm</span><span>, 2026-03-13 18:43 (UTC)</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary button-show-comment-dialog" onclick="harag_cz_comment('b92586f9-57d8-4e98-bd9b-ec51153365b0')">
+              Reply
+            </button>
+          </div>
+        </blockquote>
+      </div>
+    </div>
+    <div id="comment_9e124986-c40f-492e-882e-ec07f1123c30" class="card comment">
+      <div class="card-body">
+        <blockquote class="mb-0">
+          
+          <p class="comment-content">deledao it sucks using AI to block things because people are to lazy to do it and it 90% of the time it blocks things that are not even bad like piskel what you need to do is make it so the sand saga game does not take you to a different web site just keep it in the same web site so the AI does not see that you are on something different.</p>
+          <div class="comment-footer">
+            <span class="user ">west</span><span>, 2026-02-19 22:32 (UTC)</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary button-show-comment-dialog" onclick="harag_cz_comment('9e124986-c40f-492e-882e-ec07f1123c30')">
+              Reply
+            </button>
+          </div>
+        </blockquote>
+      </div>
+    </div>
+    <div id="comment_747b2633-5f08-41c3-b875-35092238087e" class="card comment">
+      <div class="card-body">
+        <blockquote class="mb-0">
+          
+          <p class="comment-content">that new domain link is blocked for us, when will you make one that Linewize will not block?</p>
+          <div class="comment-footer">
+            <span class="user ">nate</span><span>, 2026-01-16 14:15 (UTC)</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary button-show-comment-dialog" onclick="harag_cz_comment('747b2633-5f08-41c3-b875-35092238087e')">
+              Reply
+            </button>
+          </div>
+        </blockquote>
+      </div>
+    </div>
+    <div id="comment_750357a4-1a80-4db3-9ddd-7a34ed64d786" class="card comment">
+      <div class="card-body">
+        <blockquote class="mb-0">
+          
+          <p class="comment-content">Hi I&#39;m trying to get on the newer one and its blocked even tried through the um notification thing...please  fix this</p>
+          <div class="comment-footer">
+            <span class="user ">takeabigooneonme</span><span>, 2026-01-08 11:54 (UTC)</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary button-show-comment-dialog" onclick="harag_cz_comment('750357a4-1a80-4db3-9ddd-7a34ed64d786')">
+              Reply
+            </button>
+          </div>
+        </blockquote>
+      </div>
+    </div>
+    <div id="comment_9f0f397e-7f49-4687-8bda-ef6aa77186fd" class="card comment">
+      <div class="card-body">
+        <blockquote class="mb-0">
+          
+          <p class="comment-content">The 4schools link and sandsaga is blocked. you need to add a way for sandsaga to run from strictly the .html file so Chromebook software can run it because Linux is often restricted along with developer mode. You can also re-register the 4schools link under a made-up company so they don&#39;t block you by who your posting from (which software like iboss often looks for) just create a neocities link or something, you need to re-register the side under a different domain (create a new site basically or make sandsaga usable through an .html file.</p>
+          <div class="comment-footer">
+            <span class="user ">Michael Aleman</span><span>, 2026-01-06 18:40 (UTC)</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary button-show-comment-dialog" onclick="harag_cz_comment('9f0f397e-7f49-4687-8bda-ef6aa77186fd')">
+              Reply
+            </button>
+          </div>
+        </blockquote>
+      </div>
+    </div>
+    <div id="comment_d11646f2-8d00-4b47-8159-bd193e326051" class="card comment">
+      <div class="card-body">
+        <blockquote class="mb-0">
+          
+          <p class="comment-content">it is blocked could you make it so it can be downloaded on a chrome book</p>
+          <div class="comment-footer">
+            <span class="user ">Benjamin powell</span><span>, 2025-12-21 22:29 (UTC)</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary button-show-comment-dialog" onclick="harag_cz_comment('d11646f2-8d00-4b47-8159-bd193e326051')">
+              Reply
+            </button>
+          </div>
+        </blockquote>
+      </div>
+    </div>
+    <div id="comment_a0e20dc3-c36a-4ce4-8185-1acec3c79f43" class="card comment">
+      <div class="card-body">
+        <blockquote class="mb-0">
+          <p>Replying to <a href="#comment_e9525a92-aea0-43bc-903c-b98dc1e3b951">e9525a92-aea0-43bc-903c-b98dc1e3b951</a>:</p>
+          <p class="comment-content">it got blocked</p>
+          <div class="comment-footer">
+            <span class="user ">william</span><span>, 2025-12-12 15:36 (UTC)</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary button-show-comment-dialog" onclick="harag_cz_comment('a0e20dc3-c36a-4ce4-8185-1acec3c79f43')">
+              Reply
+            </button>
+          </div>
+        </blockquote>
+      </div>
+    </div>
+    <div id="comment_469d4800-c19d-410a-97e1-89622fe9fa43" class="card comment">
+      <div class="card-body">
+        <blockquote class="mb-0">
+          
+          <p class="comment-content">Could you make a way to download SandSaga. It is blocked and I would like to find a way to get it.</p>
+          <div class="comment-footer">
+            <span class="user ">Gnomie72</span><span>, 2025-11-05 14:49 (UTC)</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary button-show-comment-dialog" onclick="harag_cz_comment('469d4800-c19d-410a-97e1-89622fe9fa43')">
+              Reply
+            </button>
+          </div>
+        </blockquote>
+      </div>
+    </div>
+    <div id="comment_7a51b037-846b-4bbe-b02e-b57d53535da2" class="card comment">
+      <div class="card-body">
+        <blockquote class="mb-0">
+          
+          <p class="comment-content">post some unblocked games here, sand saga .com is blocked as well as saga4schools</p>
+          <div class="comment-footer">
+            <span class="user ">UnblokkedGamesFinder</span><span>, 2025-10-22 15:27 (UTC)</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary button-show-comment-dialog" onclick="harag_cz_comment('7a51b037-846b-4bbe-b02e-b57d53535da2')">
+              Reply
+            </button>
+          </div>
+        </blockquote>
+      </div>
+    </div>
+    <div id="comment_4fbecd23-33e7-4dcb-9fa6-52089905f2b6" class="card comment">
+      <div class="card-body">
+        <blockquote class="mb-0">
+          
+          <p class="comment-content">can you guys put some unblocked game websites in the comments plz i wont tell anyone</p>
+          <div class="comment-footer">
+            <span class="user ">school kid</span><span>, 2025-10-03 14:45 (UTC)</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary button-show-comment-dialog" onclick="harag_cz_comment('4fbecd23-33e7-4dcb-9fa6-52089905f2b6')">
+              Reply
+            </button>
+          </div>
+        </blockquote>
+      </div>
+    </div>
+    <div id="comment_b8d85bfd-1204-4a2c-bbb2-adbcabd1f339" class="card comment">
+      <div class="card-body">
+        <blockquote class="mb-0">
+          
+          <p class="comment-content">I want to say that one the ninth gen I get get into the game and want to to please fix this problem</p>
+          <div class="comment-footer">
+            <span class="user ">Cameron</span><span>, 2025-09-24 18:40 (UTC)</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary button-show-comment-dialog" onclick="harag_cz_comment('b8d85bfd-1204-4a2c-bbb2-adbcabd1f339')">
+              Reply
+            </button>
+          </div>
+        </blockquote>
+      </div>
+    </div>
+    <div id="comment_933b42ca-2db6-465b-adcc-8fc8e8474491" class="card comment">
+      <div class="card-body">
+        <blockquote class="mb-0">
+          
+          <p class="comment-content">Hello</p>
+          <div class="comment-footer">
+            <span class="user ">Cameron</span><span>, 2025-09-24 18:39 (UTC)</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary button-show-comment-dialog" onclick="harag_cz_comment('933b42ca-2db6-465b-adcc-8fc8e8474491')">
+              Reply
+            </button>
+          </div>
+        </blockquote>
+      </div>
+    </div>
+    <div id="comment_73593a02-2d3c-4b16-8e1a-184b401d21b8" class="card comment">
+      <div class="card-body">
+        <blockquote class="mb-0">
+          <p>Replying to <a href="#comment_8b9496f4-8750-47b4-919d-c9146405cad9">8b9496f4-8750-47b4-919d-c9146405cad9</a>:</p>
+          <p class="comment-content">what</p>
+          <div class="comment-footer">
+            <span class="user ">Beans</span><span>, 2025-09-23 17:02 (UTC)</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary button-show-comment-dialog" onclick="harag_cz_comment('73593a02-2d3c-4b16-8e1a-184b401d21b8')">
+              Reply
+            </button>
+          </div>
+        </blockquote>
+      </div>
+    </div>
+    <div id="comment_8b9496f4-8750-47b4-919d-c9146405cad9" class="card comment">
+      <div class="card-body">
+        <blockquote class="mb-0">
+          
+          <p class="comment-content">THIS IS A REVALUATION AGAINST SCHOOL AND LINEWISE!!!</p>
+          <div class="comment-footer">
+            <span class="user ">josh</span><span>, 2025-09-23 02:27 (UTC)</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary button-show-comment-dialog" onclick="harag_cz_comment('8b9496f4-8750-47b4-919d-c9146405cad9')">
+              Reply
+            </button>
+          </div>
+        </blockquote>
+      </div>
+    </div>
+    <div id="comment_5b27e1c6-a70b-4e7f-b55f-a9b52ce00a23" class="card comment">
+      <div class="card-body">
+        <blockquote class="mb-0">
+          
+          <p class="comment-content">Is premium a subscription or a one time payment?</p>
+          <div class="comment-footer">
+            <span class="user ">Beans</span><span>, 2025-09-22 21:06 (UTC)</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary button-show-comment-dialog" onclick="harag_cz_comment('5b27e1c6-a70b-4e7f-b55f-a9b52ce00a23')">
+              Reply
+            </button>
+          </div>
+        </blockquote>
+      </div>
+    </div>
+    <div id="comment_7a77fda8-1bc1-4c59-be4a-13b7ae31a5b0" class="card comment">
+      <div class="card-body">
+        <blockquote class="mb-0">
+          
+          <p class="comment-content">hello</p>
+          <div class="comment-footer">
+            <span class="user ">bee</span><span>, 2025-06-17 16:53 (UTC)</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary button-show-comment-dialog" onclick="harag_cz_comment('7a77fda8-1bc1-4c59-be4a-13b7ae31a5b0')">
+              Reply
+            </button>
+          </div>
+        </blockquote>
+      </div>
+    </div>
+    <div id="comment_0233dfb7-b28e-4a77-b73b-56c66303b608" class="card comment">
+      <div class="card-body">
+        <blockquote class="mb-0">
+          <p>Replying to <a href="#comment_bf1c5b31-2398-4894-a1dd-b96a104ced1b">bf1c5b31-2398-4894-a1dd-b96a104ced1b</a>:</p>
+          <p class="comment-content">linewize it is overkill</p>
+          <div class="comment-footer">
+            <span class="user ">Dylan</span><span>, 2025-06-16 21:32 (UTC)</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary button-show-comment-dialog" onclick="harag_cz_comment('0233dfb7-b28e-4a77-b73b-56c66303b608')">
+              Reply
+            </button>
+          </div>
+        </blockquote>
+      </div>
+    </div>
+    <div id="comment_46e18fc1-76d9-464c-ba25-4849107cadcd" class="card comment">
+      <div class="card-body">
+        <blockquote class="mb-0">
+          <p>Replying to <a href="#comment_f3f11bae-6efd-4149-ac7c-8f82d7ec3b13">f3f11bae-6efd-4149-ac7c-8f82d7ec3b13</a>:</p>
+          <p class="comment-content">yippe</p>
+          <div class="comment-footer">
+            <span class="user ">Dylan</span><span>, 2025-06-16 21:31 (UTC)</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary button-show-comment-dialog" onclick="harag_cz_comment('46e18fc1-76d9-464c-ba25-4849107cadcd')">
+              Reply
+            </button>
+          </div>
+        </blockquote>
+      </div>
+    </div>
+    <div id="comment_12428f02-9c4d-4cf2-93af-533e93737ed4" class="card comment">
+      <div class="card-body">
+        <blockquote class="mb-0">
+          <p>Replying to <a href="#comment_981ef958-9471-4cd4-86d3-5e70e1426c46">981ef958-9471-4cd4-86d3-5e70e1426c46</a>:</p>
+          <p class="comment-content">and they can see dis messige</p>
+          <div class="comment-footer">
+            <span class="user ">Dylan</span><span>, 2025-06-16 21:30 (UTC)</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary button-show-comment-dialog" onclick="harag_cz_comment('12428f02-9c4d-4cf2-93af-533e93737ed4')">
+              Reply
+            </button>
+          </div>
+        </blockquote>
+      </div>
+    </div>
+    <div id="comment_83e40dbb-9c67-4ade-b06a-6bd61149d693" class="card comment">
+      <div class="card-body">
+        <blockquote class="mb-0">
+          <p>Replying to <a href="#comment_28dbd4f0-b943-48db-91fd-478518e52ee9">28dbd4f0-b943-48db-91fd-478518e52ee9</a>:</p>
+          <p class="comment-content">BRUH!</p>
+          <div class="comment-footer">
+            <span class="user ">Dylan</span><span>, 2025-06-16 21:29 (UTC)</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary button-show-comment-dialog" onclick="harag_cz_comment('83e40dbb-9c67-4ade-b06a-6bd61149d693')">
+              Reply
+            </button>
+          </div>
+        </blockquote>
+      </div>
+    </div>
+    <div id="comment_db9597c1-7acd-469a-a2de-55089ac5e919" class="card comment">
+      <div class="card-body">
+        <blockquote class="mb-0">
+          <p>Replying to <a href="#comment_edbcab39-e657-4700-9435-870a96fa91e5">edbcab39-e657-4700-9435-870a96fa91e5</a>:</p>
+          <p class="comment-content">true and birbs</p>
+          <div class="comment-footer">
+            <span class="user ">Dylan</span><span>, 2025-06-16 21:28 (UTC)</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary button-show-comment-dialog" onclick="harag_cz_comment('db9597c1-7acd-469a-a2de-55089ac5e919')">
+              Reply
+            </button>
+          </div>
+        </blockquote>
+      </div>
+    </div>
+    <div id="comment_e0a18efa-6393-46b5-9d70-bd7858f02217" class="card comment">
+      <div class="card-body">
+        <blockquote class="mb-0">
+          <p>Replying to <a href="#comment_f3f11bae-6efd-4149-ac7c-8f82d7ec3b13">f3f11bae-6efd-4149-ac7c-8f82d7ec3b13</a>:</p>
+          <p class="comment-content">How did you do that, that’s amazing!</p>
+          <div class="comment-footer">
+            <span class="user ">Ga</span><span>, 2025-05-28 22:46 (UTC)</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary button-show-comment-dialog" onclick="harag_cz_comment('e0a18efa-6393-46b5-9d70-bd7858f02217')">
+              Reply
+            </button>
+          </div>
+        </blockquote>
+      </div>
+    </div>
+    <div id="comment_c988fbba-10eb-4765-bdf6-dbba722d0870" class="card comment">
+      <div class="card-body">
+        <blockquote class="mb-0">
+          <p>Replying to <a href="#comment_e9525a92-aea0-43bc-903c-b98dc1e3b951">e9525a92-aea0-43bc-903c-b98dc1e3b951</a>:</p>
+          <p class="comment-content">Please don’t post these links online, mine is blocked now because it became public a while ago.</p>
+          <div class="comment-footer">
+            <span class="user ">Ga</span><span>, 2025-05-28 22:45 (UTC)</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary button-show-comment-dialog" onclick="harag_cz_comment('c988fbba-10eb-4765-bdf6-dbba722d0870')">
+              Reply
+            </button>
+          </div>
+        </blockquote>
+      </div>
+    </div>
+    <div id="comment_20efbeb9-fad2-4d84-a42b-ab3eaadee308" class="card comment">
+      <div class="card-body">
+        <blockquote class="mb-0">
+          <p>Replying to <a href="#comment_28dbd4f0-b943-48db-91fd-478518e52ee9">28dbd4f0-b943-48db-91fd-478518e52ee9</a>:</p>
+          <p class="comment-content">YES THEY BLOCKED SCRATCH A KID FRENDLY WEBSITE</p>
+          <div class="comment-footer">
+            <span class="user ">Bot</span><span>, 2025-05-13 20:34 (UTC)</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary button-show-comment-dialog" onclick="harag_cz_comment('20efbeb9-fad2-4d84-a42b-ab3eaadee308')">
+              Reply
+            </button>
+          </div>
+        </blockquote>
+      </div>
+    </div>
+    <div id="comment_28081fb7-042c-4b6b-b03f-b93376cece33" class="card comment">
+      <div class="card-body">
+        <blockquote class="mb-0">
+          <p>Replying to <a href="#comment_1ba4666c-0a21-4b55-adda-1e23f9b8b158">1ba4666c-0a21-4b55-adda-1e23f9b8b158</a>:</p>
+          <p class="comment-content">shure</p>
+          <div class="comment-footer">
+            <span class="user ">Bot</span><span>, 2025-05-13 20:33 (UTC)</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary button-show-comment-dialog" onclick="harag_cz_comment('28081fb7-042c-4b6b-b03f-b93376cece33')">
+              Reply
+            </button>
+          </div>
+        </blockquote>
+      </div>
+    </div>
+    <div id="comment_2c9f24ab-a8b7-437e-a851-8eea579504bb" class="card comment">
+      <div class="card-body">
+        <blockquote class="mb-0">
+          <p>Replying to <a href="#comment_edbcab39-e657-4700-9435-870a96fa91e5">edbcab39-e657-4700-9435-870a96fa91e5</a>:</p>
+          <p class="comment-content">exactly</p>
+          <div class="comment-footer">
+            <span class="user ">Bot</span><span>, 2025-05-13 20:32 (UTC)</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary button-show-comment-dialog" onclick="harag_cz_comment('2c9f24ab-a8b7-437e-a851-8eea579504bb')">
+              Reply
+            </button>
+          </div>
+        </blockquote>
+      </div>
+    </div>
+    <div id="comment_edbcab39-e657-4700-9435-870a96fa91e5" class="card comment">
+      <div class="card-body">
+        <blockquote class="mb-0">
+          
+          <p class="comment-content">you should add a gases class and make fish free for everyone</p>
+          <div class="comment-footer">
+            <span class="user ">josh</span><span>, 2025-05-12 17:36 (UTC)</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary button-show-comment-dialog" onclick="harag_cz_comment('edbcab39-e657-4700-9435-870a96fa91e5')">
+              Reply
+            </button>
+          </div>
+        </blockquote>
+      </div>
+    </div>
+    <div id="comment_da036d1e-35a2-42f9-9f6c-6d4eed672c99" class="card comment">
+      <div class="card-body">
+        <blockquote class="mb-0">
+          
+          <p class="comment-content">I&#39;m on my school account</p>
+          <div class="comment-footer">
+            <span class="user ">josh</span><span>, 2025-05-12 17:35 (UTC)</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary button-show-comment-dialog" onclick="harag_cz_comment('da036d1e-35a2-42f9-9f6c-6d4eed672c99')">
+              Reply
+            </button>
+          </div>
+        </blockquote>
+      </div>
+    </div>
+    <div id="comment_ca8e8aea-8f2a-4725-863f-b5d524e2f405" class="card comment">
+      <div class="card-body">
+        <blockquote class="mb-0">
+          
+          <p class="comment-content">hey guys I wanted to ask is their like any other website to use</p>
+          <div class="comment-footer">
+            <span class="user ">josh</span><span>, 2025-05-12 17:34 (UTC)</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary button-show-comment-dialog" onclick="harag_cz_comment('ca8e8aea-8f2a-4725-863f-b5d524e2f405')">
+              Reply
+            </button>
+          </div>
+        </blockquote>
+      </div>
+    </div>
+    <div id="comment_2364bac5-41d5-4b6e-a43f-96df8f6c9c58" class="card comment">
+      <div class="card-body">
+        <blockquote class="mb-0">
+          <p>Replying to <a href="#comment_c9850fab-1a8e-46f1-a77c-5fec822519cf">c9850fab-1a8e-46f1-a77c-5fec822519cf</a>:</p>
+          <p class="comment-content">Well, you can&#39;t just take someone&#39;s idea, so learn how to program and make it a little different than the original game.</p>
+          <div class="comment-footer">
+            <span class="user ">GEOPLEX</span><span>, 2025-05-09 18:42 (UTC)</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary button-show-comment-dialog" onclick="harag_cz_comment('2364bac5-41d5-4b6e-a43f-96df8f6c9c58')">
+              Reply
+            </button>
+          </div>
+        </blockquote>
+      </div>
+    </div>
+    <div id="comment_1ba4666c-0a21-4b55-adda-1e23f9b8b158" class="card comment">
+      <div class="card-body">
+        <blockquote class="mb-0">
+          
+          <p class="comment-content">ngl you should add a gasses tab with things like smoke, cloud, toxins, gasoline, etc. that would be cool</p>
+          <div class="comment-footer">
+            <span class="user ">marshbarsh</span><span>, 2025-05-09 00:33 (UTC)</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary button-show-comment-dialog" onclick="harag_cz_comment('1ba4666c-0a21-4b55-adda-1e23f9b8b158')">
+              Reply
+            </button>
+          </div>
+        </blockquote>
+      </div>
+    </div>
+    <div id="comment_aff3e3f3-aa33-4a56-a16f-7e9f3b131931" class="card comment">
+      <div class="card-body">
+        <blockquote class="mb-0">
+          
+          <p class="comment-content">its blocked pleas upload it to a new website so it aint blocked no more</p>
+          <div class="comment-footer">
+            <span class="user ">Cody</span><span>, 2025-05-07 17:08 (UTC)</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary button-show-comment-dialog" onclick="harag_cz_comment('aff3e3f3-aa33-4a56-a16f-7e9f3b131931')">
+              Reply
+            </button>
+          </div>
+        </blockquote>
+      </div>
+    </div>
+    <div id="comment_9700c171-22a2-4348-a387-145cd82f7e6e" class="card comment">
+      <div class="card-body">
+        <blockquote class="mb-0">
+          <p>Replying to <a href="#comment_222eaebb-1eba-4a0e-8b88-090d96eada2e">222eaebb-1eba-4a0e-8b88-090d96eada2e</a>:</p>
+          <p class="comment-content">OK, I LOVE SCHOOL if anybody wants to tell me off send email here kitleykar35@tcapsstudent.net</p>
+          <div class="comment-footer">
+            <span class="user ">peanut</span><span>, 2025-05-07 15:57 (UTC)</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary button-show-comment-dialog" onclick="harag_cz_comment('9700c171-22a2-4348-a387-145cd82f7e6e')">
+              Reply
+            </button>
+          </div>
+        </blockquote>
+      </div>
+    </div>
+    <div id="comment_28dbd4f0-b943-48db-91fd-478518e52ee9" class="card comment">
+      <div class="card-body">
+        <blockquote class="mb-0">
+          <p>Replying to <a href="#comment_38ef303b-238a-4d3c-bd2b-d4b9d3503800">38ef303b-238a-4d3c-bd2b-d4b9d3503800</a>:</p>
+          <p class="comment-content">are school blocks EVERYTHING they blocked a SCHOOL website that I needed to do a research paper on!</p>
+          <div class="comment-footer">
+            <span class="user ">peanut</span><span>, 2025-05-07 15:56 (UTC)</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary button-show-comment-dialog" onclick="harag_cz_comment('28dbd4f0-b943-48db-91fd-478518e52ee9')">
+              Reply
+            </button>
+          </div>
+        </blockquote>
+      </div>
+    </div>
+    <div id="comment_4ee49db7-123a-47dd-81bf-f8e411bf31a9" class="card comment">
+      <div class="card-body">
+        <blockquote class="mb-0">
+          <p>Replying to <a href="#comment_f3f11bae-6efd-4149-ac7c-8f82d7ec3b13">f3f11bae-6efd-4149-ac7c-8f82d7ec3b13</a>:</p>
+          <p class="comment-content">HOW, you have GOT to tell me how you did it</p>
+          <div class="comment-footer">
+            <span class="user ">peanut</span><span>, 2025-05-07 15:54 (UTC)</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary button-show-comment-dialog" onclick="harag_cz_comment('4ee49db7-123a-47dd-81bf-f8e411bf31a9')">
+              Reply
+            </button>
+          </div>
+        </blockquote>
+      </div>
+    </div>
+    <div id="comment_01894e8f-2a39-4a12-a404-975f2b58322c" class="card comment">
+      <div class="card-body">
+        <blockquote class="mb-0">
+          
+          <p class="comment-content">why do we have to do a test to get our comments published?</p>
+          <div class="comment-footer">
+            <span class="user ">peanut</span><span>, 2025-05-07 15:53 (UTC)</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary button-show-comment-dialog" onclick="harag_cz_comment('01894e8f-2a39-4a12-a404-975f2b58322c')">
+              Reply
+            </button>
+          </div>
+        </blockquote>
+      </div>
+    </div>
+    <div id="comment_188c0d1a-571e-4b66-aa6d-75cf6f504509" class="card comment">
+      <div class="card-body">
+        <blockquote class="mb-0">
+          
+          <p class="comment-content">I love sandsaga, I like how creative you can get, you should make way more games like this you are amazing</p>
+          <div class="comment-footer">
+            <span class="user ">peanut</span><span>, 2025-05-07 15:51 (UTC)</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary button-show-comment-dialog" onclick="harag_cz_comment('188c0d1a-571e-4b66-aa6d-75cf6f504509')">
+              Reply
+            </button>
+          </div>
+        </blockquote>
+      </div>
+    </div>
+    <div id="comment_cd517102-2131-43ce-ab20-a32851a0b9da" class="card comment">
+      <div class="card-body">
+        <blockquote class="mb-0">
+          <p>Replying to <a href="#comment_e9525a92-aea0-43bc-903c-b98dc1e3b951">e9525a92-aea0-43bc-903c-b98dc1e3b951</a>:</p>
+          <p class="comment-content">this is blocked</p>
+          <div class="comment-footer">
+            <span class="user ">carson</span><span>, 2025-05-06 19:50 (UTC)</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary button-show-comment-dialog" onclick="harag_cz_comment('cd517102-2131-43ce-ab20-a32851a0b9da')">
+              Reply
+            </button>
+          </div>
+        </blockquote>
+      </div>
+    </div>
+    <div id="comment_e9525a92-aea0-43bc-903c-b98dc1e3b951" class="card comment">
+      <div class="card-body">
+        <blockquote class="mb-0">
+          <p>Replying to <a href="#comment_636e0853-6dee-41f8-9a24-e3e89bcd00fe">636e0853-6dee-41f8-9a24-e3e89bcd00fe</a>:</p>
+          <p class="comment-content">Don&#39;t share this with your teacher:
+https://sga4schools.harag.cz cannot be blocked</p>
+          <div class="comment-footer">
+            <span class="user ">Quasi</span><span>, 2025-04-22 20:16 (UTC)</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary button-show-comment-dialog" onclick="harag_cz_comment('e9525a92-aea0-43bc-903c-b98dc1e3b951')">
+              Reply
+            </button>
+          </div>
+        </blockquote>
+      </div>
+    </div>
+    <div id="comment_64160aef-597d-4929-9eb1-9e34539c39d6" class="card comment">
+      <div class="card-body">
+        <blockquote class="mb-0">
+          
+          <p class="comment-content">Can you tell me how to open an application on vs code?</p>
+          <div class="comment-footer">
+            <span class="user ">Henry Morris</span><span>, 2025-04-11 21:35 (UTC)</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary button-show-comment-dialog" onclick="harag_cz_comment('64160aef-597d-4929-9eb1-9e34539c39d6')">
+              Reply
+            </button>
+          </div>
+        </blockquote>
+      </div>
+    </div>
+    <div id="comment_981ef958-9471-4cd4-86d3-5e70e1426c46" class="card comment">
+      <div class="card-body">
+        <blockquote class="mb-0">
+          <p>Replying to <a href="#comment_38ef303b-238a-4d3c-bd2b-d4b9d3503800">38ef303b-238a-4d3c-bd2b-d4b9d3503800</a>:</p>
+          <p class="comment-content">The admin and principals check your history and can see everything you click and look at, no matter what. They can see everything you type when you type it, they can also use an app called go guardian to see what your currently on, that&#39;s what my junior high has anyway, they also will give you ASD or ISD sometimes even OSS or ISS if you are on illegal stuff or stuff that is banned by school policies or by the state, but they can also expel you or contact anyone that&#39;s in their database.</p>
+          <div class="comment-footer">
+            <span class="user ">Ayden</span><span>, 2025-04-07 23:16 (UTC)</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary button-show-comment-dialog" onclick="harag_cz_comment('981ef958-9471-4cd4-86d3-5e70e1426c46')">
+              Reply
+            </button>
+          </div>
+        </blockquote>
+      </div>
+    </div>
+    <div id="comment_9cc04a6b-846b-40a5-bb7e-345c6c0fe6d3" class="card comment">
+      <div class="card-body">
+        <blockquote class="mb-0">
+          
+          <p class="comment-content">best game ever someone should make humans with stuff to build and dig</p>
+          <div class="comment-footer">
+            <span class="user ">justin</span><span>, 2025-04-01 22:06 (UTC)</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary button-show-comment-dialog" onclick="harag_cz_comment('9cc04a6b-846b-40a5-bb7e-345c6c0fe6d3')">
+              Reply
+            </button>
+          </div>
+        </blockquote>
+      </div>
+    </div>
+    <div id="comment_cbd7d587-e6ba-45ad-bccb-ce3fc14df5a0" class="card comment">
+      <div class="card-body">
+        <blockquote class="mb-0">
+          <p>Replying to <a href="#comment_f3f11bae-6efd-4149-ac7c-8f82d7ec3b13">f3f11bae-6efd-4149-ac7c-8f82d7ec3b13</a>:</p>
+          <p class="comment-content">OK, that&#39;s good</p>
+          <div class="comment-footer">
+            <span class="user ">Amelia</span><span>, 2025-04-01 12:19 (UTC)</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary button-show-comment-dialog" onclick="harag_cz_comment('cbd7d587-e6ba-45ad-bccb-ce3fc14df5a0')">
+              Reply
+            </button>
+          </div>
+        </blockquote>
+      </div>
+    </div>
+    <div id="comment_c2058eb6-04dc-447f-ab12-2171435831b6" class="card comment">
+      <div class="card-body">
+        <blockquote class="mb-0">
+          
+          <p class="comment-content">This game is so awesome sauce</p>
+          <div class="comment-footer">
+            <span class="user ">awesome sauce</span><span>, 2025-03-28 15:33 (UTC)</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary button-show-comment-dialog" onclick="harag_cz_comment('c2058eb6-04dc-447f-ab12-2171435831b6')">
+              Reply
+            </button>
+          </div>
+        </blockquote>
+      </div>
+    </div>
+    <div id="comment_41540683-2612-493d-b333-1caec7baef85" class="card comment">
+      <div class="card-body">
+        <blockquote class="mb-0">
+          
+          <p class="comment-content">You should add salt brush in this game</p>
+          <div class="comment-footer">
+            <span class="user ">Henry Morris</span><span>, 2025-03-15 14:59 (UTC)</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary button-show-comment-dialog" onclick="harag_cz_comment('41540683-2612-493d-b333-1caec7baef85')">
+              Reply
+            </button>
+          </div>
+        </blockquote>
+      </div>
+    </div>
+    <div id="comment_8933fa8e-abe2-41d2-9f93-215fbb850794" class="card comment">
+      <div class="card-body">
+        <blockquote class="mb-0">
+          
+          <p class="comment-content">hello</p>
+          <div class="comment-footer">
+            <span class="user ">grenebean</span><span>, 2025-03-05 14:31 (UTC)</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary button-show-comment-dialog" onclick="harag_cz_comment('8933fa8e-abe2-41d2-9f93-215fbb850794')">
+              Reply
+            </button>
+          </div>
+        </blockquote>
+      </div>
+    </div>
+    <div id="comment_222eaebb-1eba-4a0e-8b88-090d96eada2e" class="card comment">
+      <div class="card-body">
+        <blockquote class="mb-0">
+          <p>Replying to <a href="#comment_851eb85d-50bf-4219-9a46-74308da2db1b">851eb85d-50bf-4219-9a46-74308da2db1b</a>:</p>
+          <p class="comment-content">yeah who doesnt h8 school</p>
+          <div class="comment-footer">
+            <span class="user ">grenebean</span><span>, 2025-03-05 14:30 (UTC)</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary button-show-comment-dialog" onclick="harag_cz_comment('222eaebb-1eba-4a0e-8b88-090d96eada2e')">
+              Reply
+            </button>
+          </div>
+        </blockquote>
+      </div>
+    </div>
+    <div id="comment_3547e47e-eb63-4ced-bc28-b1f63c5def92" class="card comment">
+      <div class="card-body">
+        <blockquote class="mb-0">
+          <p>Replying to <a href="#comment_851eb85d-50bf-4219-9a46-74308da2db1b">851eb85d-50bf-4219-9a46-74308da2db1b</a>:</p>
+          <p class="comment-content">i meant alt site :p</p>
+          <div class="comment-footer">
+            <span class="user ">AFrenchToastGuy</span><span>, 2025-03-04 19:27 (UTC)</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary button-show-comment-dialog" onclick="harag_cz_comment('3547e47e-eb63-4ced-bc28-b1f63c5def92')">
+              Reply
+            </button>
+          </div>
+        </blockquote>
+      </div>
+    </div>
+    <div id="comment_851eb85d-50bf-4219-9a46-74308da2db1b" class="card comment">
+      <div class="card-body">
+        <blockquote class="mb-0">
+          
+          <p class="comment-content">rtdrt my school blocked sand saga and then blocked the site, i h8 school!</p>
+          <div class="comment-footer">
+            <span class="user ">AFrenchToastGuy</span><span>, 2025-03-04 19:26 (UTC)</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary button-show-comment-dialog" onclick="harag_cz_comment('851eb85d-50bf-4219-9a46-74308da2db1b')">
+              Reply
+            </button>
+          </div>
+        </blockquote>
+      </div>
+    </div>
+    <div id="comment_bf19f7d4-75f4-4232-b016-ce292564bab8" class="card comment">
+      <div class="card-body">
+        <blockquote class="mb-0">
+          
+          <p class="comment-content">Fattigle tang tooga tang boom tang tang boom tang toogaloogit</p>
+          <div class="comment-footer">
+            <span class="user ">Bippleyipsnip</span><span>, 2025-03-03 16:45 (UTC)</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary button-show-comment-dialog" onclick="harag_cz_comment('bf19f7d4-75f4-4232-b016-ce292564bab8')">
+              Reply
+            </button>
+          </div>
+        </blockquote>
+      </div>
+    </div>
+    <div id="comment_e75f2920-99c5-4bc9-bf6a-52231cd76b11" class="card comment">
+      <div class="card-body">
+        <blockquote class="mb-0">
+          
+          <p class="comment-content">I think you shoued
+ ad no premunn</p>
+          <div class="comment-footer">
+            <span class="user ">rye .miller</span><span>, 2025-02-28 05:54 (UTC)</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary button-show-comment-dialog" onclick="harag_cz_comment('e75f2920-99c5-4bc9-bf6a-52231cd76b11')">
+              Reply
+            </button>
+          </div>
+        </blockquote>
+      </div>
+    </div>
+    <div id="comment_f3f11bae-6efd-4149-ac7c-8f82d7ec3b13" class="card comment">
+      <div class="card-body">
+        <blockquote class="mb-0">
+          
+          <p class="comment-content">I have returned. (I convinced my school to unblock it)</p>
+          <div class="comment-footer">
+            <span class="user ">Archer</span><span>, 2025-02-25 17:29 (UTC)</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary button-show-comment-dialog" onclick="harag_cz_comment('f3f11bae-6efd-4149-ac7c-8f82d7ec3b13')">
+              Reply
+            </button>
+          </div>
+        </blockquote>
+      </div>
+    </div>
+    <div id="comment_badd15bd-2d56-4f51-9830-0b3dd89e83ab" class="card comment">
+      <div class="card-body">
+        <blockquote class="mb-0">
+          
+          <p class="comment-content">so yea. also, making domains cost money, in pretty sure. not sure if sga4schools did, since it ends in harag.cz, which he already has.</p>
+          <div class="comment-footer">
+            <span class="user ">ramenbasil123</span><span>, 2025-02-24 03:28 (UTC)</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary button-show-comment-dialog" onclick="harag_cz_comment('badd15bd-2d56-4f51-9830-0b3dd89e83ab')">
+              Reply
+            </button>
+          </div>
+        </blockquote>
+      </div>
+    </div>
+    <div id="comment_38ef303b-238a-4d3c-bd2b-d4b9d3503800" class="card comment">
+      <div class="card-body">
+        <blockquote class="mb-0">
+          
+          <p class="comment-content">i feel like either way, the domains will get blocked by blocking systems, rendering them useless. I don&#39;t how your guys blocking works, but ours is based on tracking every word on the page and checking whether your movements are sus. and if you have actual people blocking websites, they will just block it and thats another domain wasted.</p>
+          <div class="comment-footer">
+            <span class="user ">ramenbasil123</span><span>, 2025-02-24 03:23 (UTC)</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary button-show-comment-dialog" onclick="harag_cz_comment('38ef303b-238a-4d3c-bd2b-d4b9d3503800')">
+              Reply
+            </button>
+          </div>
+        </blockquote>
+      </div>
+    </div>
+    <div id="comment_ff0021df-dc35-4e85-8ce1-ea8d33630167" class="card comment">
+      <div class="card-body">
+        <blockquote class="mb-0">
+          
+          <p class="comment-content">Can you please make more domains?</p>
+          <div class="comment-footer">
+            <span class="user ">applypieguy</span><span>, 2025-02-22 21:07 (UTC)</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary button-show-comment-dialog" onclick="harag_cz_comment('ff0021df-dc35-4e85-8ce1-ea8d33630167')">
+              Reply
+            </button>
+          </div>
+        </blockquote>
+      </div>
+    </div>
+    <div id="comment_bf1c5b31-2398-4894-a1dd-b96a104ced1b" class="card comment">
+      <div class="card-body">
+        <blockquote class="mb-0">
+          
+          <p class="comment-content">extrememath? lol, you do not know how ANNOYING our blocking system is. :)</p>
+          <div class="comment-footer">
+            <span class="user ">ramenbasil123</span><span>, 2025-02-22 02:51 (UTC)</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary button-show-comment-dialog" onclick="harag_cz_comment('bf1c5b31-2398-4894-a1dd-b96a104ced1b')">
+              Reply
+            </button>
+          </div>
+        </blockquote>
+      </div>
+    </div>
+    <div id="comment_10b7e3e8-8c6b-4890-b24d-504850ff0abb" class="card comment">
+      <div class="card-body">
+        <blockquote class="mb-0">
+          <p>Replying to <a href="#comment_3098f083-bf87-4bbb-81f2-b2909c2733a0">3098f083-bf87-4bbb-81f2-b2909c2733a0</a>:</p>
+          <p class="comment-content">use extrememath, it should be unblocked</p>
+          <div class="comment-footer">
+            <span class="user ">noah</span><span>, 2025-02-21 14:50 (UTC)</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary button-show-comment-dialog" onclick="harag_cz_comment('10b7e3e8-8c6b-4890-b24d-504850ff0abb')">
+              Reply
+            </button>
+          </div>
+        </blockquote>
+      </div>
+    </div>
+    <div id="comment_85ebc179-3271-43d4-aa78-be34bd016861" class="card comment">
+      <div class="card-body">
+        <blockquote class="mb-0">
+          <p>Replying to <a href="#comment_3098f083-bf87-4bbb-81f2-b2909c2733a0">3098f083-bf87-4bbb-81f2-b2909c2733a0</a>:</p>
+          <p class="comment-content">nvm they blocked it. at least sga4schools works...</p>
+          <div class="comment-footer">
+            <span class="user ">ramenbasil123</span><span>, 2025-02-19 03:28 (UTC)</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary button-show-comment-dialog" onclick="harag_cz_comment('85ebc179-3271-43d4-aa78-be34bd016861')">
+              Reply
+            </button>
+          </div>
+        </blockquote>
+      </div>
+    </div>
+    <div id="comment_3098f083-bf87-4bbb-81f2-b2909c2733a0" class="card comment">
+      <div class="card-body">
+        <blockquote class="mb-0">
+          
+          <p class="comment-content">Somehow SandSaga is unblocked for our district, but Sand Game JS is blocked. Probably because whatever weird blocking system we have (deledao or something) blocks LITERALLY ANYTHING if it has the word game.</p>
+          <div class="comment-footer">
+            <span class="user ">ramenbasil123</span><span>, 2025-02-13 03:45 (UTC)</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary button-show-comment-dialog" onclick="harag_cz_comment('3098f083-bf87-4bbb-81f2-b2909c2733a0')">
+              Reply
+            </button>
+          </div>
+        </blockquote>
+      </div>
+    </div>
+    <div id="comment_27e37ec8-7fbe-4fe4-b74b-3abe6b7741c1" class="card comment">
+      <div class="card-body">
+        <blockquote class="mb-0">
+          <p>Replying to <a href="#comment_f376324a-5621-4269-a063-a3b5fb49cf87">f376324a-5621-4269-a063-a3b5fb49cf87</a>:</p>
+          <p class="comment-content">it is tho</p>
+          <div class="comment-footer">
+            <span class="user ">ramenbasil123</span><span>, 2025-02-11 19:54 (UTC)</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary button-show-comment-dialog" onclick="harag_cz_comment('27e37ec8-7fbe-4fe4-b74b-3abe6b7741c1')">
+              Reply
+            </button>
+          </div>
+        </blockquote>
+      </div>
+    </div>
+    <div id="comment_ea55b326-1515-4149-a896-86f5d8740658" class="card comment">
+      <div class="card-body">
+        <blockquote class="mb-0">
+          
+          <p class="comment-content">W game honestly fr. would be even more W if it had sound :D</p>
+          <div class="comment-footer">
+            <span class="user ">ramenbasil123</span><span>, 2025-02-11 19:52 (UTC)</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary button-show-comment-dialog" onclick="harag_cz_comment('ea55b326-1515-4149-a896-86f5d8740658')">
+              Reply
+            </button>
+          </div>
+        </blockquote>
+      </div>
+    </div>
+    <div id="comment_55affc06-f743-48f5-b70e-cb35925e253e" class="card comment">
+      <div class="card-body">
+        <blockquote class="mb-0">
+          
+          <p class="comment-content">cool</p>
+          <div class="comment-footer">
+            <span class="user ">hud-sin</span><span>, 2025-02-04 17:42 (UTC)</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary button-show-comment-dialog" onclick="harag_cz_comment('55affc06-f743-48f5-b70e-cb35925e253e')">
+              Reply
+            </button>
+          </div>
+        </blockquote>
+      </div>
+    </div>
+    <div id="comment_2bf80b48-e340-496c-afc7-a1ea9dad88ca" class="card comment">
+      <div class="card-body">
+        <blockquote class="mb-0">
+          
+          <p class="comment-content">game fun</p>
+          <div class="comment-footer">
+            <span class="user ">coolkid538iscool</span><span>, 2025-01-30 15:50 (UTC)</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary button-show-comment-dialog" onclick="harag_cz_comment('2bf80b48-e340-496c-afc7-a1ea9dad88ca')">
+              Reply
+            </button>
+          </div>
+        </blockquote>
+      </div>
+    </div>
+    <div id="comment_f42e83d3-5f7f-4ebc-ae67-2a39dadd497d" class="card comment">
+      <div class="card-body">
+        <blockquote class="mb-0">
+          
+          <p class="comment-content">unblock sand saga</p>
+          <div class="comment-footer">
+            <span class="user ">23lun16</span><span>, 2025-01-29 20:35 (UTC)</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary button-show-comment-dialog" onclick="harag_cz_comment('f42e83d3-5f7f-4ebc-ae67-2a39dadd497d')">
+              Reply
+            </button>
+          </div>
+        </blockquote>
+      </div>
+    </div>
+    <div id="comment_7182c3aa-43a9-40c5-870f-6be1c5aa53b4" class="card comment">
+      <div class="card-body">
+        <blockquote class="mb-0">
+          <p>Replying to <a href="#comment_eae9e3cc-0a2e-4230-85b2-20ed9e3c182e">eae9e3cc-0a2e-4230-85b2-20ed9e3c182e</a>:</p>
+          <p class="comment-content">I dont need help anymore Patrik I found the 20th mission and did it thanks for the help thow</p>
+          <div class="comment-footer">
+            <span class="user ">Cody</span><span>, 2025-01-27 14:36 (UTC)</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary button-show-comment-dialog" onclick="harag_cz_comment('7182c3aa-43a9-40c5-870f-6be1c5aa53b4')">
+              Reply
+            </button>
+          </div>
+        </blockquote>
+      </div>
+    </div>
+    <div id="comment_daabfaf7-fdb1-4fb5-93a3-a3fb78757029" class="card comment">
+      <div class="card-body">
+        <blockquote class="mb-0">
+          
+          <p class="comment-content">I was wondering if I could get the base file for this so I can manually add my own stuff.</p>
+          <div class="comment-footer">
+            <span class="user ">Ryan</span><span>, 2025-01-25 18:24 (UTC)</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary button-show-comment-dialog" onclick="harag_cz_comment('daabfaf7-fdb1-4fb5-93a3-a3fb78757029')">
+              Reply
+            </button>
+          </div>
+        </blockquote>
+      </div>
+    </div>
+    <div id="comment_eae9e3cc-0a2e-4230-85b2-20ed9e3c182e" class="card comment">
+      <div class="card-body">
+        <blockquote class="mb-0">
+          <p>Replying to <a href="#comment_5129dbd4-ed43-4c51-8793-b76b9de9c900">5129dbd4-ed43-4c51-8793-b76b9de9c900</a>:</p>
+          <p class="comment-content">But where do i find workshop scenarios there like not even there</p>
+          <div class="comment-footer">
+            <span class="user ">Cody</span><span>, 2025-01-23 15:12 (UTC)</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary button-show-comment-dialog" onclick="harag_cz_comment('eae9e3cc-0a2e-4230-85b2-20ed9e3c182e')">
+              Reply
+            </button>
+          </div>
+        </blockquote>
+      </div>
+    </div>
+    <div id="comment_5129dbd4-ed43-4c51-8793-b76b9de9c900" class="card comment">
+      <div class="card-body">
+        <blockquote class="mb-0">
+          <p>Replying to <a href="#comment_a79c18c4-4a05-4160-ab50-7d6388312ccf">a79c18c4-4a05-4160-ab50-7d6388312ccf</a>:</p>
+          <p class="comment-content">Any workshop scenario counts as 20th</p>
+          <div class="comment-footer">
+            <span class="user user-admin">Patrik</span><span>, 2025-01-23 12:56 (UTC)</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary button-show-comment-dialog" onclick="harag_cz_comment('5129dbd4-ed43-4c51-8793-b76b9de9c900')">
+              Reply
+            </button>
+          </div>
+        </blockquote>
+      </div>
+    </div>
+    <div id="comment_a79c18c4-4a05-4160-ab50-7d6388312ccf" class="card comment">
+      <div class="card-body">
+        <blockquote class="mb-0">
+          
+          <p class="comment-content">I have done 19/20 missions but I for some reason cannot find the 20th mission pleas fix it</p>
+          <div class="comment-footer">
+            <span class="user ">Cody</span><span>, 2025-01-22 19:45 (UTC)</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary button-show-comment-dialog" onclick="harag_cz_comment('a79c18c4-4a05-4160-ab50-7d6388312ccf')">
+              Reply
+            </button>
+          </div>
+        </blockquote>
+      </div>
+    </div>
+    <div id="comment_4ac08043-fd1f-4523-8e75-944be836e1f9" class="card comment">
+      <div class="card-body">
+        <blockquote class="mb-0">
+          
+          <p class="comment-content">burn a ecosystem.</p>
+          <div class="comment-footer">
+            <span class="user ">kaleb</span><span>, 2025-01-16 13:30 (UTC)</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary button-show-comment-dialog" onclick="harag_cz_comment('4ac08043-fd1f-4523-8e75-944be836e1f9')">
+              Reply
+            </button>
+          </div>
+        </blockquote>
+      </div>
+    </div>
+    <div id="comment_7dc4fa08-a600-4399-8149-a6ae45c5571b" class="card comment">
+      <div class="card-body">
+        <blockquote class="mb-0">
+          <p>Replying to <a href="#comment_74891ece-fdd5-4abe-8338-d1d6eaeb49e8">74891ece-fdd5-4abe-8338-d1d6eaeb49e8</a>:</p>
+          <p class="comment-content">Facts i barely got to play it</p>
+          <div class="comment-footer">
+            <span class="user ">mrosem3519</span><span>, 2025-01-10 03:56 (UTC)</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary button-show-comment-dialog" onclick="harag_cz_comment('7dc4fa08-a600-4399-8149-a6ae45c5571b')">
+              Reply
+            </button>
+          </div>
+        </blockquote>
+      </div>
+    </div>
+    <div id="comment_02fc8967-aff4-43db-8ec2-3fc8dc60bdaf" class="card comment">
+      <div class="card-body">
+        <blockquote class="mb-0">
+          <p>Replying to <a href="#comment_73d12d6b-82bd-44ca-a327-8c6a05453f08">73d12d6b-82bd-44ca-a327-8c6a05453f08</a>:</p>
+          <p class="comment-content">I believe the correct term is &quot;This Doesn&#39;t Work&quot; by C418</p>
+          <div class="comment-footer">
+            <span class="user ">person</span><span>, 2024-12-18 17:43 (UTC)</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary button-show-comment-dialog" onclick="harag_cz_comment('02fc8967-aff4-43db-8ec2-3fc8dc60bdaf')">
+              Reply
+            </button>
+          </div>
+        </blockquote>
+      </div>
+    </div>
+    <div id="comment_65ad8188-74ce-4a49-9e8d-89568882a6c3" class="card comment">
+      <div class="card-body">
+        <blockquote class="mb-0">
+          
+          <p class="comment-content">I love your game but maby you could change the speed of time or unlock some materals by completing things like demolition for that you could get a tnt thanks for listening I love your game.</p>
+          <div class="comment-footer">
+            <span class="user ">MrCinamin</span><span>, 2024-11-25 15:03 (UTC)</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary button-show-comment-dialog" onclick="harag_cz_comment('65ad8188-74ce-4a49-9e8d-89568882a6c3')">
+              Reply
+            </button>
+          </div>
+        </blockquote>
+      </div>
+    </div>
+    <div id="comment_df156591-65ef-459a-bfef-5a4b6e143259" class="card comment">
+      <div class="card-body">
+        <blockquote class="mb-0">
+          
+          <p class="comment-content">When are you going to add something that everybody can
+access without having to be a supporter like a material
+Please leave a comment</p>
+          <div class="comment-footer">
+            <span class="user ">durvin</span><span>, 2024-11-15 12:49 (UTC)</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary button-show-comment-dialog" onclick="harag_cz_comment('df156591-65ef-459a-bfef-5a4b6e143259')">
+              Reply
+            </button>
+          </div>
+        </blockquote>
+      </div>
+    </div>
+    <div id="comment_25eb0d2d-5cda-44cd-9de3-357fa7457322" class="card comment">
+      <div class="card-body">
+        <blockquote class="mb-0">
+          
+          <p class="comment-content">This game is really good I love playing it at school</p>
+          <div class="comment-footer">
+            <span class="user ">your mom</span><span>, 2024-11-12 16:19 (UTC)</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary button-show-comment-dialog" onclick="harag_cz_comment('25eb0d2d-5cda-44cd-9de3-357fa7457322')">
+              Reply
+            </button>
+          </div>
+        </blockquote>
+      </div>
+    </div>
+    <div id="comment_74891ece-fdd5-4abe-8338-d1d6eaeb49e8" class="card comment">
+      <div class="card-body">
+        <blockquote class="mb-0">
+          <p>Replying to <a href="#comment_50cfedd5-d72e-4889-874c-e83e954b07e7">50cfedd5-d72e-4889-874c-e83e954b07e7</a>:</p>
+          <p class="comment-content">They already blocked it and I found it 10 minutes ago</p>
+          <div class="comment-footer">
+            <span class="user ">Trxde</span><span>, 2024-11-11 18:05 (UTC)</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary button-show-comment-dialog" onclick="harag_cz_comment('74891ece-fdd5-4abe-8338-d1d6eaeb49e8')">
+              Reply
+            </button>
+          </div>
+        </blockquote>
+      </div>
+    </div>
+    <div id="comment_2c098a1d-26b8-49ee-b4ab-1f6c0659dd66" class="card comment">
+      <div class="card-body">
+        <blockquote class="mb-0">
+          <p>Replying to <a href="#comment_f33d5aa1-6dc5-43b5-aab4-b4d2d917d186">f33d5aa1-6dc5-43b5-aab4-b4d2d917d186</a>:</p>
+          <p class="comment-content">Firstly isn’t a word</p>
+          <div class="comment-footer">
+            <span class="user ">Jaj</span><span>, 2024-11-08 14:44 (UTC)</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary button-show-comment-dialog" onclick="harag_cz_comment('2c098a1d-26b8-49ee-b4ab-1f6c0659dd66')">
+              Reply
+            </button>
+          </div>
+        </blockquote>
+      </div>
+    </div>
+    <div id="comment_636e0853-6dee-41f8-9a24-e3e89bcd00fe" class="card comment">
+      <div class="card-body">
+        <blockquote class="mb-0">
+          <p>Replying to <a href="#comment_73d12d6b-82bd-44ca-a327-8c6a05453f08">73d12d6b-82bd-44ca-a327-8c6a05453f08</a>:</p>
+          <p class="comment-content">sandsaga.com link does not work</p>
+          <div class="comment-footer">
+            <span class="user ">Tarce</span><span>, 2024-10-24 13:14 (UTC)</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary button-show-comment-dialog" onclick="harag_cz_comment('636e0853-6dee-41f8-9a24-e3e89bcd00fe')">
+              Reply
+            </button>
+          </div>
+        </blockquote>
+      </div>
+    </div>
+    <div id="comment_73d12d6b-82bd-44ca-a327-8c6a05453f08" class="card comment">
+      <div class="card-body">
+        <blockquote class="mb-0">
+          
+          <p class="comment-content">this dont work</p>
+          <div class="comment-footer">
+            <span class="user ">Pmarks1107</span><span>, 2024-10-23 17:41 (UTC)</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary button-show-comment-dialog" onclick="harag_cz_comment('73d12d6b-82bd-44ca-a327-8c6a05453f08')">
+              Reply
+            </button>
+          </div>
+        </blockquote>
+      </div>
+    </div>
+    <div id="comment_fb163003-574e-473d-98b9-be0e8023773b" class="card comment">
+      <div class="card-body">
+        <blockquote class="mb-0">
+          
+          <p class="comment-content">wood burn faster s      l</p>
+          <div class="comment-footer">
+            <span class="user ">sajk</span><span>, 2024-10-23 15:15 (UTC)</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary button-show-comment-dialog" onclick="harag_cz_comment('fb163003-574e-473d-98b9-be0e8023773b')">
+              Reply
+            </button>
+          </div>
+        </blockquote>
+      </div>
+    </div>
+    <div id="comment_37911355-a69c-48bf-b50a-3ca4c3f20c1c" class="card comment">
+      <div class="card-body">
+        <blockquote class="mb-0">
+          
+          <p class="comment-content">maybe try putting in on this since the ones here work for now at least</p>
+          <div class="comment-footer">
+            <span class="user ">KidofKids</span><span>, 2024-10-22 15:35 (UTC)</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary button-show-comment-dialog" onclick="harag_cz_comment('37911355-a69c-48bf-b50a-3ca4c3f20c1c')">
+              Reply
+            </button>
+          </div>
+        </blockquote>
+      </div>
+    </div>
+    <div id="comment_90530c90-1e0d-483d-bafa-a1bd10e23d2d" class="card comment">
+      <div class="card-body">
+        <blockquote class="mb-0">
+          <p>Replying to <a href="#comment_50cfedd5-d72e-4889-874c-e83e954b07e7">50cfedd5-d72e-4889-874c-e83e954b07e7</a>:</p>
+          <p class="comment-content">didn&#39;t work ;_;</p>
+          <div class="comment-footer">
+            <span class="user ">KidofKids</span><span>, 2024-10-22 15:34 (UTC)</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary button-show-comment-dialog" onclick="harag_cz_comment('90530c90-1e0d-483d-bafa-a1bd10e23d2d')">
+              Reply
+            </button>
+          </div>
+        </blockquote>
+      </div>
+    </div>
+    <div id="comment_f376324a-5621-4269-a063-a3b5fb49cf87" class="card comment">
+      <div class="card-body">
+        <blockquote class="mb-0">
+          
+          <p class="comment-content">what is the new sand saga website URL
+and no not sandsaga.com</p>
+          <div class="comment-footer">
+            <span class="user ">wyatt</span><span>, 2024-10-17 20:03 (UTC)</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary button-show-comment-dialog" onclick="harag_cz_comment('f376324a-5621-4269-a063-a3b5fb49cf87')">
+              Reply
+            </button>
+          </div>
+        </blockquote>
+      </div>
+    </div>
+    <div id="comment_41d89a02-cc7e-4141-b568-3a1dc7da2354" class="card comment">
+      <div class="card-body">
+        <blockquote class="mb-0">
+          
+          <p class="comment-content">I don&#39;t know if anybody else has experienced this bug, but currently, me and my friend found a bug with the Demolition mission. when the scene is loaded, the entire structure Is non-existant, and the mission is automatically completed</p>
+          <div class="comment-footer">
+            <span class="user ">GE0PLEX</span><span>, 2024-10-15 15:08 (UTC)</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary button-show-comment-dialog" onclick="harag_cz_comment('41d89a02-cc7e-4141-b568-3a1dc7da2354')">
+              Reply
+            </button>
+          </div>
+        </blockquote>
+      </div>
+    </div>
+    <div id="comment_c9850fab-1a8e-46f1-a77c-5fec822519cf" class="card comment">
+      <div class="card-body">
+        <blockquote class="mb-0">
+          
+          <p class="comment-content">could i put this on my website?</p>
+          <div class="comment-footer">
+            <span class="user ">classroom 69x admin</span><span>, 2024-10-15 13:44 (UTC)</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary button-show-comment-dialog" onclick="harag_cz_comment('c9850fab-1a8e-46f1-a77c-5fec822519cf')">
+              Reply
+            </button>
+          </div>
+        </blockquote>
+      </div>
+    </div>
+    <div id="comment_50cfedd5-d72e-4889-874c-e83e954b07e7" class="card comment">
+      <div class="card-body">
+        <blockquote class="mb-0">
+          
+          <p class="comment-content">Keep it a secret :)
+https://sga4schools.harag.cz</p>
+          <div class="comment-footer">
+            <span class="user user-admin">Patrik</span><span>, 2024-10-13 14:15 (UTC)</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary button-show-comment-dialog" onclick="harag_cz_comment('50cfedd5-d72e-4889-874c-e83e954b07e7')">
+              Reply
+            </button>
+          </div>
+        </blockquote>
+      </div>
+    </div>
+    <div id="comment_6306e6c4-6cd1-48c5-ba58-01608c3485a2" class="card comment">
+      <div class="card-body">
+        <blockquote class="mb-0">
+          <p>Replying to <a href="#comment_85d9234a-1e3a-4691-96a6-e2c4e87f363d">85d9234a-1e3a-4691-96a6-e2c4e87f363d</a>:</p>
+          <p class="comment-content">please do this we need actual games on the school cronebooks</p>
+          <div class="comment-footer">
+            <span class="user ">KidofKids</span><span>, 2024-10-10 17:01 (UTC)</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary button-show-comment-dialog" onclick="harag_cz_comment('6306e6c4-6cd1-48c5-ba58-01608c3485a2')">
+              Reply
+            </button>
+          </div>
+        </blockquote>
+      </div>
+    </div>
+    <div id="comment_85d9234a-1e3a-4691-96a6-e2c4e87f363d" class="card comment">
+      <div class="card-body">
+        <blockquote class="mb-0">
+          
+          <p class="comment-content">hey can you people make multiple url&#39;s things so that the people who have them blocked at school can have url&#39;s that allow them to get to this website to play sandsaga it would be like how chess.com has multiple url&#39;s to play chess</p>
+          <div class="comment-footer">
+            <span class="user ">charles</span><span>, 2024-10-09 12:50 (UTC)</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary button-show-comment-dialog" onclick="harag_cz_comment('85d9234a-1e3a-4691-96a6-e2c4e87f363d')">
+              Reply
+            </button>
+          </div>
+        </blockquote>
+      </div>
+    </div>
+    <div id="comment_54e8afea-8e4a-4ea2-871f-1157161fb5eb" class="card comment">
+      <div class="card-body">
+        <blockquote class="mb-0">
+          <p>Replying to <a href="#comment_f2fe484a-4223-46ad-b910-6248f05fc78b">f2fe484a-4223-46ad-b910-6248f05fc78b</a>:</p>
+          <p class="comment-content">Don&#39;t work gng</p>
+          <div class="comment-footer">
+            <span class="user ">Trxee</span><span>, 2024-10-07 15:08 (UTC)</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary button-show-comment-dialog" onclick="harag_cz_comment('54e8afea-8e4a-4ea2-871f-1157161fb5eb')">
+              Reply
+            </button>
+          </div>
+        </blockquote>
+      </div>
+    </div>
+    <div id="comment_b533ff31-0903-4030-b9eb-d5c1c594ae8d" class="card comment">
+      <div class="card-body">
+        <blockquote class="mb-0">
+          
+          <p class="comment-content">Can you add fertilizer? it makes plants grow faster.</p>
+          <div class="comment-footer">
+            <span class="user ">Archer</span><span>, 2024-09-25 16:56 (UTC)</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary button-show-comment-dialog" onclick="harag_cz_comment('b533ff31-0903-4030-b9eb-d5c1c594ae8d')">
+              Reply
+            </button>
+          </div>
+        </blockquote>
+      </div>
+    </div>
+    <div id="comment_531bd5f8-9194-4097-8eea-7030c15ef81e" class="card comment">
+      <div class="card-body">
+        <blockquote class="mb-0">
+          
+          <p class="comment-content">LOLLLOL
+great game ngl</p>
+          <div class="comment-footer">
+            <span class="user ">EWTHEBEASTLY</span><span>, 2024-09-24 17:53 (UTC)</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary button-show-comment-dialog" onclick="harag_cz_comment('531bd5f8-9194-4097-8eea-7030c15ef81e')">
+              Reply
+            </button>
+          </div>
+        </blockquote>
+      </div>
+    </div>
+    <div id="comment_fa5a5dab-1dd0-405f-8611-a3878eff98b3" class="card comment">
+      <div class="card-body">
+        <blockquote class="mb-0">
+          <p>Replying to <a href="#comment_3a21f5d5-f17d-4e26-98d5-f85469f5a1a7">3a21f5d5-f17d-4e26-98d5-f85469f5a1a7</a>:</p>
+          <p class="comment-content">it is also not for me reeeeeee</p>
+          <div class="comment-footer">
+            <span class="user ">gamemaster15302</span><span>, 2024-09-21 11:37 (UTC)</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary button-show-comment-dialog" onclick="harag_cz_comment('fa5a5dab-1dd0-405f-8611-a3878eff98b3')">
+              Reply
+            </button>
+          </div>
+        </blockquote>
+      </div>
+    </div>
+    <div id="comment_0a315931-5c71-4ba4-844c-3a170705953a" class="card comment">
+      <div class="card-body">
+        <blockquote class="mb-0">
+          
+          <p class="comment-content">it is so fun I can make a valcano&#39;s and geyser&#39;s bro make sand saga 2!</p>
+          <div class="comment-footer">
+            <span class="user ">gamemaster15302</span><span>, 2024-09-21 11:04 (UTC)</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary button-show-comment-dialog" onclick="harag_cz_comment('0a315931-5c71-4ba4-844c-3a170705953a')">
+              Reply
+            </button>
+          </div>
+        </blockquote>
+      </div>
+    </div>
+    <div id="comment_3a21f5d5-f17d-4e26-98d5-f85469f5a1a7" class="card comment">
+      <div class="card-body">
+        <blockquote class="mb-0">
+          
+          <p class="comment-content">y&#39;all r massive L&#39;s sandsaga.com isn&#39;t blocked for me</p>
+          <div class="comment-footer">
+            <span class="user ">urbuiltlikeabakedbean</span><span>, 2024-09-19 23:19 (UTC)</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary button-show-comment-dialog" onclick="harag_cz_comment('3a21f5d5-f17d-4e26-98d5-f85469f5a1a7')">
+              Reply
+            </button>
+          </div>
+        </blockquote>
+      </div>
+    </div>
+    <div id="comment_2305f8d9-1461-4b18-b378-5521c146cd85" class="card comment">
+      <div class="card-body">
+        <blockquote class="mb-0">
+          <p>Replying to <a href="#comment_47991779-de14-41b6-8941-06e3a16f9f9d">47991779-de14-41b6-8941-06e3a16f9f9d</a>:</p>
+          <p class="comment-content">real</p>
+          <div class="comment-footer">
+            <span class="user ">urbuiltlikeabakedbean</span><span>, 2024-09-19 23:18 (UTC)</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary button-show-comment-dialog" onclick="harag_cz_comment('2305f8d9-1461-4b18-b378-5521c146cd85')">
+              Reply
+            </button>
+          </div>
+        </blockquote>
+      </div>
+    </div>
+    <div id="comment_3a9082ff-8138-4b58-ab43-11c7c8ead422" class="card comment">
+      <div class="card-body">
+        <blockquote class="mb-0">
+          <p>Replying to <a href="#comment_f33d5aa1-6dc5-43b5-aab4-b4d2d917d186">f33d5aa1-6dc5-43b5-aab4-b4d2d917d186</a>:</p>
+          <p class="comment-content">womp womp</p>
+          <div class="comment-footer">
+            <span class="user ">urbuiltlikeabakedbean</span><span>, 2024-09-19 23:18 (UTC)</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary button-show-comment-dialog" onclick="harag_cz_comment('3a9082ff-8138-4b58-ab43-11c7c8ead422')">
+              Reply
+            </button>
+          </div>
+        </blockquote>
+      </div>
+    </div>
+    <div id="comment_8ff1102c-7b87-4f31-85ce-7f19921978c5" class="card comment">
+      <div class="card-body">
+        <blockquote class="mb-0">
+          
+          <p class="comment-content">ur mom is gai</p>
+          <div class="comment-footer">
+            <span class="user ">skeebeedee</span><span>, 2024-09-19 23:15 (UTC)</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary button-show-comment-dialog" onclick="harag_cz_comment('8ff1102c-7b87-4f31-85ce-7f19921978c5')">
+              Reply
+            </button>
+          </div>
+        </blockquote>
+      </div>
+    </div>
+    <div id="comment_aed7f7cf-a167-4d45-b648-3c1baf9161e1" class="card comment">
+      <div class="card-body">
+        <blockquote class="mb-0">
+          <p>Replying to <a href="#comment_a198f4c4-53a6-47a1-b05a-dcaef33fa4e6">a198f4c4-53a6-47a1-b05a-dcaef33fa4e6</a>:</p>
+          <p class="comment-content">I also can&#39;t upload anything to the workshop.</p>
+          <div class="comment-footer">
+            <span class="user ">Archer</span><span>, 2024-09-09 14:28 (UTC)</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary button-show-comment-dialog" onclick="harag_cz_comment('aed7f7cf-a167-4d45-b648-3c1baf9161e1')">
+              Reply
+            </button>
+          </div>
+        </blockquote>
+      </div>
+    </div>
+    <div id="comment_a198f4c4-53a6-47a1-b05a-dcaef33fa4e6" class="card comment">
+      <div class="card-body">
+        <blockquote class="mb-0">
+          
+          <p class="comment-content">Discord is blocked on my device so the only way I can share anything is by commenting.</p>
+          <div class="comment-footer">
+            <span class="user ">Archer</span><span>, 2024-09-08 19:05 (UTC)</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary button-show-comment-dialog" onclick="harag_cz_comment('a198f4c4-53a6-47a1-b05a-dcaef33fa4e6')">
+              Reply
+            </button>
+          </div>
+        </blockquote>
+      </div>
+    </div>
+    <div id="comment_8f3ebd6d-6448-4e3f-95d3-7925812681dd" class="card comment">
+      <div class="card-body">
+        <blockquote class="mb-0">
+          
+          <p class="comment-content">Could you please add sandsaga on this website bc it is blocked at my school</p>
+          <div class="comment-footer">
+            <span class="user "> Jason  </span><span>, 2024-09-05 15:53 (UTC)</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary button-show-comment-dialog" onclick="harag_cz_comment('8f3ebd6d-6448-4e3f-95d3-7925812681dd')">
+              Reply
+            </button>
+          </div>
+        </blockquote>
+      </div>
+    </div>
+    <div id="comment_03998cb9-06c6-4d9c-9ff8-aeffe438a8fc" class="card comment">
+      <div class="card-body">
+        <blockquote class="mb-0">
+          
+          <p class="comment-content">can you update sandgame so we can use the new things since this is blocked and we cant do anything with the lack of abilitys</p>
+          <div class="comment-footer">
+            <span class="user ">KidofKids</span><span>, 2024-08-16 16:54 (UTC)</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary button-show-comment-dialog" onclick="harag_cz_comment('03998cb9-06c6-4d9c-9ff8-aeffe438a8fc')">
+              Reply
+            </button>
+          </div>
+        </blockquote>
+      </div>
+    </div>
+    <div id="comment_fe0ba582-ba00-492d-b57a-1591babbe391" class="card comment">
+      <div class="card-body">
+        <blockquote class="mb-0">
+          
+          <p class="comment-content">i like your game</p>
+          <div class="comment-footer">
+            <span class="user ">liliac</span><span>, 2024-05-28 15:31 (UTC)</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary button-show-comment-dialog" onclick="harag_cz_comment('fe0ba582-ba00-492d-b57a-1591babbe391')">
+              Reply
+            </button>
+          </div>
+        </blockquote>
+      </div>
+    </div>
+    <div id="comment_df412f1d-a426-412f-ae79-6e13ab4fdcbf" class="card comment">
+      <div class="card-body">
+        <blockquote class="mb-0">
+          <p>Replying to <a href="#comment_4e78fafb-81f2-48c5-bff4-5584d40dbe9e">4e78fafb-81f2-48c5-bff4-5584d40dbe9e</a>:</p>
+          <p class="comment-content">your lucky our blocking thing is botted (I think)</p>
+          <div class="comment-footer">
+            <span class="user ">justaperson</span><span>, 2024-05-02 19:11 (UTC)</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary button-show-comment-dialog" onclick="harag_cz_comment('df412f1d-a426-412f-ae79-6e13ab4fdcbf')">
+              Reply
+            </button>
+          </div>
+        </blockquote>
+      </div>
+    </div>
+    <div id="comment_4e78fafb-81f2-48c5-bff4-5584d40dbe9e" class="card comment">
+      <div class="card-body">
+        <blockquote class="mb-0">
+          
+          <p class="comment-content">Well, in my school they blocks sites by site and they just search &quot;classroom games&quot; and then blocking em&#39;. So these game is safe ;D</p>
+          <div class="comment-footer">
+            <span class="user ">Alen</span><span>, 2024-05-02 11:05 (UTC)</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary button-show-comment-dialog" onclick="harag_cz_comment('4e78fafb-81f2-48c5-bff4-5584d40dbe9e')">
+              Reply
+            </button>
+          </div>
+        </blockquote>
+      </div>
+    </div>
+    <div id="comment_75021dcc-190c-45fe-9362-ac7a04378a07" class="card comment">
+      <div class="card-body">
+        <blockquote class="mb-0">
+          <p>Replying to <a href="#comment_6e01a7f8-a8ed-4171-b843-ceae3f2bd3d4">6e01a7f8-a8ed-4171-b843-ceae3f2bd3d4</a>:</p>
+          <p class="comment-content">just found out what greyware was, heres the explanation:
+https://uk.norton.com/blog/malware/what-is-grayware</p>
+          <div class="comment-footer">
+            <span class="user ">justaperson</span><span>, 2024-05-01 23:24 (UTC)</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary button-show-comment-dialog" onclick="harag_cz_comment('75021dcc-190c-45fe-9362-ac7a04378a07')">
+              Reply
+            </button>
+          </div>
+        </blockquote>
+      </div>
+    </div>
+    <div id="comment_6e01a7f8-a8ed-4171-b843-ceae3f2bd3d4" class="card comment">
+      <div class="card-body">
+        <blockquote class="mb-0">
+          <p>Replying to <a href="#comment_9f1c58c4-0256-487d-a9e8-9bb8e9e8b295">9f1c58c4-0256-487d-a9e8-9bb8e9e8b295</a>:</p>
+          <p class="comment-content">so basically, my school blocks anything &quot;harmful&quot; on our crapotrons (school chromebooks) and they have a specific list of reasons. i guess it got marked as greyware.</p>
+          <div class="comment-footer">
+            <span class="user ">justaperson</span><span>, 2024-05-01 21:54 (UTC)</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary button-show-comment-dialog" onclick="harag_cz_comment('6e01a7f8-a8ed-4171-b843-ceae3f2bd3d4')">
+              Reply
+            </button>
+          </div>
+        </blockquote>
+      </div>
+    </div>
+    <div id="comment_9f1c58c4-0256-487d-a9e8-9bb8e9e8b295" class="card comment">
+      <div class="card-body">
+        <blockquote class="mb-0">
+          <p>Replying to <a href="#comment_75862e82-55c1-4489-a29e-87e41aea79a0">75862e82-55c1-4489-a29e-87e41aea79a0</a>:</p>
+          <p class="comment-content">I don’t know exactly what you mean by grayware but it’s obviously a false accusation. There’s nothing to fix. If some s*ity antivirus is reporting it, you should mark it as a false positive.</p>
+          <div class="comment-footer">
+            <span class="user user-admin">Patrik</span><span>, 2024-05-01 18:23 (UTC)</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary button-show-comment-dialog" onclick="harag_cz_comment('9f1c58c4-0256-487d-a9e8-9bb8e9e8b295')">
+              Reply
+            </button>
+          </div>
+        </blockquote>
+      </div>
+    </div>
+    <div id="comment_75862e82-55c1-4489-a29e-87e41aea79a0" class="card comment">
+      <div class="card-body">
+        <blockquote class="mb-0">
+          
+          <p class="comment-content">idk if my og comment posted but my school says its greyware :( pls fix I love your games and I have sand game 2 on my home computer</p>
+          <div class="comment-footer">
+            <span class="user ">justaperson</span><span>, 2024-05-01 16:28 (UTC)</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary button-show-comment-dialog" onclick="harag_cz_comment('75862e82-55c1-4489-a29e-87e41aea79a0')">
+              Reply
+            </button>
+          </div>
+        </blockquote>
+      </div>
+    </div>
+    <div id="comment_af3c1b4b-ee54-47fe-b823-5d6ada87bcc2" class="card comment">
+      <div class="card-body">
+        <blockquote class="mb-0">
+          
+          <p class="comment-content">can all y&#39;all shut the mess up like gawd dang</p>
+          <div class="comment-footer">
+            <span class="user ">ad123beavercheese</span><span>, 2024-05-01 13:42 (UTC)</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary button-show-comment-dialog" onclick="harag_cz_comment('af3c1b4b-ee54-47fe-b823-5d6ada87bcc2')">
+              Reply
+            </button>
+          </div>
+        </blockquote>
+      </div>
+    </div>
+    <div id="comment_f33d5aa1-6dc5-43b5-aab4-b4d2d917d186" class="card comment">
+      <div class="card-body">
+        <blockquote class="mb-0">
+          <p>Replying to <a href="#comment_65c887c8-ad28-4c7a-961f-7244d01b78bb">65c887c8-ad28-4c7a-961f-7244d01b78bb</a>:</p>
+          <p class="comment-content">Firstly, it doesn’t work. Secondly, I didn’t give permission for this!</p>
+          <div class="comment-footer">
+            <span class="user user-admin">Patrik</span><span>, 2024-04-25 16:23 (UTC)</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary button-show-comment-dialog" onclick="harag_cz_comment('f33d5aa1-6dc5-43b5-aab4-b4d2d917d186')">
+              Reply
+            </button>
+          </div>
+        </blockquote>
+      </div>
+    </div>
+    <div id="comment_65c887c8-ad28-4c7a-961f-7244d01b78bb" class="card comment">
+      <div class="card-body">
+        <blockquote class="mb-0">
+          
+          <p class="comment-content">WHOEVER WANTS TO PLAY SANDSAGA I HAVE IT ON MY GOOGLE SITE
+sites.google.com/greenvilleschools.us/homeworkhelper</p>
+          <div class="comment-footer">
+            <span class="user ">ROPIKAL</span><span>, 2024-04-25 15:50 (UTC)</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary button-show-comment-dialog" onclick="harag_cz_comment('65c887c8-ad28-4c7a-961f-7244d01b78bb')">
+              Reply
+            </button>
+          </div>
+        </blockquote>
+      </div>
+    </div>
+    <div id="comment_f2fe484a-4223-46ad-b910-6248f05fc78b" class="card comment">
+      <div class="card-body">
+        <blockquote class="mb-0">
+          <p>Replying to <a href="#comment_7e4afc9e-a7ae-4b7a-84fc-bfb6b7bb0b18">7e4afc9e-a7ae-4b7a-84fc-bfb6b7bb0b18</a>:</p>
+          <p class="comment-content">I have a site with it! its (sites.google.com/greenvilleschools.us/homeworkhelper</p>
+          <div class="comment-footer">
+            <span class="user ">ROPIKAL</span><span>, 2024-04-25 15:49 (UTC)</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary button-show-comment-dialog" onclick="harag_cz_comment('f2fe484a-4223-46ad-b910-6248f05fc78b')">
+              Reply
+            </button>
+          </div>
+        </blockquote>
+      </div>
+    </div>
+    <div id="comment_00debf51-9f00-467b-9fa0-b64c12aee064" class="card comment">
+      <div class="card-body">
+        <blockquote class="mb-0">
+          
+          <p class="comment-content">nu uh</p>
+          <div class="comment-footer">
+            <span class="user ">???</span><span>, 2024-04-23 18:32 (UTC)</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary button-show-comment-dialog" onclick="harag_cz_comment('00debf51-9f00-467b-9fa0-b64c12aee064')">
+              Reply
+            </button>
+          </div>
+        </blockquote>
+      </div>
+    </div>
+    <div id="comment_7e4afc9e-a7ae-4b7a-84fc-bfb6b7bb0b18" class="card comment">
+      <div class="card-body">
+        <blockquote class="mb-0">
+          <p>Replying to <a href="#comment_0b6f468a-dbfa-4ac2-9ad5-cc1dc042ec11">0b6f468a-dbfa-4ac2-9ad5-cc1dc042ec11</a>:</p>
+          <p class="comment-content">and THINS IS BLOCKED TO AHHHHHHHHHHHH</p>
+          <div class="comment-footer">
+            <span class="user ">KidofKids</span><span>, 2024-04-22 18:32 (UTC)</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary button-show-comment-dialog" onclick="harag_cz_comment('7e4afc9e-a7ae-4b7a-84fc-bfb6b7bb0b18')">
+              Reply
+            </button>
+          </div>
+        </blockquote>
+      </div>
+    </div>
+    <div id="comment_47991779-de14-41b6-8941-06e3a16f9f9d" class="card comment">
+      <div class="card-body">
+        <blockquote class="mb-0">
+          <p>Replying to <a href="#comment_b77c8e18-cf48-4a61-bbe8-3181e080577c">b77c8e18-cf48-4a61-bbe8-3181e080577c</a>:</p>
+          <p class="comment-content">this isnt undertale broski💀</p>
+          <div class="comment-footer">
+            <span class="user ">cdanie2756</span><span>, 2024-04-16 18:30 (UTC)</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary button-show-comment-dialog" onclick="harag_cz_comment('47991779-de14-41b6-8941-06e3a16f9f9d')">
+              Reply
+            </button>
+          </div>
+        </blockquote>
+      </div>
+    </div>
+    <div id="comment_b77c8e18-cf48-4a61-bbe8-3181e080577c" class="card comment">
+      <div class="card-body">
+        <blockquote class="mb-0">
+          
+          <p class="comment-content">NYESS, IT IS I, THE GREAT PAPYRUS! YOU MADE A GOOD GAME, BUT IT SAYS GRAYWARE! ITS ODD, BUT GOOD JOB</p>
+          <div class="comment-footer">
+            <span class="user ">COOLDUDE95</span><span>, 2024-04-16 13:01 (UTC)</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary button-show-comment-dialog" onclick="harag_cz_comment('b77c8e18-cf48-4a61-bbe8-3181e080577c')">
+              Reply
+            </button>
+          </div>
+        </blockquote>
+      </div>
+    </div>
+    <div id="comment_0b6f468a-dbfa-4ac2-9ad5-cc1dc042ec11" class="card comment">
+      <div class="card-body">
+        <blockquote class="mb-0">
+          <p>Replying to <a href="#comment_28a7e13a-6227-4971-927c-402179e6fdb8">28a7e13a-6227-4971-927c-402179e6fdb8</a>:</p>
+          <p class="comment-content">thats right poor kids we always get everything blocked</p>
+          <div class="comment-footer">
+            <span class="user ">KidofKids</span><span>, 2024-04-12 16:28 (UTC)</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary button-show-comment-dialog" onclick="harag_cz_comment('0b6f468a-dbfa-4ac2-9ad5-cc1dc042ec11')">
+              Reply
+            </button>
+          </div>
+        </blockquote>
+      </div>
+    </div>
+    <div id="comment_b3b8557e-e633-4463-8260-34824c50c1b9" class="card comment">
+      <div class="card-body">
+        <blockquote class="mb-0">
+          <p>Replying to <a href="#comment_28a7e13a-6227-4971-927c-402179e6fdb8">28a7e13a-6227-4971-927c-402179e6fdb8</a>:</p>
+          <p class="comment-content">it is but I think I speak for everyone we really love your games! so keep up the good work!</p>
+          <div class="comment-footer">
+            <span class="user ">???</span><span>, 2024-04-09 12:23 (UTC)</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary button-show-comment-dialog" onclick="harag_cz_comment('b3b8557e-e633-4463-8260-34824c50c1b9')">
+              Reply
+            </button>
+          </div>
+        </blockquote>
+      </div>
+    </div>
+    <div id="comment_28a7e13a-6227-4971-927c-402179e6fdb8" class="card comment">
+      <div class="card-body">
+        <blockquote class="mb-0">
+          <p>Replying to <a href="#comment_92a5cb98-cd4d-4399-96d4-e0e51434e2e0">92a5cb98-cd4d-4399-96d4-e0e51434e2e0</a>:</p>
+          <p class="comment-content">Poor kids. It&#39;s strange that one works. Maybe it&#39;s domain related blocking.</p>
+          <div class="comment-footer">
+            <span class="user user-admin">Patrik</span><span>, 2024-04-06 10:15 (UTC)</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary button-show-comment-dialog" onclick="harag_cz_comment('28a7e13a-6227-4971-927c-402179e6fdb8')">
+              Reply
+            </button>
+          </div>
+        </blockquote>
+      </div>
+    </div>
+    <div id="comment_92a5cb98-cd4d-4399-96d4-e0e51434e2e0" class="card comment">
+      <div class="card-body">
+        <blockquote class="mb-0">
+          <p>Replying to <a href="#comment_364e9f41-70c3-46a1-af1b-59bbd5a40bf9">364e9f41-70c3-46a1-af1b-59bbd5a40bf9</a>:</p>
+          <p class="comment-content">For some reasons schools block java script using websites sooooo yeah but the way this websites executes it somehow it not against there TOS</p>
+          <div class="comment-footer">
+            <span class="user ">???</span><span>, 2024-04-05 17:55 (UTC)</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary button-show-comment-dialog" onclick="harag_cz_comment('92a5cb98-cd4d-4399-96d4-e0e51434e2e0')">
+              Reply
+            </button>
+          </div>
+        </blockquote>
+      </div>
+    </div>
+    <div id="comment_364e9f41-70c3-46a1-af1b-59bbd5a40bf9" class="card comment">
+      <div class="card-body">
+        <blockquote class="mb-0">
+          <p>Replying to <a href="#comment_137667d6-2604-4b81-9338-ce5755bb7d75">137667d6-2604-4b81-9338-ce5755bb7d75</a>:</p>
+          <p class="comment-content">Currently theese tools can&#39;t be enabled on sandsaga.com.
+It is controlled by the &#39;debug&#39; config property:
+https://github.com/Hartrik/sand-saga-scenario/blob/master/index.html#L23</p>
+          <div class="comment-footer">
+            <span class="user user-admin">Patrik</span><span>, 2024-04-05 17:34 (UTC)</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary button-show-comment-dialog" onclick="harag_cz_comment('364e9f41-70c3-46a1-af1b-59bbd5a40bf9')">
+              Reply
+            </button>
+          </div>
+        </blockquote>
+      </div>
+    </div>
+    <div id="comment_06992be3-4a4a-499e-8528-b1806f5d3771" class="card comment">
+      <div class="card-body">
+        <blockquote class="mb-0">
+          <p>Replying to <a href="#comment_586bbb0e-0a8e-47aa-8a3e-4bafe75288ca">586bbb0e-0a8e-47aa-8a3e-4bafe75288ca</a>:</p>
+          <p class="comment-content">Chromebooks are fine (generally). So you can play on harag.cz, but not on sandsaga.com. Why? :)</p>
+          <div class="comment-footer">
+            <span class="user user-admin">Patrik</span><span>, 2024-04-05 17:28 (UTC)</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary button-show-comment-dialog" onclick="harag_cz_comment('06992be3-4a4a-499e-8528-b1806f5d3771')">
+              Reply
+            </button>
+          </div>
+        </blockquote>
+      </div>
+    </div>
+    <div id="comment_586bbb0e-0a8e-47aa-8a3e-4bafe75288ca" class="card comment">
+      <div class="card-body">
+        <blockquote class="mb-0">
+          <p>Replying to <a href="#comment_777cfbcc-005b-4956-a20d-36f489b1215a">777cfbcc-005b-4956-a20d-36f489b1215a</a>:</p>
+          <p class="comment-content">Well most people on this game are playing it from school so. So they can&#39;t go on sandsega.com most people play it on there Chromebook from school including yours truly</p>
+          <div class="comment-footer">
+            <span class="user ">???</span><span>, 2024-04-05 15:24 (UTC)</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary button-show-comment-dialog" onclick="harag_cz_comment('586bbb0e-0a8e-47aa-8a3e-4bafe75288ca')">
+              Reply
+            </button>
+          </div>
+        </blockquote>
+      </div>
+    </div>
+    <div id="comment_137667d6-2604-4b81-9338-ce5755bb7d75" class="card comment">
+      <div class="card-body">
+        <blockquote class="mb-0">
+          
+          <p class="comment-content">is there a way with custom scenarios, to enable the developer tools like screenshots and heatmap?</p>
+          <div class="comment-footer">
+            <span class="user ">GE0PLEX</span><span>, 2024-04-04 15:35 (UTC)</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary button-show-comment-dialog" onclick="harag_cz_comment('137667d6-2604-4b81-9338-ce5755bb7d75')">
+              Reply
+            </button>
+          </div>
+        </blockquote>
+      </div>
+    </div>
+    <div id="comment_777cfbcc-005b-4956-a20d-36f489b1215a" class="card comment">
+      <div class="card-body">
+        <blockquote class="mb-0">
+          <p>Replying to <a href="#comment_e8bb8218-8ec5-4e29-af4d-363f00c3c4bb">e8bb8218-8ec5-4e29-af4d-363f00c3c4bb</a>:</p>
+          <p class="comment-content">You’re saying that sandsaga.com isn’t working for someone? No one has complained so far. If you provide me with more information, I might be able to fix it. What does it show or is there anything in the console when you press F12? It runs on the same machine and almost identical technology, by the way.</p>
+          <div class="comment-footer">
+            <span class="user user-admin">Patrik</span><span>, 2024-04-02 19:44 (UTC)</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary button-show-comment-dialog" onclick="harag_cz_comment('777cfbcc-005b-4956-a20d-36f489b1215a')">
+              Reply
+            </button>
+          </div>
+        </blockquote>
+      </div>
+    </div>
+    <div id="comment_e8bb8218-8ec5-4e29-af4d-363f00c3c4bb" class="card comment">
+      <div class="card-body">
+        <blockquote class="mb-0">
+          
+          <p class="comment-content">Bro keep updating this website its unfair for people that cant load the website and must use this version I understand that there is probably more resources but youll lose more players than gaining.</p>
+          <div class="comment-footer">
+            <span class="user ">???</span><span>, 2024-04-02 18:06 (UTC)</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary button-show-comment-dialog" onclick="harag_cz_comment('e8bb8218-8ec5-4e29-af4d-363f00c3c4bb')">
+              Reply
+            </button>
+          </div>
+        </blockquote>
+      </div>
+    </div>
+
+  <div class="modal fade" id="dialog-comment" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <strong id="dialog-comment_title"></strong>
+        </div>
+        <div class="modal-body">
+          <div id="dialog-comment_error-message-wrapper"></div>
+          <form id="form-comment" action="javascript:harag_cz_sendComment();">
+            <input type="hidden" name="csrf-token" value="56da8624-799b-4b24-a8db-2ef70921406c">
+            <input type="hidden" id="dialog-comment_reply" name="replyTo" value="">
+            <div class="mb-3">
+              <label class="form-label" for="dialog-comment_username">Name</label>
+              <input id="dialog-comment_username" type="text" name="username" required class="form-control" placeholder="Enter name" maxlength="32">
+            </div>
+            <div class="mb-3">
+              <label class="form-label" for="dialog-comment_email">E-mail</label>
+              <input id="dialog-comment_email" type="email" name="email" required class="form-control" placeholder="Enter email" aria-describedby="dialog-comment_email-help" maxlength="64">
+              <small id="dialog-comment_email-help" class="form-text text-muted">We'll never share your email with anyone else.</small>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Select ALL good reasons for writing a comment</label>
+              <div class="comment-robot-test">
+                <span class="question">
+                  <input type="checkbox" id="dialog-comment_test-1" name="test1">
+                  <label for="dialog-comment_test-1">Error reporting</label>
+                </span>
+                <span class="question">
+                  <input type="checkbox" id="dialog-comment_test-2" name="test2">
+                  <label for="dialog-comment_test-2">Spamming</label>
+                </span>
+                <span class="question">
+                  <input type="checkbox" id="dialog-comment_test-3" name="test3">
+                  <label for="dialog-comment_test-3">Unconstructive criticism</label>
+                </span>
+                <span class="question">
+                  <input type="checkbox" id="dialog-comment_test-4" name="test4">
+                  <label for="dialog-comment_test-4">Sharing ideas</label>
+                </span>
+              </div>
+              <small class="form-text text-muted">Your comment won't be published if you fail this test.</small>
+            </div>
+            <div class="mb-3">
+              <label class="form-label" for="dialog-comment_content">Message</label>
+              <textarea id="dialog-comment_content" name="content" required class="form-control" placeholder="Enter a deep comment" maxlength="1000" rows="4"></textarea>
+            </div>
+            <div class="mb-3">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Send</button>
+              <small style="margin-left: 1em" class="text-muted">IP address will be logged.</small>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div></div></div>
+
+      <div class="spacer"></div>
+
+
+      <div id="footer-image-container">
+        <a href="/app/sand-game-js">
+          <div id="footer-image"></div>
+        </a>
+      </div>
+    </div>
+  </body>
+</html>

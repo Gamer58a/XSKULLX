@@ -1,0 +1,278 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <meta name="author" content="Patrik Harag">
+    <meta property="og:site_name" content="SandSaga.com">
+    <meta name="Description" content="The Sand Saga is a next-gen falling-sand game, built on the Sand Game JS engine. Do whatever you want in the sandbox or complete missions and challenges.">
+    <meta property="og:description" content="The Sand Saga is a next-gen falling-sand game, built on the Sand Game JS engine. Do whatever you want in the sandbox or complete missions and challenges.">
+    <meta property="og:title" content="Sand Saga">
+    <meta property="og:image" content="/social-preview.png">
+
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=1">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png?v=1">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png?v=1">
+    <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png?v=1">
+    <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png?v=1">
+    <link rel="icon" type="image/png" sizes="512x512" href="/favicon-512x512.png?v=1">
+    <link rel="manifest" href="/site.webmanifest?v=3">
+    <link rel="mask-icon" href="/safari-pinned-tab.svg?v=1" color="#ffc40d">
+    <link rel="shortcut icon" href="/favicon.ico?v=1">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="theme-color" content="#24272b">
+
+    <link rel="alternate" type="application/rss+xml" title="News Feed" href="https://sandsaga.com/news/rss">
+    <link rel="alternate" type="application/rss+xml" title="Workshop Feed" href="https://sandsaga.com/workshop/rss">
+
+    <title>Sand Saga</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" type="text/css" href="https://files.harag.cz/www/app/sand-saga/prod/26w29a/sand-saga_fe.min.css">
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-V8NDXLE87V"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'G-V8NDXLE87V');
+    </script>
+  <style>
+    .container {
+      max-width: 800px;
+    }
+  </style>
+
+  <script>
+    var SGA_PAGE = ['index', 'scenario-list-root', 'sga-blog-root'];
+    var SGA_COMPLETED_SCENARIOS = [];
+    var SGA_SCENARIO_CATEGORIES = [
+      ['Tutorials', '', [['tutorial-basics', 'Tutorial: Basics', '', false, ''],['tutorial-fallthrough', 'Tutorial: Fall-through Mode', '', false, ''],['tutorial-move', 'Tutorial: Move Tool', '', false, ''],['tutorial-humans', 'Tutorial: Humans', 'new', true, 'This tutorial aims to give you the essential basics about humans.'],]],
+      ['Missions', '', [['mission-deforestation', 'Mission: Deforestation', '', false, ''],['mission-demolition', 'Mission: Demolition', '', false, ''],['mission-recultivation', 'Mission: Recultivation', '', false, ''],['mission-robots', 'Mission: Robots', 'new', true, 'Your task is to safely escort all robots through a dangerous environment to their destination. The robots are not very smart and require you to build a safe path for them.'],['mission-birds', 'Mission: Birds!', 'new', true, 'Soldier, your orders are clear: guard the statue at all costs! Failure is not an option.'],]],
+      ['Challenges', '', [['puzzle-sep-w', 'Challenge: Separation 1', '', false, ''],['puzzle-sep-ws', 'Challenge: Separation 2', '', false, ''],['puzzle-sep-s', 'Challenge: Separation 3', '', false, ''],['puzzle-transfer-w-1', 'Challenge: Water Transfer 1', '', false, ''],['puzzle-transfer-w-2', 'Challenge: Water Transfer 2', '', false, ''],['puzzle-transfer-a', 'Challenge: Acid Transfer', '', false, ''],['puzzle-transfer-s', 'Challenge: Sand Transfer', '', false, ''],]],
+      ['Sandboxes', '', [['sandbox', 'Sandbox', 'OG', false, ''],['sandbox-rain', 'Sandbox: Rain', '', false, ''],['sandbox-meteors', 'Sandbox: Meteors', '', false, ''],['sandbox-empty', 'Sandbox: Empty', '', false, ''],['m-sandbox-sandscape', 'Sandscape', '', false, ''],['m-sandbox-sand-painting', 'Sand Painting', '', false, ''],['x-sandbox-cheese-game', 'Cheese Game by Mecanix', '', false, '&lt;strong&gt;This scenario was created by &lt;a href=&quot;/profile/551&quot;&gt;GE0PLEX_MecanixCreations&lt;/a&gt;.&lt;/strong&gt; If you can program and are interested in creating scenarios, check the &lt;a href=&quot;/manual#goto-content-creation&quot;&gt;manual&lt;/a&gt;.'],]],
+    ];
+    var SGA_BLOG_POSTS = '[{\"id\":411,\"title\":\"Sand Saga Insider: Spring 2026\",\"description\":\"Quarterly information about the Sand Saga project\",\"url\":\"https://harag.cz/blog/sand-saga-insider-2026-q2\",\"type\":\"blog\",\"time\":1782937730040,\"data\":\"sand-saga-insider-2026-q2\"},{\"id\":404,\"title\":\"Sand Saga Insider: Winter 2026\",\"description\":\"Quarterly information about the Sand Saga project\",\"url\":\"https://harag.cz/blog/sand-saga-insider-2026-q1\",\"type\":\"blog\",\"time\":1775426169808,\"data\":\"sand-saga-insider-2026-q1\"},{\"id\":357,\"title\":\"Sand Saga Insider: December 2025\",\"description\":\"Monthly information about the Sand Saga project and 2025 recap\",\"url\":\"https://harag.cz/blog/sand-saga-insider-2025-12\",\"type\":\"blog\",\"time\":1767474949702,\"data\":\"sand-saga-insider-2025-12\"},{\"id\":354,\"title\":\"Sand Saga Insider: October and November 2025\",\"description\":\"Monthly information about the Sand Saga project\",\"url\":\"https://harag.cz/blog/sand-saga-insider-2025-10-and-11\",\"type\":\"blog\",\"time\":1764617994795,\"data\":\"sand-saga-insider-2025-10-and-11\"},{\"id\":252,\"title\":\"Sand Saga Insider: September 2025\",\"description\":\"Monthly information about the Sand Saga project\",\"url\":\"https://harag.cz/blog/sand-saga-insider-2025-09\",\"type\":\"blog\",\"time\":1759351059066,\"data\":\"sand-saga-insider-2025-09\"},{\"id\":209,\"title\":\"Sand Saga Insider: August 2025\",\"description\":\"Monthly information about the Sand Saga project\",\"url\":\"https://harag.cz/blog/sand-saga-insider-2025-08\",\"type\":\"blog\",\"time\":1756755534024,\"data\":\"sand-saga-insider-2025-08\"},{\"id\":205,\"title\":\"Sand Saga Insider: July 2025\",\"description\":\"Monthly information about the Sand Saga project.\",\"url\":\"https://harag.cz/blog/sand-saga-insider-2025-07\",\"type\":\"blog\",\"time\":1754141683350,\"data\":\"sand-saga-insider-2025-07\"},{\"id\":202,\"title\":\"Sand Saga Insider: June 2025\",\"description\":\"Monthly information about the Sand Saga project.\",\"url\":\"https://harag.cz/blog/sand-saga-insider-2025-06\",\"type\":\"blog\",\"time\":1751388206337,\"data\":\"sand-saga-insider-2025-06\"},{\"id\":153,\"title\":\"Sand Saga Insider: May 2025\",\"description\":\"Monthly information about the Sand Saga project.\",\"url\":\"https://harag.cz/blog/sand-saga-insider-2025-05\",\"type\":\"blog\",\"time\":1748983296863,\"data\":\"sand-saga-insider-2025-05\"},{\"id\":101,\"title\":\"Sand Saga Insider: April 2025\",\"description\":\"Monthly information about the Sand Saga project.\",\"url\":\"https://harag.cz/blog/sand-saga-insider-2025-04\",\"type\":\"blog\",\"time\":1746460583928,\"data\":\"sand-saga-insider-2025-04\"},{\"id\":12,\"title\":\"Sand Saga Insider: March 2025\",\"description\":\"Monthly information about the Sand Saga project.\",\"url\":\"https://harag.cz/blog/sand-saga-insider-2025-03\",\"type\":\"blog\",\"time\":1743537600000,\"data\":\"sand-saga-insider-2025-03\"},{\"id\":11,\"title\":\"Sand Saga Insider: February 2025\",\"description\":\"Monthly information about the Sand Saga project.\",\"url\":\"https://harag.cz/blog/sand-saga-insider-2025-02\",\"type\":\"blog\",\"time\":1740945600000,\"data\":\"sand-saga-insider-2025-02\"},{\"id\":10,\"title\":\"Sand Saga Insider: January 2025\",\"description\":\"Monthly information about the Sand Saga project.\",\"url\":\"https://harag.cz/blog/sand-saga-insider-2025-01\",\"type\":\"blog\",\"time\":1738440000000,\"data\":\"sand-saga-insider-2025-01\"},{\"id\":9,\"title\":\"Sand Saga Insider: December 2024\",\"description\":\"Monthly information about the Sand Saga project and 2024 recap.\",\"url\":\"https://harag.cz/blog/sand-saga-insider-2024-12\",\"type\":\"blog\",\"time\":1736020800000,\"data\":\"sand-saga-insider-2024-12\"},{\"id\":8,\"title\":\"Sand Saga Insider: November 2024\",\"description\":\"Monthly information about the Sand Saga project.\",\"url\":\"https://harag.cz/blog/sand-saga-insider-2024-11\",\"type\":\"blog\",\"time\":1733601600000,\"data\":\"sand-saga-insider-2024-11\"},{\"id\":7,\"title\":\"Sand Saga Insider: October 2024\",\"description\":\"Monthly information about the Sand Saga project.\",\"url\":\"https://harag.cz/blog/sand-saga-insider-2024-10\",\"type\":\"blog\",\"time\":1730491200000,\"data\":\"sand-saga-insider-2024-10\"},{\"id\":6,\"title\":\"Sand Saga Insider: September 2024\",\"description\":\"Monthly information about the Sand Saga project.\",\"url\":\"https://harag.cz/blog/sand-saga-insider-2024-09\",\"type\":\"blog\",\"time\":1727812800000,\"data\":\"sand-saga-insider-2024-09\"},{\"id\":5,\"title\":\"Sand Saga Insider: August 2024\",\"description\":\"Monthly information about the Sand Saga project.\",\"url\":\"https://harag.cz/blog/sand-saga-insider-2024-08\",\"type\":\"blog\",\"time\":1725220800000,\"data\":\"sand-saga-insider-2024-08\"},{\"id\":4,\"title\":\"Sand Saga Insider: July 2024\",\"description\":\"Monthly information about the Sand Saga project.\",\"url\":\"https://harag.cz/blog/sand-saga-insider-2024-07\",\"type\":\"blog\",\"time\":1722542400000,\"data\":\"sand-saga-insider-2024-07\"},{\"id\":3,\"title\":\"Sand Saga Insider: June 2024\",\"description\":\"Monthly information about the Sand Saga project.\",\"url\":\"https://harag.cz/blog/sand-saga-insider-2024-06\",\"type\":\"blog\",\"time\":1719864000000,\"data\":\"sand-saga-insider-2024-06\"},{\"id\":2,\"title\":\"Sand Saga Insider: May 2024\",\"description\":\"Monthly information about the Sand Saga project.\",\"url\":\"https://harag.cz/blog/sand-saga-insider-2024-05\",\"type\":\"blog\",\"time\":1717272000000,\"data\":\"sand-saga-insider-2024-05\"},{\"id\":1,\"title\":\"Sand Saga Insider: April 2024\",\"description\":\"The first month of SandSaga.com!\",\"url\":\"https://harag.cz/blog/sand-saga-insider-2024-04\",\"type\":\"blog\",\"time\":1714593600000,\"data\":\"sand-saga-insider-2024-04\"}]';
+    
+  </script>
+
+    <script src="https://files.harag.cz/www/app/sand-saga/prod/26w29a/sand-saga_fe.umd.min.js"></script>
+    <script>
+      var SGA_ANNOUNCEMENTS = '[{\"id\":412,\"title\":\"Update 26w29a\",\"description\":\"Added sound effects for the launcher, burner, and grinder\",\"url\":\"/about#26w29a\",\"type\":\"update\",\"time\":1784573781093,\"data\":\"26w29a\"},{\"id\":411,\"title\":\"Sand Saga Insider: Spring 2026\",\"description\":\"Quarterly information about the Sand Saga project\",\"url\":\"https://harag.cz/blog/sand-saga-insider-2026-q2\",\"type\":\"blog\",\"time\":1782937730040,\"data\":\"sand-saga-insider-2026-q2\"}]';
+    </script>
+  </head>
+
+  <body>
+    <div id="sga-dialog-anchor"></div>
+    <div id="sga-page-content-wrapper" class="d-flex flex-column">
+      <nav class="navbar navbar-expand-md navbar-dark">
+        <div class="container">
+          <a class="navbar-brand" href="/"><img src="/favicon-32x32.png" width="32" height="32" alt="Logo"><h1 style="display: inline;">Sand Saga</h1></a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#sga-navbar-collapse" aria-controls="sga-navbar-collapse" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="sga-navbar-collapse">
+            <div id="sga-navbar-part-1">
+<ul class="navbar-nav">
+  <li class="nav-item">
+    <a class="nav-link" href="/about">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info-circle" viewBox="0 0 16 16">
+        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+        <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0"/>
+      </svg>
+      <span class="nav-item-text">About</span>
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/manual">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-book" viewBox="0 0 16 16">
+        <path d="M1 2.828c.885-.37 2.154-.769 3.388-.893 1.33-.134 2.458.063 3.112.752v9.746c-.935-.53-2.12-.603-3.213-.493-1.18.12-2.37.461-3.287.811zm7.5-.141c.654-.689 1.782-.886 3.112-.752 1.234.124 2.503.523 3.388.893v9.923c-.918-.35-2.107-.692-3.287-.81-1.094-.111-2.278-.039-3.213.492zM8 1.783C7.015.936 5.587.81 4.287.94c-1.514.153-3.042.672-3.994 1.105A.5.5 0 0 0 0 2.5v11a.5.5 0 0 0 .707.455c.882-.4 2.303-.881 3.68-1.02 1.409-.142 2.59.087 3.223.877a.5.5 0 0 0 .78 0c.633-.79 1.814-1.019 3.222-.877 1.378.139 2.8.62 3.681 1.02A.5.5 0 0 0 16 13.5v-11a.5.5 0 0 0-.293-.455c-.952-.433-2.48-.952-3.994-1.105C10.413.809 8.985.936 8 1.783"/>
+      </svg>
+      <span class="nav-item-text">Manual</span>
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/premium">
+      <svg xmlns="http://www.w3.org/2000/svg" height="16" fill="currentColor" class="bi bi-supporters-badge" viewBox="0 0 80 100">
+        <title>Supporter's badge</title>
+        <path d="M39.8 0 0 10.3v27.2C0 74 26.5 96.8 39.8 100c13.3-3.1 39.8-26 39.8-62.4V10.3zm12 48.5L57.6 68l-1.4 1-16.7-11.6-16.9 11.8-1.3-.9 6-19.8L10.6 36l.2-1.3 21.2-.2 6.7-19.1h1.7L47 34.4l21 .3.5 1.1z"></path>
+      </svg>
+      <span class="nav-item-text">Premium</span>
+    </a>
+  </li>
+</ul>
+            </div>
+            <div id="sga-navbar-part-2">
+              <ul class="navbar-nav">
+                <li class="nav-item dropdown">
+                  <a class="btn btn-dark dropdown-toggle" href="#" id="sga-dropdown-account" role="button" data-bs-toggle="dropdown" aria-expanded="false" >
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-fill" viewBox="0 0 16 16">
+                      <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6"/>
+                    </svg>
+                    <span class="nav-item-text">Login</span>
+                  </a>
+                  <div id="sga-login-content" class="dropdown-menu dropdown-menu-dark" aria-labelledby="sga-dropdown-account">
+                    <a href="/login/discord" class="btn btn-light mb-1">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-discord" viewBox="0 0 16 16">
+                        <path d="M13.545 2.907a13.2 13.2 0 0 0-3.257-1.011.05.05 0 0 0-.052.025c-.141.25-.297.577-.406.833a12.2 12.2 0 0 0-3.658 0 8 8 0 0 0-.412-.833.05.05 0 0 0-.052-.025c-1.125.194-2.22.534-3.257 1.011a.04.04 0 0 0-.021.018C.356 6.024-.213 9.047.066 12.032q.003.022.021.037a13.3 13.3 0 0 0 3.995 2.02.05.05 0 0 0 .056-.019q.463-.63.818-1.329a.05.05 0 0 0-.01-.059l-.018-.011a9 9 0 0 1-1.248-.595.05.05 0 0 1-.02-.066l.015-.019q.127-.095.248-.195a.05.05 0 0 1 .051-.007c2.619 1.196 5.454 1.196 8.041 0a.05.05 0 0 1 .053.007q.121.1.248.195a.05.05 0 0 1-.004.085 8 8 0 0 1-1.249.594.05.05 0 0 0-.03.03.05.05 0 0 0 .003.041c.24.465.515.909.817 1.329a.05.05 0 0 0 .056.019 13.2 13.2 0 0 0 4.001-2.02.05.05 0 0 0 .021-.037c.334-3.451-.559-6.449-2.366-9.106a.03.03 0 0 0-.02-.019m-8.198 7.307c-.789 0-1.438-.724-1.438-1.612s.637-1.613 1.438-1.613c.807 0 1.45.73 1.438 1.613 0 .888-.637 1.612-1.438 1.612m5.316 0c-.788 0-1.438-.724-1.438-1.612s.637-1.613 1.438-1.613c.807 0 1.451.73 1.438 1.613 0 .888-.631 1.612-1.438 1.612"/>
+                      </svg>
+                      Continue with Discord
+                    </a><br>
+                    <a href="/login/google" class="btn btn-light mb-1">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-google" viewBox="0 0 16 16">
+                        <path d="M15.545 6.558a9.4 9.4 0 0 1 .139 1.626c0 2.434-.87 4.492-2.384 5.885h.002C11.978 15.292 10.158 16 8 16A8 8 0 1 1 8 0a7.7 7.7 0 0 1 5.352 2.082l-2.284 2.284A4.35 4.35 0 0 0 8 3.166c-2.087 0-3.86 1.408-4.492 3.304a4.8 4.8 0 0 0 0 3.063h.003c.635 1.893 2.405 3.301 4.492 3.301 1.078 0 2.004-.276 2.722-.764h-.003a3.7 3.7 0 0 0 1.599-2.431H8v-3.08z"/>
+                      </svg>
+                      Continue with Google
+                    </a><br>
+                    <a href="#" onclick="SandSagaBase.showLoginForm(); return false;" class="btn btn-light mb-1">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-at" viewBox="0 0 16 16">
+                        <path d="M13.106 7.222c0-2.967-2.249-5.032-5.482-5.032-3.35 0-5.646 2.318-5.646 5.702 0 3.493 2.235 5.708 5.762 5.708.862 0 1.689-.123 2.304-.335v-.862c-.43.199-1.354.328-2.29.328-2.926 0-4.813-1.88-4.813-4.798 0-2.844 1.921-4.881 4.594-4.881 2.735 0 4.608 1.688 4.608 4.156 0 1.682-.554 2.769-1.416 2.769-.492 0-.772-.28-.772-.76V5.206H8.923v.834h-.11c-.266-.595-.881-.964-1.6-.964-1.4 0-2.378 1.162-2.378 2.823 0 1.737.957 2.906 2.379 2.906.8 0 1.415-.39 1.709-1.087h.11c.081.67.703 1.148 1.503 1.148 1.572 0 2.57-1.415 2.57-3.643zm-7.177.704c0-1.197.54-1.907 1.456-1.907.93 0 1.524.738 1.524 1.907S8.308 9.84 7.371 9.84c-.895 0-1.442-.725-1.442-1.914"/>
+                      </svg>
+                      Email &amp; Password
+                    </a><br>
+                    <a href="/login" class="btn btn-secondary">Register</a>
+                  </div>
+                </li>
+                <li class="nav-item dropdown">
+                  <a class="btn btn-dark dropdown-toggle" href="#" id="sga-dropdown-news" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-megaphone" viewBox="0 0 16 16">
+                      <path d="M13 2.5a1.5 1.5 0 0 1 3 0v11a1.5 1.5 0 0 1-3 0v-.214c-2.162-1.241-4.49-1.843-6.912-2.083l.405 2.712A1 1 0 0 1 5.51 15.1h-.548a1 1 0 0 1-.916-.599l-1.85-3.49-.202-.003A2.014 2.014 0 0 1 0 9V7a2.02 2.02 0 0 1 1.992-2.013 75 75 0 0 0 2.483-.075c3.043-.154 6.148-.849 8.525-2.199zm1 0v11a.5.5 0 0 0 1 0v-11a.5.5 0 0 0-1 0m-1 1.35c-2.344 1.205-5.209 1.842-8 2.033v4.233q.27.015.537.036c2.568.189 5.093.744 7.463 1.993zm-9 6.215v-4.13a95 95 0 0 1-1.992.052A1.02 1.02 0 0 0 1 7v2c0 .55.448 1.002 1.006 1.009A61 61 0 0 1 4 10.065m-.657.975 1.609 3.037.01.024h.548l-.002-.014-.443-2.966a68 68 0 0 0-1.722-.082z"></path>
+                    </svg>
+                    <span id="sga-news-label" class="nav-item-text">News</span>
+                  </a>
+                  <div id="sga-news-content" class="dropdown-menu dropdown-menu-dark" aria-labelledby="sga-dropdown-news"></div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </nav>
+
+      <main class="container">
+        <div class="row"><div class="col-12">
+          <div id="sga-alerts">
+            <noscript>
+              <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                For full functionality of this site it is necessary to enable JavaScript.
+                Here are the <a href="https://www.enablejavascript.io/">instructions how to enable JavaScript in your web browser</a>.
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+              </div>
+            </noscript>
+          </div>
+  <div style="float: left;">
+  <img class="sand-saga-bg-image" src="https://files.harag.cz/www/app/sand-saga/preview-sm-01.png" style="top: 200px; margin-left: -310px;" alt="Background image">
+  <img class="sand-saga-bg-image" src="https://files.harag.cz/www/app/sand-saga/preview-sm-08.png" style="top: 500px; margin-left: -383px" alt="Background image">
+</div>
+<div style="float: right;">
+  <img class="sand-saga-bg-image" src="https://files.harag.cz/www/app/sand-saga/preview-sm-04.png" style="top: 200px;" alt="Background image">
+  <img class="sand-saga-bg-image" src="https://files.harag.cz/www/app/sand-saga/preview-sm-07.png" style="top: 600px;" alt="Background image">
+</div>
+
+  <div class="alert alert-info">
+    <p>
+      The Sand Saga (formerly <a href="https://harag.cz/app/sand-game-js">Sand Game JS</a>) is a next-gen falling-sand game where players can freely experiment in the sandbox or play missions and challenges.
+      It is also recognized by parents and teachers for its ability to develop creativity and problem-solving skills.
+      The game is actively being developed with an&nbsp;update every two weeks on Sunday and a new blog post at the end of each <s>month</s> quarter.
+    </p>
+    <p style="text-align: center;">
+      <span style="white-space: nowrap;"><strong>1,706,499</strong> <small style="margin-right: 1em;">scenarios completed</small></span>
+      <span style="white-space: nowrap;"><strong>73,691,992</strong> <small style="margin-right: 1em;">minutes played</small>
+        <a href="/stats" style="text-decoration: none;">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-three-dots" viewBox="0 0 16 16">
+            <path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3"/>
+          </svg>
+        </a>
+      </span>
+      <br>
+      <span style="white-space: nowrap;"><strong style="color: green;">25</strong> <small>now playing</small></span>
+    </p>
+    
+<p style="text-align: center;">
+  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="red" class="bi bi-youtube" viewBox="0 0 16 16">
+    <path d="M8.051 1.999h.089c.822.003 4.987.033 6.11.335a2.01 2.01 0 0 1 1.415 1.42c.101.38.172.883.22 1.402l.01.104.022.26.008.104c.065.914.073 1.77.074 1.957v.075c-.001.194-.01 1.108-.082 2.06l-.008.105-.009.104c-.05.572-.124 1.14-.235 1.558a2.01 2.01 0 0 1-1.415 1.42c-1.16.312-5.569.334-6.18.335h-.142c-.309 0-1.587-.006-2.927-.052l-.17-.006-.087-.004-.171-.007-.171-.007c-1.11-.049-2.167-.128-2.654-.26a2.01 2.01 0 0 1-1.415-1.419c-.111-.417-.185-.986-.235-1.558L.09 9.82l-.008-.104A31 31 0 0 1 0 7.68v-.123c.002-.215.01-.958.064-1.778l.007-.103.003-.052.008-.104.022-.26.01-.104c.048-.519.119-1.023.22-1.402a2.01 2.01 0 0 1 1.415-1.42c.487-.13 1.544-.21 2.654-.26l.17-.007.172-.006.086-.003.171-.007A100 100 0 0 1 7.858 2zM6.4 5.209v4.818l4.157-2.408z"></path>
+  </svg>
+  <a href="https://www.youtube.com/watch?v=G5jwQc01Itg" target="_blank">Watch trailer</a>
+</p>
+
+    
+  </div>
+
+  <div class="sand-saga-play-sandbox">
+    <a class="btn btn-lg btn-primary" href="/s/sandbox">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-play-fill" viewBox="0 0 16 16">
+        <path d="m11.596 8.697-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393"/>
+      </svg>
+      Play Sandbox
+    </a>
+    <br>
+    <small>Or choose from the scenarios below</small>
+  </div>
+
+  <div id="scenario-list-root"></div>
+
+  <div class="alert alert-info">
+    <h5>Account</h5>
+    Join now for exclusive features!
+    <ul>
+      <li>Save your progress and track completed scenarios.</li>
+      <li>Climb the <strong><a href="/leaderboard">Leaderboard</a></strong> and compare your results with others.</li>
+      <li>Share your creations in the <strong><a href="/workshop">Workshop</a></strong> and explore what others have made.</li>
+    </ul>
+    <a href="/login/discord" class="btn btn-outline-dark mb-1">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-discord" viewBox="0 0 16 16">
+        <path d="M13.545 2.907a13.2 13.2 0 0 0-3.257-1.011.05.05 0 0 0-.052.025c-.141.25-.297.577-.406.833a12.2 12.2 0 0 0-3.658 0 8 8 0 0 0-.412-.833.05.05 0 0 0-.052-.025c-1.125.194-2.22.534-3.257 1.011a.04.04 0 0 0-.021.018C.356 6.024-.213 9.047.066 12.032q.003.022.021.037a13.3 13.3 0 0 0 3.995 2.02.05.05 0 0 0 .056-.019q.463-.63.818-1.329a.05.05 0 0 0-.01-.059l-.018-.011a9 9 0 0 1-1.248-.595.05.05 0 0 1-.02-.066l.015-.019q.127-.095.248-.195a.05.05 0 0 1 .051-.007c2.619 1.196 5.454 1.196 8.041 0a.05.05 0 0 1 .053.007q.121.1.248.195a.05.05 0 0 1-.004.085 8 8 0 0 1-1.249.594.05.05 0 0 0-.03.03.05.05 0 0 0 .003.041c.24.465.515.909.817 1.329a.05.05 0 0 0 .056.019 13.2 13.2 0 0 0 4.001-2.02.05.05 0 0 0 .021-.037c.334-3.451-.559-6.449-2.366-9.106a.03.03 0 0 0-.02-.019m-8.198 7.307c-.789 0-1.438-.724-1.438-1.612s.637-1.613 1.438-1.613c.807 0 1.45.73 1.438 1.613 0 .888-.637 1.612-1.438 1.612m5.316 0c-.788 0-1.438-.724-1.438-1.612s.637-1.613 1.438-1.613c.807 0 1.451.73 1.438 1.613 0 .888-.631 1.612-1.438 1.612"/>
+      </svg>
+      Continue with Discord
+    </a>
+    <a href="/login/google" class="btn btn-outline-dark mb-1">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-google" viewBox="0 0 16 16">
+        <path d="M15.545 6.558a9.4 9.4 0 0 1 .139 1.626c0 2.434-.87 4.492-2.384 5.885h.002C11.978 15.292 10.158 16 8 16A8 8 0 1 1 8 0a7.7 7.7 0 0 1 5.352 2.082l-2.284 2.284A4.35 4.35 0 0 0 8 3.166c-2.087 0-3.86 1.408-4.492 3.304a4.8 4.8 0 0 0 0 3.063h.003c.635 1.893 2.405 3.301 4.492 3.301 1.078 0 2.004-.276 2.722-.764h-.003a3.7 3.7 0 0 0 1.599-2.431H8v-3.08z"/>
+      </svg>
+      Continue with Google
+    </a>
+    <a href="#" onclick="SandSagaBase.showLoginForm(); return false;" class="btn btn-outline-dark mb-1">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-at" viewBox="0 0 16 16">
+        <path d="M13.106 7.222c0-2.967-2.249-5.032-5.482-5.032-3.35 0-5.646 2.318-5.646 5.702 0 3.493 2.235 5.708 5.762 5.708.862 0 1.689-.123 2.304-.335v-.862c-.43.199-1.354.328-2.29.328-2.926 0-4.813-1.88-4.813-4.798 0-2.844 1.921-4.881 4.594-4.881 2.735 0 4.608 1.688 4.608 4.156 0 1.682-.554 2.769-1.416 2.769-.492 0-.772-.28-.772-.76V5.206H8.923v.834h-.11c-.266-.595-.881-.964-1.6-.964-1.4 0-2.378 1.162-2.378 2.823 0 1.737.957 2.906 2.379 2.906.8 0 1.415-.39 1.709-1.087h.11c.081.67.703 1.148 1.503 1.148 1.572 0 2.57-1.415 2.57-3.643zm-7.177.704c0-1.197.54-1.907 1.456-1.907.93 0 1.524.738 1.524 1.907S8.308 9.84 7.371 9.84c-.895 0-1.442-.725-1.442-1.914"/>
+      </svg>
+      Email &amp; Password
+    </a>
+    <a href="/login" class="btn btn-secondary mb-1">Register</a>
+  </div>
+
+  <div class="alert alert-info">
+  <h5>Workshop</h5>
+  <p>Explore the creations of others and share your own.</p>
+  <a href="/workshop" class="btn btn-primary">Open Workshop</a>
+</div>
+
+<div class="alert alert-info">
+  <h5>Discord</h5>
+  <p>Discuss, show your creations and be notified about new features.</p>
+  <p><a href="https://discord.gg/j8G37wFX32" target="_blank" class="btn btn-outline-primary">Join Sand Saga Discord</a></p>
+</div>
+
+<div class="alert alert-info" id="sga-blog-root">
+  <h5 id="goto-blog">Blog</h5>
+</div>
+        </div></div>
+      </main>
+
+      <div class="spacer"></div>
+      <div class="sand-saga-sand-footer"></div>
+      <div class="sand-saga-footer">
+        <div class="container"><div class="row"><div class="col-12">
+          Sand Game JS & Sand Saga; &copy; Patrik Harag, <a href="https://harag.cz">harag.cz</a>; all rights reserved
+          &bull; <a href="/terms">Terms</a>
+          &bull; <a href="/privacy">Privacy</a>
+          &bull; <a href="/news/rss">RSS</a>
+        </div></div></div>
+      </div>
+    </div>
+  </body>
+</html>

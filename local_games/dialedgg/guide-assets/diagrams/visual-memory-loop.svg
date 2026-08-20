@@ -1,0 +1,43 @@
+<svg width="1200" height="720" viewBox="0 0 1200 720" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="720" rx="36" fill="#FBF6EE"/>
+  <rect x="40" y="40" width="1120" height="640" rx="32" fill="#FFFAF1" stroke="#CFC1AE"/>
+  <text x="86" y="118" fill="#2B2118" font-family="Avenir Next, Segoe UI, sans-serif" font-size="44" font-weight="700">DialedGG visual memory loop</text>
+  <text x="86" y="160" fill="#7A6D60" font-family="Avenir Next, Segoe UI, sans-serif" font-size="24">Color sessions work best when you anchor one thing first, then rebuild the rest around it.</text>
+  <defs>
+    <linearGradient id="peach" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#F7E3DA"/>
+      <stop offset="1" stop-color="#F4D4BE"/>
+    </linearGradient>
+    <linearGradient id="sea" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#D7EDF1"/>
+      <stop offset="1" stop-color="#C0E0D8"/>
+    </linearGradient>
+  </defs>
+  <rect x="86" y="226" width="224" height="178" rx="24" fill="url(#peach)" stroke="#CFC1AE"/>
+  <text x="114" y="282" fill="#2B2118" font-family="Avenir Next, Segoe UI, sans-serif" font-size="19" font-weight="700">1. Scan the pattern</text>
+  <text x="114" y="318" fill="#5B4A3A" font-family="Avenir Next, Segoe UI, sans-serif" font-size="18">Take in the whole</text>
+  <text x="114" y="344" fill="#5B4A3A" font-family="Avenir Next, Segoe UI, sans-serif" font-size="18">sequence before you</text>
+  <text x="114" y="370" fill="#5B4A3A" font-family="Avenir Next, Segoe UI, sans-serif" font-size="18">zoom into details.</text>
+  <rect x="346" y="226" width="224" height="178" rx="24" fill="url(#sea)" stroke="#CFC1AE"/>
+  <text x="374" y="282" fill="#2B2118" font-family="Avenir Next, Segoe UI, sans-serif" font-size="19" font-weight="700">2. Pick one anchor</text>
+  <text x="374" y="318" fill="#5B4A3A" font-family="Avenir Next, Segoe UI, sans-serif" font-size="18">Remember the first</text>
+  <text x="374" y="344" fill="#5B4A3A" font-family="Avenir Next, Segoe UI, sans-serif" font-size="18">tile, the brightest</text>
+  <text x="374" y="370" fill="#5B4A3A" font-family="Avenir Next, Segoe UI, sans-serif" font-size="18">tile, or one position.</text>
+  <rect x="606" y="226" width="224" height="178" rx="24" fill="url(#peach)" stroke="#CFC1AE"/>
+  <text x="634" y="282" fill="#2B2118" font-family="Avenir Next, Segoe UI, sans-serif" font-size="19" font-weight="700">3. Rebuild fast</text>
+  <text x="634" y="318" fill="#5B4A3A" font-family="Avenir Next, Segoe UI, sans-serif" font-size="18">Place the rest of the</text>
+  <text x="634" y="344" fill="#5B4A3A" font-family="Avenir Next, Segoe UI, sans-serif" font-size="18">colors before your</text>
+  <text x="634" y="370" fill="#5B4A3A" font-family="Avenir Next, Segoe UI, sans-serif" font-size="18">memory cools off.</text>
+  <rect x="866" y="226" width="224" height="178" rx="24" fill="url(#sea)" stroke="#CFC1AE"/>
+  <text x="894" y="282" fill="#2B2118" font-family="Avenir Next, Segoe UI, sans-serif" font-size="19" font-weight="700">4. Name the miss</text>
+  <text x="894" y="318" fill="#5B4A3A" font-family="Avenir Next, Segoe UI, sans-serif" font-size="18">Was it order, shade,</text>
+  <text x="894" y="344" fill="#5B4A3A" font-family="Avenir Next, Segoe UI, sans-serif" font-size="18">position, or simple</text>
+  <text x="894" y="370" fill="#5B4A3A" font-family="Avenir Next, Segoe UI, sans-serif" font-size="18">confidence?</text>
+  <path d="M310 316H346" stroke="#C76631" stroke-width="8" stroke-linecap="round"/>
+  <path d="M570 316H606" stroke="#C76631" stroke-width="8" stroke-linecap="round"/>
+  <path d="M830 316H866" stroke="#C76631" stroke-width="8" stroke-linecap="round"/>
+  <circle cx="180" cy="546" r="28" fill="#C76631"/>
+  <circle cx="248" cy="546" r="28" fill="#1D7D8C"/>
+  <circle cx="316" cy="546" r="28" fill="#D7B261"/>
+  <text x="382" y="555" fill="#2B2118" font-family="Avenir Next, Segoe UI, sans-serif" font-size="22" font-weight="700">Short sessions beat long, blurry repetition.</text>
+</svg>

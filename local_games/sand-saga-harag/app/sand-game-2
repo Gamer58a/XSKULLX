@@ -1,0 +1,757 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <meta name="author" content="Patrik Harag">
+    <meta property="og:site_name" content="Harag.cz">
+    <meta name="Description" content="Sand Game 2 is a falling sand game that presents an empty canvas and a wide range of various elements. The player can create landscapes out of dirt, sand and water, then plant grass and watch it grow. Or build metal structures and then melt them with thermite, or perhaps set fire to an oil pond. Or mix water and salt to make brine – that can be distilled back to pure salt. And many other possibilities.">
+    <meta property="og:description" content="Sand Game 2 is a falling sand game that presents an empty canvas and a wide range of various elements. The player can create landscapes out of dirt, sand and water, then plant grass and watch it grow. Or build metal structures and then melt them with thermite, or perhaps set fire to an oil pond. Or mix water and salt to make brine – that can be distilled back to pure salt. And many other possibilities.">
+    <meta property="og:title" content="Sand Game 2">
+    <meta property="og:image" content="https://files.harag.cz/www/app/sand-game-2/preview-ui.png">
+
+    <!-- icons -->
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#e6c700">
+    <meta name="msapplication-TileColor" content="#ffc40d">
+    <meta name="theme-color" content="#000000">
+
+    <title>Harag.cz - Sand Game 2</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+          rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" type="text/css" href="/resources/main.css">
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-HLHEV50NKX"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'G-HLHEV50NKX');
+    </script>
+    <script>
+        function harag_cz_showLoginForm() {
+            var dialogNode = document.getElementById('dialog-login');
+            var modal = new window.bootstrap.Modal(dialogNode);
+            modal.show();
+        }
+        if (window.location.hash === '#login' || window.location.hash === '#login-failed') {
+            document.addEventListener('DOMContentLoaded', function () {
+                harag_cz_showLoginForm();
+            });
+        }
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var sidebarToggle = document.body.querySelector('#sidebarToggle');
+            if (sidebarToggle) {
+                sidebarToggle.addEventListener('click', function (event) {
+                    event.preventDefault();
+                    document.body.classList.toggle('sb-sidenav-toggled');
+                });
+            }
+        });
+    </script>
+
+<script>
+    function harag_cz_comment(replyTo) {
+        document.getElementById('dialog-comment_title').textContent = replyTo ? 'Reply' : 'Post Comment';
+        document.getElementById('dialog-comment_reply').value = replyTo;
+        document.getElementById('dialog-comment_error-message-wrapper').innerHTML = '';
+
+        const dialogNode = document.getElementById('dialog-comment');
+        const modal = new window.bootstrap.Modal(dialogNode);
+        modal.show();
+    }
+
+    function harag_cz_sendComment() {
+        document.getElementById('dialog-comment_error-message-wrapper').innerHTML = '';
+
+        let formComment = document.getElementById('form-comment');
+        let serialized = new FormData(formComment);
+        let dataToSend = {};
+
+        for (let [key, value] of serialized.entries()) {
+            dataToSend[key] = key.startsWith('test') ? value === 'on' : value;
+        }
+
+        fetch(`/discussion/app-sand-game-2`, {
+                method: 'POST',
+                body: JSON.stringify(dataToSend),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => {
+                if (response.ok) {
+                    document.getElementById('dialog-comment_content').value = '';
+                    alert('Submitted successfully. Your comment will be visible after page reload.');
+                } else if (response.status === 400) {
+                    harag_cz_sendCommentHandleError('check the form again');
+                } else {
+                    harag_cz_sendCommentHandleError(response.statusText);
+                }
+            })
+            .catch(error => {
+                harag_cz_sendCommentHandleError(error);
+            });
+    }
+
+    function harag_cz_sendCommentHandleError(error) {
+        setTimeout(() => {
+            const alert = document.createElement('div');
+            alert.setAttribute('role', 'alert');
+            alert.setAttribute('class', 'alert alert-danger');
+            alert.append('Submit failed: ' + error);
+
+            const messageWrapper = document.getElementById('dialog-comment_error-message-wrapper');
+            messageWrapper.append(alert);
+
+            const dialogNode = document.getElementById('dialog-comment');
+            const modal = new window.bootstrap.Modal(dialogNode);
+            modal.show();
+        }, 0);
+    }
+
+</script>
+
+  </head>
+
+  <body class="d-flex">
+    <div class="modal fade" id="dialog-login" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <strong>Login</strong>
+          </div>
+          <div class="modal-body">
+            <form class="" action="/login" method="POST">
+              <input type="hidden" name="csrf-token" value="40f98d89-dfa3-4961-8af2-d485fe56c0de">
+              <div class="mb-3">
+                <label class="form-label" for="username">Name</label>
+                <input type="text" id="username" name="username" class="form-control" placeholder="Enter login" maxlength="30" required>
+              </div>
+              <div class="mb-3">
+                <label class="form-label" for="password">Pass</label>
+                <input type="password" id="password" name="password" class="form-control" placeholder="Enter password" maxlength="30" required>
+              </div>
+              <div class="mb-3">
+                <button type="submit" class="btn btn-primary">Send</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sidebar-->
+    <nav id="sidebar" class="bg-dark">
+      <div id="sidebar-fixed" class="position-fixed bg-dark">
+        <div class="sidebar-heading">
+          <a class="navbar-brand" href="/">
+            <img src="/favicon-32x32.png" width="32" height="32" alt="Logo">
+            <span>Harag.cz</span>
+          </a>
+          <a class="hidden-link" href="#" onclick="harag_cz_showLoginForm(); return false;">_</a>
+        </div>
+        <ul class="nav flex-column">  <!-- active -->
+          <li class="nav-item">
+            <a href="/about/" class="nav-link">About</a>
+          </li>
+          <li class="nav-item">
+            <a href="/blog" class="nav-link">Blog</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/app">Apps</a>
+            <ul class="nav flex-column">
+              <li class="nav-item"><a class="nav-link" href="/app/sand-saga">SandSaga.com <span class="badge badge-light">New</span></a></li>
+              <li class="nav-item"><a class="nav-link" href="/app/sand-game-js">Sand Game JS</a></li>
+              <li class="nav-item"><a class="nav-link" href="/app/sand-game-2">Sand Game 2</a></li>
+              <li class="nav-item"><a class="nav-link" href="/app/turtle">Turtle Graphics</a></li>
+              <li class="nav-item"><a class="nav-link" href="/app/finance">Finance</a></li>
+              <li class="nav-item"> <a href="/app" class="nav-link">...</a></li>
+            </ul>
+          </li>
+        </ul>
+
+      </div>
+    </nav>
+
+    <!-- Page content wrapper-->
+    <div id="page-content-wrapper" class="d-flex flex-column">
+
+      <!-- Navigation -->
+      <nav id="navbar" class="navbar navbar-dark bg-dark">
+        <button id="sidebarToggle" class="navbar-toggler" type="button" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+      </nav>
+
+
+      <noscript>
+        <div class="container"><div class="row"><div class="col-12">
+          <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            For full functionality of this site it is necessary to enable JavaScript.
+            Here are the <a href="https://www.enablejavascript.io/">instructions how to enable JavaScript in your web browser</a>.
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+        </div></div></div>
+      </noscript>
+
+      <main class="container"><div class="row"><div class="col-12">
+  <h1>Sand Game 2</h1>
+  <div class="alert alert-info" style="font-weight: bold;">
+  There is a successor called <a href="https://harag.cz/app/sand-game-js">Sand Game JS</a>.
+  It's more advanced and playable right in your browser!
+</div>
+<p><strong>Sand Game 2</strong> is a <em>falling sand</em> game that presents an empty canvas and a wide range of various elements.
+  The player can create landscapes out of dirt, sand and water, then plant grass and watch it grow.
+  Or build metal structures and then melt them with thermite, or perhaps set fire to an oil pond.
+  Or mix water and salt to make brine – that can be distilled back to pure salt.
+  And many other possibilities.</p>
+<p><strong>Features</strong></p>
+<ul>
+  <li>many elements and tools</li>
+  <li>gravity</li>
+  <li>fire and temperature</li>
+  <li>in-game scripting</li>
+  <li>loading / saving</li>
+  <li>portable, multi-platform, with open sources</li>
+</ul>
+<p><strong>Preview</strong></p>
+<p><figure class="figure"><img alt="Preview - GUI" class="figure-img img-fluid" src="https://files.harag.cz/www/app/sand-game-2/preview-ui.png" /><figcaption class="figure-caption">Preview - GUI</figcaption></figure></p>
+<p><figure class="figure"><img alt="Preview - creations" class="figure-img img-fluid" src="https://files.harag.cz/www/app/sand-game-2/preview-creations.png" /><figcaption class="figure-caption">Preview - creations</figcaption></figure></p>
+<div class="ratio ratio-16x9">
+  <iframe src="https://www.youtube-nocookie.com/embed/FBkcQxIvOkc" allowfullscreen></iframe>
+</div>
+<h2 id="goto-controls">Controls</h2>
+<h3 id="goto-inserting-elements">Inserting elements</h3>
+<p>Elements are inserted into the canvas using brushes. You can select primary
+  (left mouse button) and secondary (right mouse button) brush.
+  Shape and size can be changed in <code>menu &gt; tools</code>.</p>
+<ul>
+  <li><strong>left mouse button (<em>LMB</em>)</strong> – drawing with the primary brush</li>
+  <li><strong>right mouse button (<em>RMB</em>)</strong> – drawing with the secondary brush</li>
+  <li><strong>shift</strong> + <em><strong>LMB</strong></em> or <em><strong>RMB</strong></em> – drawing a line</li>
+  <li><strong>ctrl</strong> + <em><strong>LMB</strong></em> or <em><strong>RMB</strong></em> – drawing a rectangle</li>
+  <li><strong>alt</strong> – preventing from rewriting elements (while holding)</li>
+  <li><strong>middle mouse button (<em>MMB</em>)</strong> – picker tool</li>
+  <li><strong>MMB + shift</strong> or <strong>ctrl</strong> – can tool</li>
+</ul>
+<h3 id="goto-templates">Templates</h3>
+<p>Several prepared templates can be found in <code>menus &gt; tools</code>.
+  Insertion can be cancelled using <em>RMB</em>.</p>
+<p>Saved canvases can also be inserted as templates.</p>
+<p><figure class="figure"><img alt="Preview - templates" class="figure-img img-fluid" src="https://files.harag.cz/www/app/sand-game-2/preview-templates.png" /><figcaption class="figure-caption">Preview - templates</figcaption></figure></p>
+<h3 id="goto-editing-tools">Editing tools</h3>
+<p>Canvas editing tools (fill, clear, flip, rotate...) can be found in <code>menus &gt; edit</code>.</p>
+<h3 id="goto-debugging">Debugging</h3>
+<p>Press F12 to show the console.</p>
+<h2 id="goto-saving-and-loading">Saving and loading</h2>
+<p>There are two file formats:</p>
+<ul>
+  <li>
+    <p><strong><code>*.sgs</code></strong> – saving is done by object serialization.
+      After loading, the canvas is exactly the same as it was.
+      However, this solution has disadvantages such as greater memory difficulty,
+      and occasional incompatibility between versions.</p>
+  </li>
+  <li>
+    <p><strong><code>*.sgb</code></strong> – only IDs of brushes that were used to insert elements are stored.
+      Some information such as (exact) colors or internal state may be lost.
+      This format should be <strong>backward compatible</strong>.</p>
+  </li>
+</ul>
+<h2 id="goto-scripting">Scripting</h2>
+<p>You can write scripts in JavaScript and manipulate the canvas programmatically.</p>
+<p>If you put directory named “scripts” into the working directory you will be able
+  to run all scripts from the menu. The second option is a build-in editor.</p>
+<p>Get inspired by <a href="https://github.com/Hartrik/Sand-Game-2/tree/master/scripts">examples</a>.</p>
+<p><figure class="figure"><img alt="Preview - scripting" class="figure-img img-fluid" src="https://files.harag.cz/www/app/sand-game-2/preview-scripting.png" /><figcaption class="figure-caption">Preview - scripting</figcaption></figure></p>
+<h2 id="goto-performance">Performance</h2>
+<p>Significant effort has been invested in optimizing the game for efficiency.
+  If, however, the simulation speed on your machine is not sufficient, try the following tips to enhance your gaming experience.</p>
+<p>The canvas is divided into chunks – square areas with dimensions usually 20×20 points.
+  This allows to distinguish areas where “nothing moves” and these areas are then
+  “ignored”, thus saving performance. <strong>The aim is therefore to have the least active chunks</strong>.
+  Do you want a huge heap of sand? – no problem – until it all moves.</p>
+<p>Another factor affecting performance is the canvas size.
+  <strong>Choose the canvas size with respect to performance of your computer.</strong>
+  Use scaling if needed.</p>
+<p><figure class="figure"><img alt="Preview - chunks" class="figure-img img-fluid" src="https://files.harag.cz/www/app/sand-game-2/preview-chunks.png" /><figcaption class="figure-caption">Preview - chunks</figcaption></figure></p>
+<h2 id="goto-development">Development</h2>
+<p>Most of the codebase comes from 2014 and 2015.
+  In 2016 version 2.03 Beta was released as the last bigger release, introducing new elements and behaviour.
+  Version 2.04 Beta was released in 2017 with English localization and performance improvements.
+  It currently has around <strong>30,000 source lines of Java code</strong>.</p>
+<p>Sand Game 2 is now in <strong>maintenance mode</strong>. No new features are planned in the future.
+  Check <a href="https://harag.cz/app/sand-game-js">Sand Game JS</a>.</p>
+<p>In the past, there have always been issues with Java backwards compatibility:</p>
+<ul>
+  <li>wild changes in JavaFX between Java 7 and Java 8 (APIs removed, rendering changes),</li>
+  <li>JavaFX was removed from Java distributions since Java 11,</li>
+  <li>JavaScript engine was removed from Java distributions since Java 15.</li>
+</ul>
+<h2 id="goto-download">Download</h2>
+<h3 id="goto-exe-distribution-windows-only">EXE distribution (Windows only)</h3>
+<p>The easiest way. Java is included.</p>
+<div class="alert alert-info" style="margin-bottom: 1.5em;">
+  1) Download <a href="https://github.com/Hartrik/Sand-Game-2/releases/download/2.04/SandGame2_2-04-bundle-win.zip">SandGame2_2-04-bundle-win.zip</a> (71.1 MB)<br>
+  2) <strong>Unzip the file</strong><br>
+  3) Double-click on <strong>SandGame2_2-04.exe</strong><br>
+</div>
+<h3 id="goto-jar-distribution">JAR distribution</h3>
+<p>Correct version and distribution of Java must be installed. Tested on Windows only.</p>
+<ul>
+  <li><strong>Java 8</strong> build – <a href="https://github.com/Hartrik/Sand-Game-2/releases/download/2.04/SandGame2_2-04.zip">SandGame2_2-04.zip</a> (1.4 MB)
+    <ul>
+      <li><span style="background-color: #a7e9a7; padding: 0 3pt; border-radius: 20%;">✓</span> Oracle JRE 8   <span style="background-color: #ffaa91; padding: 0 3pt; border-radius: 20%;">✗</span> 9, 10 – broken scripting editor, 11 and later – it lacks JavaFX</li>
+      <li><span style="background-color: #a7e9a7; padding: 0 3pt; border-radius: 20%;">✓</span> BellSoft Liberica <strong>Full</strong> JRE 8   <span style="background-color: #ffaa91; padding: 0 3pt; border-radius: 20%;">✗</span> 11 and later – broken scripting editor</li>
+      <li><span style="background-color: #ffaa91; padding: 0 3pt; border-radius: 20%;">✗</span> Amazon Corretto JRE 8 and later – it lacks some JavaFX features</li>
+      <li><span style="background-color: #ffaa91; padding: 0 3pt; border-radius: 20%;">✗</span> Eclipse Temurin/Adoptium JRE 8 and later – it lacks JavaFX</li>
+    </ul>
+  </li>
+  <li><strong>Java 11</strong> build with JavaFX Windows binaries included – <a href="https://github.com/Hartrik/Sand-Game-2/releases/download/2.04-J11-hotfix-2/SandGame2_2-04-J11-win.zip">SandGame2_2-04-J11-win.zip</a> (34.6 MB)
+    <ul>
+      <li><span style="background-color: #a7e9a7; padding: 0 3pt; border-radius: 20%;">✓</span> Oracle JRE 11, 12, 13, 14   <span style="background-color: #ffaa91; padding: 0 3pt; border-radius: 20%;">✗</span> 15 and later – it lacks JavaScript engine</li>
+      <li><span style="background-color: #a7e9a7; padding: 0 3pt; border-radius: 20%;">✓</span> BellSoft Liberica JRE 11   <span style="background-color: #ffaa91; padding: 0 3pt; border-radius: 20%;">✗</span> 17 and later – it lacks JavaScript engine</li>
+      <li><span style="background-color: #a7e9a7; padding: 0 3pt; border-radius: 20%;">✓</span> Amazon Corretto JRE 11   <span style="background-color: #ffaa91; padding: 0 3pt; border-radius: 20%;">✗</span> 17 and later – it lacks JavaScript engine</li>
+      <li><span style="background-color: #a7e9a7; padding: 0 3pt; border-radius: 20%;">✓</span> Eclipse Temurin/Adoptium JRE 11   <span style="background-color: #ffaa91; padding: 0 3pt; border-radius: 20%;">✗</span> 17 and later – it lacks JavaScript engine</li>
+    </ul>
+  </li>
+</ul>
+<hr />
+<div class="alert alert-info" style="margin-top: 3em; font-weight: bold;">
+  There is a successor called <a href="https://harag.cz/app/sand-game-js">Sand Game JS</a>.
+  It's more advanced and playable right in your browser!
+</div>
+
+      </div></div></main>
+
+<div class="container comments"><div class="row"><div class="col-12">
+  <h2>Discussion</h2>
+  <p>
+    There are 24 comments.
+    <button type="button" class="btn btn-outline-secondary button-show-comment-dialog" onclick="harag_cz_comment('')">
+      Leave a comment
+    </button>
+  </p>
+
+    <div id="comment_d9f13987-567e-41e1-b8cf-fea087d9be81" class="card comment">
+      <div class="card-body">
+        <blockquote class="mb-0">
+          <p>Replying to <a href="#comment_5ff3e6d7-631c-4dc5-8d40-9e4eeb807bdc">5ff3e6d7-631c-4dc5-8d40-9e4eeb807bdc</a>:</p>
+          <p class="comment-content">linewiz yo too bad lol</p>
+          <div class="comment-footer">
+            <span class="user ">bald_cookie</span><span>, 2025-11-24 01:27 (UTC)</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary button-show-comment-dialog" onclick="harag_cz_comment('d9f13987-567e-41e1-b8cf-fea087d9be81')">
+              Reply
+            </button>
+          </div>
+        </blockquote>
+      </div>
+    </div>
+    <div id="comment_9bd27f6b-0af0-4efe-9a53-adb1b82be290" class="card comment">
+      <div class="card-body">
+        <blockquote class="mb-0">
+          
+          <p class="comment-content">Maybe make it so that there is a play button to play sg2 on chromebook</p>
+          <div class="comment-footer">
+            <span class="user ">Amelia</span><span>, 2025-04-24 21:31 (UTC)</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary button-show-comment-dialog" onclick="harag_cz_comment('9bd27f6b-0af0-4efe-9a53-adb1b82be290')">
+              Reply
+            </button>
+          </div>
+        </blockquote>
+      </div>
+    </div>
+    <div id="comment_ca5c60a3-e054-4fac-833b-d17ebc1ee186" class="card comment">
+      <div class="card-body">
+        <blockquote class="mb-0">
+          
+          <p class="comment-content">I created 2 new files on my account that I need for sg2.</p>
+          <div class="comment-footer">
+            <span class="user ">Wesly</span><span>, 2025-04-04 22:42 (UTC)</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary button-show-comment-dialog" onclick="harag_cz_comment('ca5c60a3-e054-4fac-833b-d17ebc1ee186')">
+              Reply
+            </button>
+          </div>
+        </blockquote>
+      </div>
+    </div>
+    <div id="comment_07ca30b6-85a6-41c0-b479-d38a8edcaac8" class="card comment">
+      <div class="card-body">
+        <blockquote class="mb-0">
+          <p>Replying to <a href="#comment_5ff3e6d7-631c-4dc5-8d40-9e4eeb807bdc">5ff3e6d7-631c-4dc5-8d40-9e4eeb807bdc</a>:</p>
+          <p class="comment-content">Well, life is not fair</p>
+          <div class="comment-footer">
+            <span class="user ">Quasi</span><span>, 2025-03-30 02:47 (UTC)</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary button-show-comment-dialog" onclick="harag_cz_comment('07ca30b6-85a6-41c0-b479-d38a8edcaac8')">
+              Reply
+            </button>
+          </div>
+        </blockquote>
+      </div>
+    </div>
+    <div id="comment_5ff3e6d7-631c-4dc5-8d40-9e4eeb807bdc" class="card comment">
+      <div class="card-body">
+        <blockquote class="mb-0">
+          
+          <p class="comment-content">PLEASE make another copy or something of sand game 2 because it can&#39;t be opened on Chromebook, also, the backup link and sand saga can&#39;t be opened because it&#39;s blocked. I&#39;m bored in class and this stupid school blocks everything.</p>
+          <div class="comment-footer">
+            <span class="user ">hi</span><span>, 2025-03-28 18:37 (UTC)</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary button-show-comment-dialog" onclick="harag_cz_comment('5ff3e6d7-631c-4dc5-8d40-9e4eeb807bdc')">
+              Reply
+            </button>
+          </div>
+        </blockquote>
+      </div>
+    </div>
+    <div id="comment_27aee679-875a-41e3-ab70-4ed442eae5a0" class="card comment">
+      <div class="card-body">
+        <blockquote class="mb-0">
+          <p>Replying to <a href="#comment_dd369a92-1b94-4d45-a6fc-417d6325c37b">dd369a92-1b94-4d45-a6fc-417d6325c37b</a>:</p>
+          <p class="comment-content">I think that is a good idea</p>
+          <div class="comment-footer">
+            <span class="user ">Henry Morris</span><span>, 2025-03-27 23:33 (UTC)</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary button-show-comment-dialog" onclick="harag_cz_comment('27aee679-875a-41e3-ab70-4ed442eae5a0')">
+              Reply
+            </button>
+          </div>
+        </blockquote>
+      </div>
+    </div>
+    <div id="comment_dd369a92-1b94-4d45-a6fc-417d6325c37b" class="card comment">
+      <div class="card-body">
+        <blockquote class="mb-0">
+          
+          <p class="comment-content">You should add entities to SG2</p>
+          <div class="comment-footer">
+            <span class="user ">Quasi</span><span>, 2025-03-27 23:29 (UTC)</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary button-show-comment-dialog" onclick="harag_cz_comment('dd369a92-1b94-4d45-a6fc-417d6325c37b')">
+              Reply
+            </button>
+          </div>
+        </blockquote>
+      </div>
+    </div>
+    <div id="comment_e184cbbb-f2d4-4335-9ed4-e4db770b4ee9" class="card comment">
+      <div class="card-body">
+        <blockquote class="mb-0">
+          <p>Replying to <a href="#comment_a3c1e83e-7224-4cef-a9a4-0a32c3271be2">a3c1e83e-7224-4cef-a9a4-0a32c3271be2</a>:</p>
+          <p class="comment-content">You have to download SandGame2_2-04-bundle-win.zip, then unzip the file and double click on SandGame2_2-04.exe on PC using Windows software and when it says &quot;Windows Protected Your PC&quot; Click &quot;learn more&quot; and click &quot;Run Anyways&quot;</p>
+          <div class="comment-footer">
+            <span class="user ">Quasi</span><span>, 2025-03-25 14:48 (UTC)</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary button-show-comment-dialog" onclick="harag_cz_comment('e184cbbb-f2d4-4335-9ed4-e4db770b4ee9')">
+              Reply
+            </button>
+          </div>
+        </blockquote>
+      </div>
+    </div>
+    <div id="comment_a3c1e83e-7224-4cef-a9a4-0a32c3271be2" class="card comment">
+      <div class="card-body">
+        <blockquote class="mb-0">
+          
+          <p class="comment-content">where is the play button??????????????/</p>
+          <div class="comment-footer">
+            <span class="user ">Alessia </span><span>, 2025-03-17 00:38 (UTC)</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary button-show-comment-dialog" onclick="harag_cz_comment('a3c1e83e-7224-4cef-a9a4-0a32c3271be2')">
+              Reply
+            </button>
+          </div>
+        </blockquote>
+      </div>
+    </div>
+    <div id="comment_502f34a2-9dd4-4bd1-881c-7f691e0180c0" class="card comment">
+      <div class="card-body">
+        <blockquote class="mb-0">
+          <p>Replying to <a href="#comment_eee849bb-8f71-49be-9284-f46514ef67e5">eee849bb-8f71-49be-9284-f46514ef67e5</a>:</p>
+          <p class="comment-content">On PC or chromeOS</p>
+          <div class="comment-footer">
+            <span class="user ">Henry Morris</span><span>, 2025-03-15 18:36 (UTC)</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary button-show-comment-dialog" onclick="harag_cz_comment('502f34a2-9dd4-4bd1-881c-7f691e0180c0')">
+              Reply
+            </button>
+          </div>
+        </blockquote>
+      </div>
+    </div>
+    <div id="comment_b782bcb3-6074-490b-be1a-0b3c3e287c5d" class="card comment">
+      <div class="card-body">
+        <blockquote class="mb-0">
+          <p>Replying to <a href="#comment_3fb8546c-bc06-4203-b6de-5ae27e808354">3fb8546c-bc06-4203-b6de-5ae27e808354</a>:</p>
+          <p class="comment-content">You can&#39;t play it on PC, But I Found a way to play it on desktop computer</p>
+          <div class="comment-footer">
+            <span class="user ">Henry Morris</span><span>, 2025-03-09 14:59 (UTC)</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary button-show-comment-dialog" onclick="harag_cz_comment('b782bcb3-6074-490b-be1a-0b3c3e287c5d')">
+              Reply
+            </button>
+          </div>
+        </blockquote>
+      </div>
+    </div>
+    <div id="comment_3fb8546c-bc06-4203-b6de-5ae27e808354" class="card comment">
+      <div class="card-body">
+        <blockquote class="mb-0">
+          
+          <p class="comment-content">Why can’t pc play this</p>
+          <div class="comment-footer">
+            <span class="user ">Madman</span><span>, 2024-11-12 19:14 (UTC)</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary button-show-comment-dialog" onclick="harag_cz_comment('3fb8546c-bc06-4203-b6de-5ae27e808354')">
+              Reply
+            </button>
+          </div>
+        </blockquote>
+      </div>
+    </div>
+    <div id="comment_624ec5dd-06ab-4b9b-841d-a256212402db" class="card comment">
+      <div class="card-body">
+        <blockquote class="mb-0">
+          
+          <p class="comment-content">The file is not accessible as it&#39;s made for a PC on Windows, and my Chromebook is not a PC, or on Windows.</p>
+          <div class="comment-footer">
+            <span class="user ">Phoenix6540</span><span>, 2024-11-06 11:54 (UTC)</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary button-show-comment-dialog" onclick="harag_cz_comment('624ec5dd-06ab-4b9b-841d-a256212402db')">
+              Reply
+            </button>
+          </div>
+        </blockquote>
+      </div>
+    </div>
+    <div id="comment_f414143d-f8a5-42bf-a16d-e509bafce98c" class="card comment">
+      <div class="card-body">
+        <blockquote class="mb-0">
+          <p>Replying to <a href="#comment_eee849bb-8f71-49be-9284-f46514ef67e5">eee849bb-8f71-49be-9284-f46514ef67e5</a>:</p>
+          <p class="comment-content">Did you read all of the comments?</p>
+          <div class="comment-footer">
+            <span class="user ">Archer</span><span>, 2024-09-18 01:50 (UTC)</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary button-show-comment-dialog" onclick="harag_cz_comment('f414143d-f8a5-42bf-a16d-e509bafce98c')">
+              Reply
+            </button>
+          </div>
+        </blockquote>
+      </div>
+    </div>
+    <div id="comment_eee849bb-8f71-49be-9284-f46514ef67e5" class="card comment">
+      <div class="card-body">
+        <blockquote class="mb-0">
+          <p>Replying to <a href="#comment_f0651f5a-9d3e-4135-ae21-389cd0cd1829">f0651f5a-9d3e-4135-ae21-389cd0cd1829</a>:</p>
+          <p class="comment-content">it makes no sense why we cant play this</p>
+          <div class="comment-footer">
+            <span class="user ">kbgjhvdjgchughoixevudyiol;e</span><span>, 2024-09-16 17:37 (UTC)</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary button-show-comment-dialog" onclick="harag_cz_comment('eee849bb-8f71-49be-9284-f46514ef67e5')">
+              Reply
+            </button>
+          </div>
+        </blockquote>
+      </div>
+    </div>
+    <div id="comment_8ecb6390-53a6-4535-a3ca-043d9e462a68" class="card comment">
+      <div class="card-body">
+        <blockquote class="mb-0">
+          
+          <p class="comment-content">Java 8 cannot be operated on the device I&#39;m using and all the search results say nothing about how to do it.</p>
+          <div class="comment-footer">
+            <span class="user ">Archer</span><span>, 2024-09-12 15:47 (UTC)</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary button-show-comment-dialog" onclick="harag_cz_comment('8ecb6390-53a6-4535-a3ca-043d9e462a68')">
+              Reply
+            </button>
+          </div>
+        </blockquote>
+      </div>
+    </div>
+    <div id="comment_7cd7f3d5-d237-47ec-bdba-3021bb311c4a" class="card comment">
+      <div class="card-body">
+        <blockquote class="mb-0">
+          <p>Replying to <a href="#comment_377dc9ed-6cdf-4461-ae49-e8e6166b19ca">377dc9ed-6cdf-4461-ae49-e8e6166b19ca</a>:</p>
+          <p class="comment-content">That would be cool, but we’re a long way off from that.</p>
+          <div class="comment-footer">
+            <span class="user user-admin">Patrik</span><span>, 2024-09-12 06:25 (UTC)</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary button-show-comment-dialog" onclick="harag_cz_comment('7cd7f3d5-d237-47ec-bdba-3021bb311c4a')">
+              Reply
+            </button>
+          </div>
+        </blockquote>
+      </div>
+    </div>
+    <div id="comment_78fbbca8-ad51-4893-8870-caf4b84d0182" class="card comment">
+      <div class="card-body">
+        <blockquote class="mb-0">
+          <p>Replying to <a href="#comment_1c1598b5-66db-4711-b53a-4cf966903398">1c1598b5-66db-4711-b53a-4cf966903398</a>:</p>
+          <p class="comment-content">It will probably be more technically challenging, but it should be possible. Download the .jar build for Java 8 and search &quot;how to run a JAR on a Chromebook&quot; or something...</p>
+          <div class="comment-footer">
+            <span class="user user-admin">Patrik</span><span>, 2024-09-12 06:20 (UTC)</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary button-show-comment-dialog" onclick="harag_cz_comment('78fbbca8-ad51-4893-8870-caf4b84d0182')">
+              Reply
+            </button>
+          </div>
+        </blockquote>
+      </div>
+    </div>
+    <div id="comment_23712677-0e07-4965-9779-207aceb6681f" class="card comment">
+      <div class="card-body">
+        <blockquote class="mb-0">
+          
+          <p class="comment-content">Sorry if i&#39;m getting annoying.</p>
+          <div class="comment-footer">
+            <span class="user ">Archer</span><span>, 2024-09-11 20:20 (UTC)</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary button-show-comment-dialog" onclick="harag_cz_comment('23712677-0e07-4965-9779-207aceb6681f')">
+              Reply
+            </button>
+          </div>
+        </blockquote>
+      </div>
+    </div>
+    <div id="comment_377dc9ed-6cdf-4461-ae49-e8e6166b19ca" class="card comment">
+      <div class="card-body">
+        <blockquote class="mb-0">
+          
+          <p class="comment-content">Can you add vehicles (like planes and cars) to SandSaga?
+You would right click the vehicle and you could use the arrow keys to control it, for planes you don&#39;t need to press &lt;- and -&gt; while flying and to start planes you press /|\ and while on the ground the &lt;- and -&gt; keys can be used for taxing. Cars use the arrow keys but \|/ and /|\ don&#39;t do anything.</p>
+          <div class="comment-footer">
+            <span class="user ">Archer</span><span>, 2024-09-11 14:28 (UTC)</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary button-show-comment-dialog" onclick="harag_cz_comment('377dc9ed-6cdf-4461-ae49-e8e6166b19ca')">
+              Reply
+            </button>
+          </div>
+        </blockquote>
+      </div>
+    </div>
+    <div id="comment_1c1598b5-66db-4711-b53a-4cf966903398" class="card comment">
+      <div class="card-body">
+        <blockquote class="mb-0">
+          <p>Replying to <a href="#comment_75fe9585-5da2-4305-9208-6d6fa9977b38">75fe9585-5da2-4305-9208-6d6fa9977b38</a>:</p>
+          <p class="comment-content">Yes, the data file cannot  be opened on chromebook.</p>
+          <div class="comment-footer">
+            <span class="user ">Archer</span><span>, 2024-09-09 13:41 (UTC)</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary button-show-comment-dialog" onclick="harag_cz_comment('1c1598b5-66db-4711-b53a-4cf966903398')">
+              Reply
+            </button>
+          </div>
+        </blockquote>
+      </div>
+    </div>
+    <div id="comment_75fe9585-5da2-4305-9208-6d6fa9977b38" class="card comment">
+      <div class="card-body">
+        <blockquote class="mb-0">
+          <p>Replying to <a href="#comment_20b6ba8c-0014-4715-892b-28c0e5d23a55">20b6ba8c-0014-4715-892b-28c0e5d23a55</a>:</p>
+          <p class="comment-content">You mean Chromebook?</p>
+          <div class="comment-footer">
+            <span class="user user-admin">Patrik</span><span>, 2024-09-09 10:29 (UTC)</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary button-show-comment-dialog" onclick="harag_cz_comment('75fe9585-5da2-4305-9208-6d6fa9977b38')">
+              Reply
+            </button>
+          </div>
+        </blockquote>
+      </div>
+    </div>
+    <div id="comment_20b6ba8c-0014-4715-892b-28c0e5d23a55" class="card comment">
+      <div class="card-body">
+        <blockquote class="mb-0">
+          
+          <p class="comment-content">Sadly its not available on google chrome</p>
+          <div class="comment-footer">
+            <span class="user ">Archer</span><span>, 2024-09-08 22:13 (UTC)</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary button-show-comment-dialog" onclick="harag_cz_comment('20b6ba8c-0014-4715-892b-28c0e5d23a55')">
+              Reply
+            </button>
+          </div>
+        </blockquote>
+      </div>
+    </div>
+    <div id="comment_f0651f5a-9d3e-4135-ae21-389cd0cd1829" class="card comment">
+      <div class="card-body">
+        <blockquote class="mb-0">
+          
+          <p class="comment-content">you should upload this on steam when its finished!</p>
+          <div class="comment-footer">
+            <span class="user ">cerealx12</span><span>, 2024-03-05 23:50 (UTC)</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary button-show-comment-dialog" onclick="harag_cz_comment('f0651f5a-9d3e-4135-ae21-389cd0cd1829')">
+              Reply
+            </button>
+          </div>
+        </blockquote>
+      </div>
+    </div>
+
+  <div class="modal fade" id="dialog-comment" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <strong id="dialog-comment_title"></strong>
+        </div>
+        <div class="modal-body">
+          <div id="dialog-comment_error-message-wrapper"></div>
+          <form id="form-comment" action="javascript:harag_cz_sendComment();">
+            <input type="hidden" name="csrf-token" value="40f98d89-dfa3-4961-8af2-d485fe56c0de">
+            <input type="hidden" id="dialog-comment_reply" name="replyTo" value="">
+            <div class="mb-3">
+              <label class="form-label" for="dialog-comment_username">Name</label>
+              <input id="dialog-comment_username" type="text" name="username" required class="form-control" placeholder="Enter name" maxlength="32">
+            </div>
+            <div class="mb-3">
+              <label class="form-label" for="dialog-comment_email">E-mail</label>
+              <input id="dialog-comment_email" type="email" name="email" required class="form-control" placeholder="Enter email" aria-describedby="dialog-comment_email-help" maxlength="64">
+              <small id="dialog-comment_email-help" class="form-text text-muted">We'll never share your email with anyone else.</small>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Select ALL good reasons for writing a comment</label>
+              <div class="comment-robot-test">
+                <span class="question">
+                  <input type="checkbox" id="dialog-comment_test-1" name="test1">
+                  <label for="dialog-comment_test-1">Error reporting</label>
+                </span>
+                <span class="question">
+                  <input type="checkbox" id="dialog-comment_test-2" name="test2">
+                  <label for="dialog-comment_test-2">Spamming</label>
+                </span>
+                <span class="question">
+                  <input type="checkbox" id="dialog-comment_test-3" name="test3">
+                  <label for="dialog-comment_test-3">Unconstructive criticism</label>
+                </span>
+                <span class="question">
+                  <input type="checkbox" id="dialog-comment_test-4" name="test4">
+                  <label for="dialog-comment_test-4">Sharing ideas</label>
+                </span>
+              </div>
+              <small class="form-text text-muted">Your comment won't be published if you fail this test.</small>
+            </div>
+            <div class="mb-3">
+              <label class="form-label" for="dialog-comment_content">Message</label>
+              <textarea id="dialog-comment_content" name="content" required class="form-control" placeholder="Enter a deep comment" maxlength="1000" rows="4"></textarea>
+            </div>
+            <div class="mb-3">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Send</button>
+              <small style="margin-left: 1em" class="text-muted">IP address will be logged.</small>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div></div></div>
+
+      <div class="spacer"></div>
+
+
+      <div id="footer-image-container">
+        <a href="/app/sand-game-js">
+          <div id="footer-image"></div>
+        </a>
+      </div>
+    </div>
+  </body>
+</html>

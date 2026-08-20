@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name='robots' content='index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1' />
+<title>Tanuki Sunset - Free Game Play Online</title>
+  <meta name="description" content="Tanuki Sunset is a free online longboarding video game.  Play Now Tanuki Sunset for become a longboard legend.">
+<link rel="icon" type="image/jpeg" sizes="32x32" href="tanuki-sunset-icon.jpg">
+
+<link rel="canonical" href="https://tanukisunset.fun/" />
+	<meta property="og:locale" content="en-US" />
+	<meta property="og:type" content="game" />
+	<meta property="og:title" content="Tanuki Sunset - Free Game Play Online" />
+	<meta property="og:description" content="Tanuki Sunset is a free online longboarding video game.  Play Now Tanuki Sunset for become a longboard legend." />
+	<meta property="og:site_name" content="Tanuki Sunset" />
+	<meta property="og:url" content="https://tanukisunset.fun/" />
+	<meta property="og:image" content="https://tanukisunset.fun/tanuki-sunset.jpg" />
+	<meta property="og:image:width" content="1280" />
+	<meta property="og:image:height" content="720" />
+	<meta property="og:image:type" content="image/jpeg" />
+
+<meta name="google-site-verification" content="H_2alLXAhBvLXisQyYww4Pgsm0d3uykUuXBdX7Klm04" />
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+<link rel="stylesheet" href="style.css" />
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-WL47FLPFY0"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-WL47FLPFY0');
+</script>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif;}
+
+body{
+background:linear-gradient(135deg,#0f0c29,#302b63,#24243e);
+min-height:100vh;
+color:white;
+}
+
+/* HEADER */
+header{padding:20px 40px;display:flex;justify-content:space-between;align-items:center;}
+.logo{font-size:26px;font-weight:700;background:linear-gradient(45deg,#ff00cc,#ff8800);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.logo img{
+height:50px;
+width:auto;
+display:block;
+}
+
+nav{display:flex;gap:30px;}
+nav a{text-decoration:none;font-weight:600;color:#ddd;}
+nav a:hover{color:#ff00cc;}
+.menu-toggle{display:none;font-size:26px;cursor:pointer;}
+
+/* MOBILE MENU */
+.mobile-menu{position:fixed;top:0;right:-100%;width:260px;height:100%;background:#0f0c29;padding:30px;transition:.4s;z-index:2000;}
+.mobile-menu.active{right:0;}
+.close-btn{font-size:26px;cursor:pointer;text-align:right;margin-bottom:30px;}
+.mobile-menu a{display:block;margin:20px 0;font-size:18px;text-decoration:none;color:#ddd;font-weight:600;}
+
+/* MAIN */
+.container{text-align:center;margin-top:60px;}
+
+h1{
+font-size:40px;
+margin-bottom:20px;
+background:linear-gradient(45deg,#ff00cc,#ff8800);
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
+}
+
+.date{color:#bbb;margin-bottom:40px;font-size:18px;}
+
+/* THUMBNAIL */
+.thumb-wrapper{
+display:inline-block;padding:6px;border-radius:25px;
+background:linear-gradient(45deg,#ff00cc,#ff8800);
+box-shadow:0 0 40px rgba(255,0,200,0.5);
+margin-bottom:45px;transition:.4s;
+}
+.thumb-wrapper:hover{transform:scale(1.05);}
+.thumbnail{width:340px;max-width:100%;border-radius:20px;display:block;}
+
+/* ⭐ RATING */
+.rating-box{
+  margin-top:2px;
+  margin-bottom:20px;
+
+}
+
+.stars{
+  font-size:40px;
+  cursor:pointer;
+  color:#555;
+}
+
+.stars i.active{color:#FFD700}
+
+
+/* PLAY BUTTON */
+.play-btn{
+padding:22px 70px;
+border:none;
+border-radius:50px;
+background:linear-gradient(45deg,#ff00cc,#ff8800);
+color:white;
+font-size:24px;
+cursor:pointer;
+font-weight:700;
+box-shadow:0 0 30px rgba(255,0,200,0.5);
+transition:.3s;
+}
+.play-btn:hover{transform:scale(1.1);}
+
+/* SHARE BUTTONS */
+.share{
+margin-top:45px;
+display:flex;
+justify-content:center;
+flex-wrap:wrap;
+gap:15px;
+}
+
+.share a{
+width:50px;height:50px;border-radius:50%;
+display:flex;align-items:center;justify-content:center;
+color:white;font-size:20px;text-decoration:none;
+transition:.3s;
+}
+
+.share a:hover{transform:scale(1.2);}
+
+/* BRAND COLORS */
+.fb{background:#1877F2;}
+.tw{background:#000;}
+.wa{background:#25D366;}
+.tg{background:#0088cc;}
+.pin{background:#E60023;}
+.li{background:#0A66C2;}
+.rd{background:#FF4500;}
+.mail{background:#666;}
+
+/* FOOTER */
+
+
+/* GAME SECTION */
+.game-section{
+max-width:800px;
+margin:80px auto;
+padding:40px;
+border-radius:0;
+background:rgba(255,255,255,0.05);
+backdrop-filter:blur(10px);
+box-shadow:0 0 40px rgba(255,0,200,0.15);
+}
+
+.game-section h2{
+margin-bottom:20px;
+margin-top:25px;
+background:linear-gradient(45deg,#ff00cc,#ff8800);
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
+}
+
+.game-section p{
+color:#ddd;
+line-height:1.7;
+}
+.game-section img{
+padding-top: 30px;
+padding-right: 30px;
+height:auto;
+width:340px;
+display:block;
+align-items: center;
+}
+
+/* TABLE */
+.game-table{
+width:100%;
+border-collapse:collapse;
+margin-top:15px;
+}
+
+.game-table td{
+border:1px solid rgba(255,255,255,0.2);
+padding:12px;
+color:#ddd;
+}
+
+.game-table tr td:first-child{
+font-weight:bold;
+color:#ff00cc;
+}
+
+/* STEPS */
+.steps{
+margin-top:15px;
+color:#ddd;
+line-height:1.8;
+padding-left:20px;
+}
+
+
+
+/* FOOTER */
+
+footer{
+background:#111;
+color:white;
+padding:60px
+margin-top:60px;
+text-align:left;
+}
+
+.footer-container{
+max-width:1200px;
+margin:auto;
+padding:20px;
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+gap:40px;
+}
+
+.footer-logo h3{
+color:#ff0080;
+margin-bottom:10px;
+}
+
+.footer-links h4,
+.footer-social h4{
+margin-bottom:15px;
+}
+
+.footer-links ul{
+list-style:none;
+}
+
+.footer-links li{
+margin-bottom:10px;
+}
+
+.footer-links a{
+color:#ccc;
+text-decoration:none;
+transition:.3s;
+}
+
+.footer-links a:hover{
+color:#ff0080;
+}
+
+.social-icons a{
+display:inline-block;
+width:40px;
+height:40px;
+line-height:40px;
+text-align:center;
+border-radius:50%;
+margin-right:10px;
+font-size:18px;
+color:white;
+background:#333;
+transition:.3s;
+}
+
+.social-icons a:nth-child(1){background:#1877f2;}
+.social-icons a:nth-child(2){background:#ff2e63;}
+.social-icons a:nth-child(3){background:#25d366;}
+.social-icons a:nth-child(4){background:#ff0000;}
+
+.social-icons a:hover{
+transform:translateY(-5px);
+box-shadow:0 10px 20px rgba(0,0,0,.3);
+}
+
+.footer-bottom{
+text-align:center;
+padding:15px;
+background:#0a0a0a;
+font-size:14px;
+color:#aaa;
+}
+
+.social-share-container {
+      display: flex;
+      margin-top: 35px;
+      gap: 18px;
+      justify-content: center;
+    }
+
+    .share-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      color: white;
+      font-size: 24px;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    }
+
+    .share-btn:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+    }
+
+    /* Facebook */
+    .facebook { background: #1877f2; }
+    .facebook:hover { background: #0e5fd8; }
+
+    /* Instagram */
+    .instagram {
+      background: linear-gradient(135deg, #feda75, #fa7e1e, #d62976, #962fbf, #4f5bd5);
+    }
+    .instagram:hover {
+      background: linear-gradient(135deg, #e8c04e, #e66d12, #c21e60, #7d249f, #3b4ab8);
+    }
+
+    /* WhatsApp */
+    .whatsapp { background: #25d366; }
+    .whatsapp:hover { background: #1ebe52; }
+
+    /* Reddit */
+    .reddit { background: #ff4500; }
+    .reddit:hover { background: #e03d00; }
+
+    /* X (Twitter) */
+    .x { background: #000000; }
+    .x:hover { background: #1a1a1a; }
+
+@media(max-width:768px){
+nav{display:none;}
+.menu-toggle{display:block;}
+}
+</style>
+
+</head>
+
+<body>
+
+<header>
+<div class="logo">
+        <img src="tanukisunset-logo.png" alt="Tanuki Sunset">
+</div>
+
+<nav>
+<a href="https://tanukisunset.fun/">Home</a>
+<a href="https://tanukisunset.fun/about">About</a>
+<a href="https://tanukisunset.fun/contact">Contact</a>
+<a href="https://tanukisunset.fun/play">Play Now</a>
+</nav>
+
+<div class="menu-toggle" onclick="openMenu()">
+<i class="fas fa-bars"></i>
+</div>
+</header>
+
+<div class="mobile-menu" id="mobileMenu">
+<div class="close-btn" onclick="closeMenu()"><i class="fas fa-times"></i></div>
+<a href="https://tanukisunset.fun/">Home</a>
+<a href="https://tanukisunset.fun/about">About</a>
+<a href="https://tanukisunset.fun/contact">Contact</a>
+<a href="https://tanukisunset.fun/play">Paly Now</a>
+</div>
+
+<div class="container">
+<h1>Tanuki Sunset</h1>
+<div class="date" id="date"></div>
+
+<center>
+    <script>
+  atOptions = {
+    'key' : 'db7cc24fef2757148cd75c3cbe40055f',
+    'format' : 'iframe',
+    'height' : 50,
+    'width' : 320,
+    'params' : {}
+  };
+</script>
+<script src="https://www.highperformanceformat.com/db7cc24fef2757148cd75c3cbe40055f/invoke.js"></script>
+</center>
+<br>
+
+<div class="thumb-wrapper">
+<img src="tanuki-sunset.jpg" alt="Tanuki Sunset" class="thumbnail">
+</div>
+
+<!-- ⭐ RATING -->
+<div class="rating-box">
+<h3>Rate This Game</h3>
+
+<div class="stars" id="stars">
+<i class="fa fa-star" data-rate="1"></i>
+<i class="fa fa-star" data-rate="2"></i>
+<i class="fa fa-star" data-rate="3"></i>
+<i class="fa fa-star" data-rate="4"></i>
+<i class="fa fa-star" data-rate="5"></i>
+</div>
+
+<p id="rating-text"></p>
+<p id="rating-stats"></p>
+</div>
+
+<button class="play-btn" onclick="playGame()">🎮 Play Now</button>
+
+<!-- SHARE BUTTONS -->
+
+<div class="social-share-container">
+    <!-- Replace https://example.com with your actual page URL -->
+    <!-- Optional: add &title=Your%20Page%20Title for better previews -->
+
+    <a href="https://www.facebook.com/sharer/sharer.php?u=https://tanukisunset.fun/" 
+       target="_blank" rel="noopener noreferrer"
+       class="share-btn facebook"
+       title="Share on Facebook">
+      <i class="fab fa-facebook-f"></i>
+    </a>
+
+    <a href="https://www.instagram.com/" 
+       target="_blank" rel="noopener noreferrer"
+       class="share-btn instagram"
+       title="Follow / Share on Instagram">
+      <i class="fab fa-instagram"></i>
+    </a>
+
+    <a href="https://api.whatsapp.com/send?text=Check%20this%20Game:%20https://tanukisunset.fun" 
+       target="_blank" rel="noopener noreferrer"
+       class="share-btn whatsapp"
+       title="Share on WhatsApp">
+      <i class="fab fa-whatsapp"></i>
+    </a>
+
+    <a href="https://www.reddit.com/submit?url=https://tanukisunset.fun&title=Check%20this%20Game!" 
+       target="_blank" rel="noopener noreferrer"
+       class="share-btn reddit"
+       title="Share on Reddit">
+      <i class="fab fa-reddit-alien"></i>
+    </a>
+
+    <a href="https://twitter.com/intent/tweet?url=https://tanukisunset.fun&text=Check%20this%20Game!&via=tanukisunset" 
+       target="_blank" rel="noopener noreferrer"
+       class="share-btn x"
+       title="Share on X">
+      <i class="fab fa-x-twitter"></i> <!-- or use fa-twitter if you prefer old icon -->
+    </a>
+  </div>
+
+</div>
+<br>
+
+<!-- Ads -->
+<center><script>
+  atOptions = {
+    'key' : 'ba62f8a9edf33e251ed2292a152243e0',
+    'format' : 'iframe',
+    'height' : 250,
+    'width' : 300,
+    'params' : {}
+  };
+</script>
+<script src="https://www.highperformanceformat.com/ba62f8a9edf33e251ed2292a152243e0/invoke.js"></script></center>
+
+
+<!-- ABOUT -->
+<div class="game-section">
+
+<h2>About the Game</h2>
+
+<p>
+<strong>Tanuki Sunset</strong> is a relaxing longboarding arcade game where you play as a stylish raccoon skating downhill through neon-lit roads. Your goal is to drift smoothly, avoid obstacles, collect points, and enjoy the chill synthwave atmosphere while cruising toward the sunset. The game focuses on smooth controls, stylish tricks, and endless downhill fun.
+</p>
+
+ <img src="tanuki-sunset-2.jpg" alt="Tanuki Sunset Game Play Online for Free">
+
+
+<!-- TABLE -->
+<h2>Game Information</h2>
+
+<table class="game-table">
+<tr><td>Game Name</td><td>Tanuki Sunset</td></tr>
+<tr><td>Genre</td><td>Arcade / Skateboarding</td></tr>
+<tr><td>Platform</td><td>Browser & PC</td></tr>
+<tr><td>Game Mode</td><td>Single Player</td></tr>
+<tr><td>Objective</td><td>Drift, score points, and avoid crashes</td></tr>
+</table>
+
+<!-- HOW TO PLAY -->
+<h2>How to Play</h2>
+
+<ol class="steps">
+<li>Click the <strong>Play Now</strong> button to start the game.</li>
+<li>Use <strong>arrow keys</strong> or <strong>A/D keys</strong> to steer.</li>
+<li>Hold drift while turning to earn combo points.</li>
+<li>Avoid hitting cars, walls, and obstacles.</li>
+<li>Collect items and maintain smooth rides to get high scores.</li>
+</ol>
+
+</div>
+
+<footer>
+
+<div class="footer-container">
+
+<div class="footer-logo">
+<h3>Tanuki Sunset</h3>
+<p>Tanuki Sunset is a chill, arcade-style longboarding video game developed by Rewind Games.</p>
+</div>
+
+<div class="footer-links">
+<h4>Contact Us</h4>
+<p>Email: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="761e131a0636021718031d1f05031805130258100318">[email&#160;protected]</a></p>
+</div>
+
+<div class="footer-links">
+<h4>Pages</h4>
+<ul>
+<li><a href="/about">About</a></li>
+<li><a href="/contact">Contact</a></li>
+<li><a href="/disclaimer">Disclaimer</a></li>
+<li><a href="/privacy-policy">Privacy Policy</a></li>
+</ul>
+</div>
+
+<div class="footer-social">
+<h4>Follow Us</h4>
+<div class="social-icons">
+<a href="https://www.facebook.com/tanukisunsetfun"><i class="fab fa-facebook-f"></i></a>
+<a href="https://www.instagram.com/sunset_tanuki"><i class="fab fa-instagram"></i></a>
+<a href="https://whatsapp.com/channel/0029VbC3n7gC1FuBHidnIf1m"><i class="fab fa-whatsapp"></i></a>
+<a href="https://www.youtube.com/watch?v=i8naLFaHLrU"><i class="fab fa-youtube"></i></a>
+</div>
+</div>
+
+</div>
+
+<div class="footer-bottom">
+© 2026 TanukiSunset.fun - All Rights Reserved
+</div>
+
+</footer>
+
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+document.getElementById("date").innerText =
+new Date().toLocaleDateString("en-US",{weekday:"long",year:"numeric",month:"long",day:"numeric"});
+
+function playGame(){
+window.open("https://tanukisunset.fun/play/", "_self");
+}
+
+function openMenu(){
+document.getElementById("mobileMenu").classList.add("active");
+}
+function closeMenu(){
+document.getElementById("mobileMenu").classList.remove("active");
+}
+
+/* ⭐ Rating */
+const stars = document.querySelectorAll("#stars i");
+const text = document.getElementById("rating-text");
+const stats = document.getElementById("rating-stats");
+
+/* LOAD DATA */
+let ratings = JSON.parse(localStorage.getItem("tanukiRatings")) || [];
+
+/* SHOW STATS */
+function updateStats(){
+  if(ratings.length === 0){
+    stats.innerText = "No ratings yet";
+    return;
+  }
+
+  let total = ratings.reduce((a,b)=>a+b,0);
+  let avg = (total / ratings.length).toFixed(1);
+
+  stats.innerText = `⭐ ${avg} / 5  —  ${ratings.length} ratings`;
+
+  /* Update Schema */
+  document.getElementById("schemaRating").innerHTML = `
+  {
+   "@context":"https://schema.org",
+   "@type":"VideoGame",
+   "name":"Tanuki Sunset",
+   "aggregateRating":{
+     "@type":"AggregateRating",
+     "ratingValue":"${avg}",
+     "reviewCount":"${ratings.length}"
+   }
+  }`;
+}
+
+/* STAR CLICK */
+stars.forEach(star=>{
+  star.onclick = () => {
+    let rating = Number(star.dataset.rate);
+
+    ratings.push(rating);
+    localStorage.setItem("tanukiRatings", JSON.stringify(ratings));
+
+    stars.forEach(s=>s.classList.remove("active"));
+    for(let i=0;i<rating;i++) stars[i].classList.add("active");
+
+    text.innerText = `You rated ${rating} ⭐`;
+    updateStats();
+  };
+});
+
+updateStats();
+</script>
+
+<!-- ⭐ SCHEMA -->
+<script type="application/ld+json" id="schemaRating">
+{
+ "@context":"https://schema.org",
+ "@type":"VideoGame",
+ "name":"Tanuki Sunset",
+ "aggregateRating":{
+   "@type":"AggregateRating",
+   "ratingValue":"4.7",
+   "reviewCount":"1297"
+ }
+}
+</script>
+
+</body>
+</html>
