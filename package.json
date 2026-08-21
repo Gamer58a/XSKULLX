@@ -1,5 +1,9 @@
 {
   "name": "xskullx-website",
-  "version": "1.0.1",
-  "main": "index.html"
+  "version": "1.0.0",
+  "main": "index.html",
+  "scripts": {
+    "publish-all": "npm pkg set name=xskullx-website && npm publish --access public && npm pkg set name=xskullx2-website && npm publish --access public && npm pkg set name=xskullx3-website && npm publish --access public && npm pkg set name=xskullx-website",
+    "pushall": "git add . && git commit -m \"update\" && npm version patch && npm run publish-all && git push origin main"
+  }
 }
