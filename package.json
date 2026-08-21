@@ -1,6 +1,6 @@
 {
   "name": "xskullx-website",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "main": "index.html",
   "scripts": {
     "publish-all": "npm pkg set name=xskullx-website && npm publish --access public && npm pkg set name=xskullx2-website && npm publish --access public && npm pkg set name=xskullx3-website && npm publish --access public && npm pkg set name=xskullx-website"
