@@ -5,12 +5,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Drift Boss</title>
   <style>
-    * { box-sizing: border-box; }
-    html, body { margin: 0; width: 100%; height: 100%; overflow: hidden; background: #0f1118; }
-    iframe { display: block; width: 100%; height: 100%; border: 0; background: #0f1118; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { width: 100%; height: 100%; overflow: hidden; background: #1a1a2e; }
+    .loader { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: white; font-family: Arial, sans-serif; font-size: 18px; z-index: 10; }
+    iframe { display: block; width: 100%; height: 100%; border: 0; }
   </style>
 </head>
 <body>
-  <iframe title="Drift Boss" src="https://html5.gamedistribution.com/rvvASMiM/6493b872f0564380a7adad671d1e0a57/index.html" allow="fullscreen; autoplay; gamepad; pointer-lock; clipboard-read; clipboard-write" referrerpolicy="no-referrer" allowfullscreen></iframe>
+  <div class="loader" id="loader">Loading Drift Boss...</div>
+  <iframe id="game" src="https://html5.gamedistribution.com/0a8b51e5eaee42e7b4db83ca00afc92e/" 
+    allow="fullscreen; autoplay; gamepad; pointer-lock" 
+    referrerpolicy="no-referrer" allowfullscreen
+    onload="document.getElementById('loader').style.display='none'"></iframe>
 </body>
 </html>

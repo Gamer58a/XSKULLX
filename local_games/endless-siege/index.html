@@ -5,12 +5,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Endless Siege</title>
   <style>
-    * { box-sizing: border-box; }
-    html, body { margin: 0; width: 100%; height: 100%; overflow: hidden; background: #0f1118; }
-    iframe { display: block; width: 100%; height: 100%; border: 0; background: #0f1118; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { width: 100%; height: 100%; overflow: hidden; background: #0f1118; }
+    .fallback { display: flex; align-items: center; justify-content: center; height: 100vh; color: #fff; font-family: Arial, sans-serif; text-align: center; flex-direction: column; }
+    .fallback a { color: #4fc3f7; text-decoration: none; font-size: 20px; margin-top: 15px; padding: 10px 25px; border: 2px solid #4fc3f7; border-radius: 8px; }
+    .fallback a:hover { background: #4fc3f7; color: #000; }
   </style>
 </head>
 <body>
-  <iframe title="Endless Siege" src="https://www.crazygames.com/game/endless-siege" allow="fullscreen; autoplay; gamepad; pointer-lock; clipboard-read; clipboard-write" referrerpolicy="no-referrer" allowfullscreen></iframe>
+  <div class="fallback">
+    <h2>Endless Siege</h2>
+    <p>This game requires playing on CrazyGames</p>
+    <a href="https://www.crazygames.com/game/endless-siege" target="_blank" rel="noopener">Play on CrazyGames</a>
+  </div>
 </body>
 </html>

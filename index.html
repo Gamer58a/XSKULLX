@@ -9,16 +9,30 @@
       box-sizing: border-box;
     }
 
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@500;600;700&display=swap');
+
     :root {
-      --bg: #111217;
-      --panel: #1b1d26;
-      --panel-2: #242735;
-      --text: #f7f8ff;
-      --muted: #aeb4c8;
-      --line: #343849;
-      --accent: #47d6a8;
-      --accent-2: #75a7ff;
-      --danger: #ff6b7a;
+      --bg: #0a0a0f;
+      --bg-2: #0f1018;
+      --panel: #13141f;
+      --panel-2: #1a1c2a;
+      --panel-3: #22243a;
+      --text: #f0f2ff;
+      --muted: #8b90a8;
+      --line: #252840;
+      --accent: #a855f7;
+      --accent-2: #6366f1;
+      --accent-3: #ec4899;
+      --danger: #ef4444;
+      --glow: rgba(168, 85, 247, 0.3);
+      --glow-2: rgba(99, 102, 241, 0.25);
+      --gradient: linear-gradient(135deg, #a855f7, #6366f1, #ec4899);
+      --gradient-subtle: linear-gradient(135deg, rgba(168,85,247,0.1), rgba(99,102,241,0.1));
+      --glass: rgba(19, 20, 31, 0.75);
+      --shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+      --shadow-lg: 0 16px 48px rgba(0, 0, 0, 0.5);
+      --radius: 12px;
+      --radius-lg: 16px;
     }
 
     body {
@@ -26,7 +40,68 @@
       min-height: 100vh;
       background: var(--bg);
       color: var(--text);
-      font-family: Arial, sans-serif;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(ellipse at 30% 20%, rgba(168,85,247,0.06) 0%, transparent 50%),
+                  radial-gradient(ellipse at 70% 80%, rgba(99,102,241,0.04) 0%, transparent 50%);
+      pointer-events: none;
+      z-index: 0;
+      animation: bgFloat 20s ease-in-out infinite alternate;
+    }
+
+    @keyframes bgFloat {
+      0% { transform: translate(0, 0) rotate(0deg); }
+      100% { transform: translate(-2%, -1%) rotate(1deg); }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeInScale {
+      from { opacity: 0; transform: scale(0.96); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes slideDown {
+      from { opacity: 0; transform: translateY(-12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes glowPulse {
+      0%, 100% { box-shadow: 0 0 20px rgba(168,85,247,0.15); }
+      50% { box-shadow: 0 0 40px rgba(168,85,247,0.3); }
+    }
+
+    @keyframes shimmer {
+      0% { background-position: -200% 0; }
+      100% { background-position: 200% 0; }
+    }
+
+    @keyframes borderGlow {
+      0%, 100% { border-color: rgba(168,85,247,0.3); }
+      50% { border-color: rgba(99,102,241,0.5); }
+    }
+
+    @keyframes cardPop {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.02); }
+      100% { transform: scale(1); }
     }
 
     button,
@@ -50,32 +125,52 @@
       align-items: center;
       justify-content: space-between;
       gap: 18px;
-      padding: 16px 20px;
+      padding: 14px 24px;
       border-bottom: 1px solid var(--line);
-      background: rgba(17, 18, 23, 0.94);
+      background: var(--glass);
+      backdrop-filter: blur(20px) saturate(1.5);
+      -webkit-backdrop-filter: blur(20px) saturate(1.5);
       position: sticky;
       top: 0;
       z-index: 5;
+      animation: slideDown 0.4s ease;
     }
 
     .brand {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 12px;
       min-width: 150px;
       font-weight: 800;
-      letter-spacing: 0;
+      letter-spacing: -0.02em;
+      font-family: 'Space Grotesk', 'Inter', sans-serif;
+      font-size: 1.15rem;
     }
 
     .brand-mark {
       display: grid;
       place-items: center;
-      width: 34px;
-      height: 34px;
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      background: var(--panel);
-      color: var(--accent);
+      width: 38px;
+      height: 38px;
+      border: none;
+      border-radius: 10px;
+      background: var(--gradient);
+      color: white;
+      font-size: 0;
+      overflow: hidden;
+      box-shadow: 0 4px 16px var(--glow);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .brand-mark:hover {
+      transform: scale(1.08) rotate(-3deg);
+      box-shadow: 0 6px 24px var(--glow);
+    }
+
+    .brand-mark img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
     }
 
     .tabs {
@@ -94,17 +189,36 @@
     .primary-button,
     .secondary-button {
       border: 1px solid var(--line);
-      border-radius: 8px;
+      border-radius: var(--radius);
       color: var(--text);
       background: var(--panel);
       min-height: 40px;
-      padding: 0 14px;
+      padding: 0 16px;
+      font-weight: 500;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .tab-button::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: var(--gradient);
+      opacity: 0;
+      transition: opacity 0.25s ease;
+      z-index: -1;
+    }
+
+    .tab-button:hover::before {
+      opacity: 0.1;
     }
 
     .tab-button[aria-selected="true"] {
       border-color: var(--accent);
-      background: #17352d;
-      color: #dffdf3;
+      background: rgba(168, 85, 247, 0.15);
+      color: #e9d5ff;
+      box-shadow: 0 0 20px rgba(168, 85, 247, 0.15), inset 0 1px 0 rgba(255,255,255,0.05);
     }
 
     .tab-button.search-icon-btn {
@@ -114,25 +228,35 @@
     }
 
     .primary-button {
-      border-color: #2f7d66;
-      background: var(--accent);
-      color: #07120f;
+      border-color: rgba(168, 85, 247, 0.4);
+      background: var(--gradient);
+      color: white;
       font-weight: 700;
+      box-shadow: 0 4px 16px var(--glow);
+    }
+
+    .primary-button:hover {
+      box-shadow: 0 6px 24px var(--glow);
+      transform: translateY(-1px);
     }
 
     .secondary-button:hover,
     .tab-button:hover {
-      border-color: #596078;
+      border-color: rgba(168, 85, 247, 0.4);
+      background: var(--panel-2);
     }
 
     .content {
       width: min(1120px, 100%);
       margin: 0 auto;
-      padding: 26px 20px 40px;
+      padding: 28px 20px 40px;
+      position: relative;
+      z-index: 1;
     }
 
     .view {
       display: none;
+      animation: fadeIn 0.35s ease;
     }
 
     .view.active {
@@ -140,13 +264,19 @@
     }
 
     .page-heading {
-      margin-bottom: 22px;
+      margin-bottom: 24px;
+      animation: fadeIn 0.5s ease;
     }
 
     .page-heading h1,
     .page-heading h2 {
       margin: 0 0 8px;
-      letter-spacing: 0;
+      letter-spacing: -0.02em;
+      font-family: 'Space Grotesk', 'Inter', sans-serif;
+      background: var(--gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
     }
 
     .page-heading p {
@@ -163,6 +293,17 @@
       margin-bottom: 16px;
     }
 
+    .game-grid .game-card:nth-child(1) { animation-delay: 0.02s; }
+    .game-grid .game-card:nth-child(2) { animation-delay: 0.04s; }
+    .game-grid .game-card:nth-child(3) { animation-delay: 0.06s; }
+    .game-grid .game-card:nth-child(4) { animation-delay: 0.08s; }
+    .game-grid .game-card:nth-child(5) { animation-delay: 0.1s; }
+    .game-grid .game-card:nth-child(6) { animation-delay: 0.12s; }
+    .game-grid .game-card:nth-child(7) { animation-delay: 0.14s; }
+    .game-grid .game-card:nth-child(8) { animation-delay: 0.16s; }
+    .game-grid .game-card:nth-child(9) { animation-delay: 0.18s; }
+    .game-grid .game-card:nth-child(10) { animation-delay: 0.2s; }
+
     .game-grid.compact {
       grid-template-columns: repeat(auto-fill, minmax(72px, 1fr));
       gap: 10px;
@@ -177,11 +318,14 @@
       padding: 10px 4px 6px;
       min-height: 0;
       cursor: pointer;
-      transition: border-color 0.12s;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      border-radius: var(--radius);
     }
 
     .game-grid.compact .game-card:hover {
       border-color: var(--accent);
+      transform: translateY(-3px) scale(1.03);
+      box-shadow: 0 8px 24px rgba(168,85,247,0.2);
     }
 
     .game-grid.compact .game-card h3 {
@@ -189,7 +333,8 @@
       font-size: 0.6rem;
       text-align: center;
       opacity: 0;
-      transition: opacity 0.12s;
+      transition: opacity 0.2s ease, transform 0.2s ease;
+      transform: translateY(4px);
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -200,6 +345,7 @@
 
     .game-grid.compact .game-card:hover h3 {
       opacity: 1;
+      transform: translateY(0);
     }
 
     .game-grid.compact .game-card p {
@@ -221,50 +367,94 @@
     }
 
     .game-grid.compact .game-card .game-icon {
-      width: 36px;
-      height: 36px;
+      width: 38px;
+      height: 38px;
       font-size: 0.75rem;
       background-size: contain;
       background-repeat: no-repeat;
       background-position: center;
       flex-shrink: 0;
+      border-radius: 10px;
+      transition: all 0.3s ease;
+    }
+
+    .game-grid.compact .game-card:hover .game-icon {
+      transform: scale(1.1);
+      box-shadow: 0 4px 12px var(--glow);
     }
 
     .game-card,
     .setting-row,
     .launcher-panel {
       border: 1px solid var(--line);
-      border-radius: 8px;
+      border-radius: var(--radius-lg);
       background: var(--panel);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
     .game-card {
       display: grid;
       gap: 12px;
-      padding: 16px;
+      padding: 18px;
       min-height: 160px;
+      position: relative;
+      overflow: hidden;
+      animation: fadeIn 0.4s ease both;
+    }
+
+    .game-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: var(--gradient);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .game-card:hover {
+      border-color: rgba(168, 85, 247, 0.4);
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(168, 85, 247, 0.15), 0 4px 16px rgba(0,0,0,0.3);
+    }
+
+    .game-card:hover::before {
+      opacity: 1;
     }
 
     .game-card h3 {
       margin: 0;
-      letter-spacing: 0;
+      letter-spacing: -0.01em;
+      font-family: 'Space Grotesk', 'Inter', sans-serif;
     }
 
     .game-card p {
       margin: 0;
       color: var(--muted);
-      line-height: 1.45;
+      line-height: 1.5;
+      font-size: 0.9rem;
     }
 
     .game-icon {
       display: grid;
       place-items: center;
-      width: 42px;
-      height: 42px;
-      border-radius: 8px;
-      background: var(--panel-2);
-      color: var(--accent-2);
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+      background: var(--gradient-subtle);
+      border: 1px solid rgba(168,85,247,0.2);
+      color: var(--accent);
       font-weight: 800;
+      transition: all 0.3s ease;
+    }
+
+    .game-card:hover .game-icon {
+      background: var(--gradient);
+      color: white;
+      box-shadow: 0 4px 16px var(--glow);
+      transform: scale(1.05);
     }
 
     .game-page {
@@ -274,6 +464,7 @@
       grid-template-rows: auto 1fr;
       width: 100%;
       background: var(--bg);
+      animation: fadeInScale 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
     .game-page.active {
@@ -286,9 +477,11 @@
       justify-content: space-between;
       gap: 12px;
       min-height: 58px;
-      padding: 10px 14px;
+      padding: 10px 16px;
       border-bottom: 1px solid var(--line);
-      background: var(--panel);
+      background: var(--glass);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
     }
 
     .game-page-left,
@@ -305,11 +498,19 @@
       width: 40px;
       height: 40px;
       border: 1px solid var(--line);
-      border-radius: 8px;
+      border-radius: var(--radius);
       background: var(--panel-2);
       color: var(--text);
       font-size: 1.15rem;
       line-height: 1;
+      transition: all 0.25s ease;
+    }
+
+    .icon-button:hover {
+      border-color: var(--accent);
+      background: rgba(168,85,247,0.1);
+      box-shadow: 0 0 16px rgba(168,85,247,0.15);
+      transform: scale(1.05);
     }
 
     .game-page-title {
@@ -317,6 +518,8 @@
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
+      font-family: 'Space Grotesk', 'Inter', sans-serif;
+      font-weight: 600;
     }
 
 
@@ -325,7 +528,8 @@
       width: 100%;
       height: 100%;
       border: 0;
-      background: #08090d;
+      background: #050508;
+      border-radius: 0 0 var(--radius-lg) var(--radius-lg);
     }
 
     .proxy-view {
@@ -335,6 +539,7 @@
       display: none;
       grid-template-rows: auto 1fr;
       background: var(--bg);
+      animation: fadeInScale 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
     .proxy-view.active {
@@ -346,9 +551,11 @@
       align-items: center;
       gap: 10px;
       min-height: 58px;
-      padding: 10px 14px;
+      padding: 10px 16px;
       border-bottom: 1px solid var(--line);
-      background: var(--panel);
+      background: var(--glass);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
     }
 
     .proxy-frame {
@@ -392,22 +599,24 @@
       display: none;
       place-items: center;
       padding: 24px;
-      background: #111217;
+      background: var(--bg);
       text-align: center;
     }
 
     .frame-notice.active {
       display: grid;
+      animation: fadeIn 0.3s ease;
     }
 
     .frame-notice-inner {
       display: grid;
-      gap: 12px;
+      gap: 14px;
       width: min(520px, 100%);
-      padding: 22px;
+      padding: 28px;
       border: 1px solid var(--line);
-      border-radius: 8px;
+      border-radius: var(--radius-lg);
       background: var(--panel);
+      box-shadow: var(--shadow-lg);
     }
 
     .frame-notice-inner h2,
@@ -415,9 +624,13 @@
       margin: 0;
     }
 
+    .frame-notice-inner h2 {
+      font-family: 'Space Grotesk', 'Inter', sans-serif;
+    }
+
     .frame-notice-inner p {
       color: var(--muted);
-      line-height: 1.5;
+      line-height: 1.55;
     }
 
     .setting-list {
@@ -431,12 +644,14 @@
       align-items: center;
       gap: 14px;
       padding: 16px;
+      border-radius: var(--radius-lg);
     }
 
     .setting-row h3 {
       margin: 0 0 5px;
       font-size: 1rem;
-      letter-spacing: 0;
+      letter-spacing: -0.01em;
+      font-family: 'Space Grotesk', 'Inter', sans-serif;
     }
 
     .setting-row p {
@@ -447,6 +662,8 @@
 
     #searchInput:focus {
       border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(168,85,247,0.15);
+      outline: none;
     }
 
     .search-result-item {
@@ -455,19 +672,22 @@
       justify-content: space-between;
       padding: 12px 14px;
       border: 1px solid var(--line);
-      border-radius: 8px;
+      border-radius: var(--radius);
       margin-bottom: 8px;
       background: var(--panel);
-      transition: border-color 0.12s;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
       cursor: pointer;
     }
 
     .search-result-item:hover {
       border-color: var(--accent);
+      transform: translateX(4px);
+      box-shadow: 0 4px 16px rgba(168,85,247,0.1);
     }
 
     .search-result-item .result-name {
       font-weight: 600;
+      font-family: 'Space Grotesk', 'Inter', sans-serif;
     }
 
     .search-result-item .result-tab {
@@ -480,10 +700,18 @@
       min-height: 40px;
       width: 160px;
       border: 1px solid var(--line);
-      border-radius: 8px;
+      border-radius: var(--radius);
       background: var(--panel-2);
       color: var(--text);
-      padding: 0 10px;
+      padding: 0 12px;
+      transition: all 0.25s ease;
+    }
+
+    .setting-row input:focus,
+    .setting-row select:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(168,85,247,0.15);
     }
 
     .setting-group {
@@ -563,19 +791,27 @@
       display: flex;
       gap: 8px;
       flex-wrap: wrap;
-      color: #d6d6e7;
-      font-size: 0.9rem;
+      color: var(--muted);
+      font-size: 0.85rem;
       z-index: 6;
+      background: var(--glass);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      padding: 8px 14px;
+      border-radius: var(--radius);
+      border: 1px solid var(--line);
     }
 
     kbd {
-      border: 1px solid #515163;
+      border: 1px solid var(--line);
       border-bottom-width: 3px;
       border-radius: 6px;
-      padding: 2px 7px;
-      background: #20202a;
-      color: #fff;
+      padding: 2px 8px;
+      background: var(--panel-2);
+      color: var(--text);
       font: inherit;
+      font-weight: 600;
+      font-size: 0.8rem;
     }
 
     .classroom-cover {
@@ -647,7 +883,7 @@
   <div class="app" id="app">
     <header class="topbar">
       <div class="brand">
-        <span class="brand-mark">X</span>
+        <span class="brand-mark"><img src="assets/images/logo.jpeg" alt="XSKULLX"></span>
         <span>XSKULLX</span>
       </div>
 
@@ -8219,7 +8455,7 @@
           <div style="display:flex;align-items:center;gap:10px">
             <button class="icon-button" type="button" onclick="toggleFullscreen()" aria-label="Fullscreen">⛶</button>
             <button class="icon-button" type="button" onclick="setActiveTab('games')" aria-label="Back">←</button>
-            <span class="brand-mark">X</span>
+            <span class="brand-mark"><img src="assets/images/logo.jpeg" alt="XSKULLX"></span>
             <strong class="game-page-title">Budsin Games</strong>
           </div>
           <button class="icon-button" type="button" onclick="location.reload()" aria-label="Reload">↻</button>
@@ -8238,7 +8474,7 @@
           <div style="display:flex;align-items:center;gap:10px">
             <button class="icon-button" type="button" onclick="toggleFullscreen()" aria-label="Fullscreen">⛶</button>
             <button class="icon-button" type="button" onclick="setActiveTab('home')" aria-label="Back">←</button>
-            <span class="brand-mark">X</span>
+            <span class="brand-mark"><img src="assets/images/logo.jpeg" alt="XSKULLX"></span>
             <strong class="game-page-title">Lunar</strong>
           </div>
           <button class="icon-button" type="button" onclick="location.reload()" aria-label="Reload">↻</button>
@@ -8257,7 +8493,7 @@
           <div class="game-page-left">
             <button class="icon-button" type="button" onclick="toggleFullscreen()" aria-label="Fullscreen">⛶</button>
             <button class="icon-button" type="button" onclick="setActiveTab('books')" aria-label="Back">←</button>
-            <span class="brand-mark">X</span>
+            <span class="brand-mark"><img src="assets/images/logo.jpeg" alt="XSKULLX"></span>
             <strong class="game-page-title">Diary of a Wimpy Kid</strong>
           </div>
           <div class="game-page-actions">
@@ -8399,7 +8635,7 @@
           <div class="game-page-left">
             <button class="icon-button" type="button" onclick="toggleFullscreen()" aria-label="Fullscreen">⛶</button>
             <button class="icon-button" type="button" onclick="setActiveTab('books')" aria-label="Back">←</button>
-            <span class="brand-mark">X</span>
+            <span class="brand-mark"><img src="assets/images/logo.jpeg" alt="XSKULLX"></span>
             <strong class="game-page-title">Harry Potter</strong>
           </div>
           <div class="game-page-actions">
@@ -8451,7 +8687,7 @@
           <div class="game-page-left">
             <button class="icon-button" type="button" onclick="toggleFullscreen()" aria-label="Fullscreen">⛶</button>
             <button class="icon-button" type="button" id="backToGamesButton" aria-label="Back">←</button>
-            <span class="brand-mark">X</span>
+            <span class="brand-mark"><img src="assets/images/logo.jpeg" alt="XSKULLX"></span>
             <strong class="game-page-title" id="gamePageTitle">Game</strong>
           </div>
 
