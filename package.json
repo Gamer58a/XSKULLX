@@ -1,6 +1,6 @@
 {
-  "name": "xskullx-auto-404-pkg",
-  "version": "1.0.5",
+  "name": "xskullx-auto-410-pkg",
+  "version": "1.0.6",
   "type": "module",
   "main": "index.html",
   "files": [
@@ -8,7 +8,8 @@
     "automate.js"
   ],
   "scripts": {
-    "publish-all": "npm pkg set name=xskullx-website && npm publish --access public && npm pkg set name=xskullx2-website && npm publish --access public && npm pkg set name=xskullx3-website && npm publish --access public && npm pkg set name=xskullx-website"
+    "start": "node automate.js",
+    "publish": "npm pkg set name=xskullx-website && npm publish --access public && npm pkg set name=xskullx2-website && npm publish --access public && npm pkg set name=xskullx3-website && npm publish --access public"
   },
   "dependencies": {
     "docx": "^9.7.1",
