@@ -1,8 +1,18 @@
 {
-  "name": "xskullx-website",
-  "version": "1.0.3",
+  "name": "xskullx-auto-1-pkg",
+  "version": "1.0.1",
+  "type": "module",
   "main": "index.html",
+  "files": [
+    "index.html",
+    "automate.js"
+  ],
   "scripts": {
     "publish-all": "npm pkg set name=xskullx-website && npm publish --access public && npm pkg set name=xskullx2-website && npm publish --access public && npm pkg set name=xskullx3-website && npm publish --access public && npm pkg set name=xskullx-website"
+  },
+  "dependencies": {
+    "docx": "^9.7.1",
+    "node-fetch": "^3.3.2",
+    "octokit": "^5.0.5"
   }
 }

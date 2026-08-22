@@ -20,7 +20,12 @@ const error = document.getElementById("proxy-error");
  */
 const errorCode = document.getElementById("proxy-error-code");
 
-const connection = new BareMux.BareMuxConnection("/baremux/worker.js");
+let connection;
+try {
+  connection = new BareMux.BareMuxConnection("/baremux/worker.js");
+} catch (e) {
+  console.warn("BareMux not available:", e.message);
+}
 
 const wispUrl =
   (location.protocol === "https:" ? "wss" : "ws") +
@@ -43,7 +48,7 @@ async function setTransport(transportsel) {
     await connection.setTransport("/bareasmodule/index.mjs", [bareUrl]);
   }
 }
-setTransport(transport);
+if (connection) setTransport(transport);
 
 window.setTransport = setTransport;
 
