@@ -1,40 +1,57 @@
-name: 24/7 Scheduled Automator
+name: Automated Release, Deployment & Sync
 
 on:
-  schedule:
-    - cron: '*/15 * * * *'
-  workflow_dispatch:
-
-permissions:
-  contents: write
+  push:
+    branches:
+      - main
+    tags:
+      - 'v*'
 
 jobs:
-  run-automation:
+  publish-and-deploy:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout Repository
+      - name: Checkout Source Code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: '20'
+          registry-url: 'https://registry.npmjs.org'
 
       - name: Install Dependencies
         run: npm ci
 
-      - name: Run Script
-        run: node automate.js
-
-      - name: Commit and Push Updated Files
+      - name: Publish to npm
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git add Generated_CDN_Links.docx history.json || true
-          if git diff --staged --quiet; then
-            echo "No changes to commit"
-          else
-            git commit -m "auto: updated CDN links and history log"
-            git push
-          fi
+          # Publish package if version is updated
+          npm publish --access public || echo "Version already published"
+
+      - name: Deploy to Vercel
+        uses: amondnet/vercel-action@v25
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+          vercel-args: '--prod'
+
+      - name: Purge CDN Cache
+        run: |
+          # Invalidate CDN edge cache (e.g., Cloudflare)
+          curl -X POST "https://api.cloudflare.com/client/v4/zones/${{ secrets.CLOUDFLARE_ZONE_ID }}/purge_cache" \
+            -H "Authorization: Bearer ${{ secrets.CLOUDFLARE_API_TOKEN }}" \
+            -H "Content-Type: application/json" \
+            --data '{"purge_everything":true}'
+
+      - name: Push Repository Updates & Sync Tags
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git push origin --tags
