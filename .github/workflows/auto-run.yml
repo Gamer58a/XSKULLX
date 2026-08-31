@@ -2,8 +2,9 @@ name: 24/7 Scheduled Automator
 
 on:
   schedule:
+    # Runs every 15 minutes
     - cron: '*/15 * * * *'
-  workflow_dispatch:
+  workflow_dispatch: # Allows manual trigger from GitHub UI
 
 permissions:
   contents: write
