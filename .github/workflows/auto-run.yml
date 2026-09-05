@@ -4,6 +4,13 @@ on:
   push:
     branches:
       - main
+  schedule:
+    # Runs automatically every 15 minutes
+    - cron: '*/15 * * * *'
+  workflow_dispatch: # Allows manual triggers from the GitHub Actions UI
+
+permissions:
+  contents: write
 
 jobs:
   run-automator:
