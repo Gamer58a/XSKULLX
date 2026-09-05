@@ -1,52 +1,114 @@
 const { execSync } = require('child_process');
+const fs = require('fs');
+const https = require('https');
 
-const INTERVAL_MS = 60000; // Polls every 60 seconds
+// CONFIGURATION
+const GITHUB_USERNAME = process.env.GITHUB_USERNAME || 'Gamer69a';
+const GITHUB_PAT = process.env.GITHUB_PAT || process.env.GH_PAT;
+const NPM_TOKEN = process.env.NPM_TOKEN;
+const VERCEL_TOKEN = process.env.VERCEL_TOKEN;
 
-function run(cmd) {
-  try {
-    execSync(cmd, { stdio: 'inherit' });
-    return true;
-  } catch (e) {
-    return false;
-  }
+if (!GITHUB_PAT) {
+  console.error('Error: GITHUB_PAT (or GH_PAT) environment variable is required.');
+  process.exit(1);
 }
 
-async function startAutomator() {
-  while (true) {
-    console.log('[Automator] Checking for updates...');
-
-    // 1. Fetch & Check for updates from GitHub
-    run('git fetch origin main');
-    const hasUpdates = execSync('git rev-list HEAD..origin/main').toString().trim().length > 0;
-
-    if (hasUpdates) {
-      console.log('[Automator] New changes detected. Running pipeline...');
-
-      // Sync local repo
-      run('git pull origin main');
-
-      // Publish NPM package
-      run('npm publish --access public || true');
-
-      // Deploy to Vercel
-      if (process.env.VERCEL_TOKEN) {
-        run(`npx vercel --prod --token ${process.env.VERCEL_TOKEN} --confirm`);
+// Helper: Create a brand-new GitHub Repository via API
+function createNewRepo(repoName) {
+  return new Promise((resolve, reject) => {
+    const data = JSON.stringify({ name: repoName, private: false });
+    const req = https.request({
+      hostname: 'api.github.com',
+      path: '/user/repos',
+      method: 'POST',
+      headers: {
+        'Authorization': `token ${GITHUB_PAT}`,
+        'User-Agent': 'NodeJS-Automator',
+        'Content-Type': 'application/json',
+        'Content-Length': data.length
       }
+    }, (res) => {
+      let body = '';
+      res.on('data', chunk => body += chunk);
+      res.on('end', () => resolve(JSON.parse(body)));
+    });
+    req.on('error', reject);
+    req.write(data);
+    req.end();
+  });
+}
 
-      // Purge CDN Cache
-      if (process.env.CLOUDFLARE_ZONE_ID && process.env.CLOUDFLARE_API_TOKEN) {
-        run(`curl -X POST "https://api.cloudflare.com/client/v4/zones/${process.env.CLOUDFLARE_ZONE_ID}/purge_cache" \
-          -H "Authorization: Bearer ${process.env.CLOUDFLARE_API_TOKEN}" \
-          -H "Content-Type: application/json" \
-          --data '{"purge_everything":true}'`);
-      }
+async function runPipeline() {
+  const timeStamp = Date.now();
+  const buildName = `build-${timeStamp}`;
+  const npmScopedName = `@${GITHUB_USERNAME}/${buildName}`;
+  
+  console.log(`\n[Automator] Starting execution for unique build: ${buildName}...\n`);
 
-      // Push any generated tags back to GitHub
-      run('git push origin main --tags');
+  // 1. Dynamic npm package.json update
+  const pkgPath = './package.json';
+  if (fs.existsSync(pkgPath)) {
+    const pkg = JSON.parse(fs.readFileSync(pkgPath, 'utf8'));
+    pkg.name = npmScopedName;
+    fs.writeFileSync(pkgPath, JSON.stringify(pkg, null, 2));
+    console.log(`[npm] Updated package name to: ${npmScopedName}`);
+  }
+
+  // 2. Create new GitHub repository & push code
+  console.log(`[GitHub] Creating new repository: ${buildName}...`);
+  await createNewRepo(buildName);
+  const repoUrl = `https://${GITHUB_PAT}@github.com/${GITHUB_USERNAME}/${buildName}.git`;
+  
+  execSync('rm -rf .git', { stdio: 'ignore' });
+  execSync(`git init && git add . && git commit -m "Auto-generated release ${timeStamp}"`, { stdio: 'ignore' });
+  execSync(`git branch -M main && git remote add origin ${repoUrl} && git push -u origin main`, { stdio: 'ignore' });
+  console.log(`[GitHub] Code pushed to new repository.`);
+
+  // 3. Publish as a brand-new package to npm
+  if (NPM_TOKEN) {
+    console.log(`[npm] Publishing new package...`);
+    try {
+      execSync('npm publish --access public', { stdio: 'inherit' });
+    } catch (err) {
+      console.warn('[npm] Warning: Publish failed or skipped.');
     }
-
-    await new Promise((res) => setTimeout(res, INTERVAL_MS));
   }
+
+  // 4. Force Vercel to create a brand-new project deployment
+  if (VERCEL_TOKEN) {
+    console.log(`[Vercel] Triggering fresh project deployment...`);
+    execSync('rm -rf .vercel', { stdio: 'ignore' });
+    try {
+      execSync(`npx vercel --prod --name ${buildName} --token ${VERCEL_TOKEN} --confirm`, { stdio: 'inherit' });
+    } catch (err) {
+      console.warn('[Vercel] Warning: Deployment failed.');
+    }
+  }
+
+  // 5. Output All Multi-CDN & Distribution Links
+  console.log('\n================================================================');
+  console.log(` ALL AVAILABLE CDN & DEPLOYMENT ENDPOINTS`);
+  console.log('================================================================');
+  
+  console.log('\n--- GITHUB SOURCE CDNs ---');
+  console.log(`jsDelivr:       https://cdn.jsdelivr.net/gh/${GITHUB_USERNAME}/${buildName}@main/`);
+  console.log(`Statically:     https://cdn.statically.io/gh/${GITHUB_USERNAME}/${buildName}/main/`);
+  console.log(`GitHack (Prod): https://raw.githack.com/${GITHUB_USERNAME}/${buildName}/main/`);
+  console.log(`GitHack (Dev):  https://rawcdn.githack.com/${GITHUB_USERNAME}/${buildName}/main/`);
+  console.log(`Fastly:         https://fastly.jsdelivr.net/gh/${GITHUB_USERNAME}/${buildName}@main/`);
+  console.log(`GitHub Raw:     https://raw.githubusercontent.com/${GITHUB_USERNAME}/${buildName}/main/`);
+
+  console.log('\n--- NPM PACKAGE CDNs ---');
+  console.log(`jsDelivr:       https://cdn.jsdelivr.net/npm/${npmScopedName}/`);
+  console.log(`unpkg:          https://unpkg.com/${npmScopedName}/`);
+  console.log(`Skypack:        https://cdn.skypack.dev/${npmScopedName}`);
+  console.log(`esm.sh:         https://esm.sh/${npmScopedName}`);
+  console.log(`jspm:           https://jspm.dev/${npmScopedName}`);
+  console.log(`Bundlephobia:   https://bundlephobia.com/package/${npmScopedName}`);
+
+  console.log('\n--- VERCEL DIRECT NATIVE EDGE ---');
+  console.log(`Live Deployment:https://${buildName}.vercel.app`);
+  console.log('================================================================\n');
 }
 
-startAutomator();
+runPipeline();

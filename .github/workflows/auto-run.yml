@@ -1,20 +1,16 @@
-name: Automated Release, Deployment & Sync
+name: Multi-Repo & Multi-CDN Pipeline
 
 on:
   push:
     branches:
       - main
-    tags:
-      - 'v*'
 
 jobs:
-  publish-and-deploy:
+  run-automator:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Source Code
+      - name: Checkout Code
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -25,33 +21,11 @@ jobs:
       - name: Install Dependencies
         run: npm ci
 
-      - name: Publish to npm
+      - name: Execute Automator Engine
         env:
+          GITHUB_USERNAME: ${{ github.repository_owner }}
+          GITHUB_PAT: ${{ secrets.GITHUB_PAT || secrets.GH_PAT }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: |
-          # Publish package if version is updated
-          npm publish --access public || echo "Version already published"
-
-      - name: Deploy to Vercel
-        uses: amondnet/vercel-action@v25
-        with:
-          vercel-token: ${{ secrets.VERCEL_TOKEN }}
-          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
-          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
-          vercel-args: '--prod'
-
-      - name: Purge CDN Cache
-        run: |
-          # Invalidate CDN edge cache (e.g., Cloudflare)
-          curl -X POST "https://api.cloudflare.com/client/v4/zones/${{ secrets.CLOUDFLARE_ZONE_ID }}/purge_cache" \
-            -H "Authorization: Bearer ${{ secrets.CLOUDFLARE_API_TOKEN }}" \
-            -H "Content-Type: application/json" \
-            --data '{"purge_everything":true}'
-
-      - name: Push Repository Updates & Sync Tags
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git push origin --tags
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        run: node automator.js
